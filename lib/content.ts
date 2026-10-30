@@ -16,12 +16,13 @@ export const person = {
 
 export const hero = {
   eyebrow: "Senior UX/Product Designer · Dubai",
-  headline: ["Designing enterprise products that ", "create measurable business impact."], // 2nd part is muted (wraps mid-line in Figma)
+  headline: ["Designing enterprise products ", "that ", "create measurable business impact."], // last part is muted; "that " is muted only on mobile (frame 27:5)
   subline:
     "15+ years designing banking, government and enterprise platforms. AI accelerates my design process — enabling faster delivery, broader exploration and uncompromising quality.",
   cta: "Let's connect",
 };
 
+export const brandsLabel = "Trusted by"; // mobile frame only
 export const brands = ["KATIM", "Digital Dubai", "Emirates NBD", "Etihad Airways"]; // Figma shows text names
 
 export type Work = {
@@ -52,9 +53,10 @@ export const worksSection = {
   heading: ["Selected works", "Enterprise impact"], // 2nd line muted
   intro: "Every project opens on its finished screens. Switch any one to its case study for the problem, process and outcome.",
   cta: "Case studies instead ↙",
+  screenLabel: "Screen 0%n — drop final design here", // Figma placeholder until the final screens are added
+  showMore: "Show the other screens ↓",
+  readCase: "Read the full case study ↗",
 };
-
-export const capabilities = ["Product/UX design", "Design systems/strategy", "Vibe coding and prototyping", "Discovery and user testing"]; // no numbering
 
 export const servicesSection = {
   heading: ["What I can do", "for you"], // 2nd line muted
@@ -109,6 +111,26 @@ export const graph = {
     Skills: ["PRODUCT/UX", "DESIGN SYSTEMS", "VIBE CODING", "DISCOVERY"],
   },
   stats: "27 nodes · 61 connections.", // 28 cross-links are inferred by me, confirm or edit
+};
+
+export const graphSection = {
+  eyebrow: "Click any node to see how it connects",
+  eyebrowMobile: "Tap a category to see how it connects",
+  heading: ["Career", "knowledge graph"], // 2nd line muted
+  intro: "Click any node to see what it is, what it delivered, and everything it connects to. Try Hajj platform or AI Banking Copilot.",
+  hint: "Drag nodes · Scroll or pinch to zoom · Click a node for details · Dashed lines are cross-links",
+  searchPlaceholder: "Search… e.g. KATIM, Claude",
+  traceFrom: "KATIM",
+  traceTo: "AI Banking Copilot",
+  openGraph: "Open interactive graph ↗",
+  categories: [
+    { id: "companies", label: "Companies", preview: "KATIM · Digital Dubai · Emirates NBD" },
+    { id: "industries", label: "Industries", preview: "Banking · Government · Aviation" },
+    { id: "skills", label: "Skills", preview: "Product/UX · Design systems" },
+    { id: "tools", label: "Tools", preview: "Cursor · Claude · React" },
+    { id: "projects", label: "Projects", preview: "Hajj platform · DubaiNow" },
+    { id: "impact", label: "Impact", preview: "+25% · +30% · 3 months" },
+  ],
 };
 
 export const testimonials = [

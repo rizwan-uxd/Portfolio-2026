@@ -1,119 +1,73 @@
-"use client";
-
-import { useState } from "react";
 import { works, worksSection } from "@/lib/content";
+import { Heading } from "@/components/SectionHeading";
 
-type View = "screens" | "case";
+const cta = "label items-center justify-center rounded-btn bg-brand px-6 text-brand-foreground";
+const screenLabel = (n: number) => worksSection.screenLabel.replace("%n", String(n));
 
+function Toggle() {
+  return (
+    <div className="flex w-full rounded-btn border border-hairline p-1">
+      <span className="label flex-1 rounded-btn bg-secondary px-3 py-2 text-center text-foreground lg:rounded-[var(--radius-sm)] lg:bg-brand lg:text-brand-foreground">Final screens</span>
+      <span className="label flex-1 px-3 py-2 text-center text-muted-foreground">Case study</span>
+    </div>
+  );
+}
+
+// Static layout: the first project is shown open. Switching and case-study links come with the behaviour pass.
 export function Works() {
-  const [active, setActive] = useState(0);
-  const [view, setView] = useState<View>("screens");
-  const [showAll, setShowAll] = useState(false);
-  const work = works[active];
-  const screens = showAll ? [1, 2, 3, 4] : [1, 2];
-
+  const [active, ...rest] = works;
   return (
     <section id="works" className="border-t border-hairline">
-      <div className="flex flex-col gap-8 px-6 py-12 md:flex-row md:items-end md:justify-between md:px-12 md:py-16">
-        <h2 className="display">
-          {worksSection.heading[0]}
-          <br />
-          <span className="text-muted-foreground">{worksSection.heading[1]}</span>
-        </h2>
-        <div className="max-w-[400px]">
+      <div className="flex flex-col gap-4 px-4 pb-8 pt-12 lg:flex-row lg:items-end lg:justify-between lg:px-12 lg:pb-12 lg:pt-16">
+        <Heading lines={worksSection.heading} />
+        <div className="flex flex-col items-start gap-6 lg:w-full lg:max-w-works-intro">
           <p className="text-muted-foreground">{worksSection.intro}</p>
-          <button
-            type="button"
-            onClick={() => setView("case")}
-            className="label mt-6 inline-flex h-10 items-center rounded-btn bg-brand px-6 text-brand-foreground"
-          >
-            {worksSection.cta}
-          </button>
+          <span className={`${cta} hidden py-3 lg:inline-flex`}>{worksSection.cta}</span>
         </div>
       </div>
 
-      <div className="grid border-t border-hairline lg:grid-cols-[395px_1fr]">
-        <div role="tablist" aria-label="Projects" className="lg:border-r lg:border-hairline">
-          {works.map((w, i) => {
-            const isActive = i === active;
-            return (
-              <div key={w.slug} className={i > 0 ? "border-t border-hairline" : ""}>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={isActive}
-                  onClick={() => setActive(i)}
-                  className={`block w-full px-6 py-4 text-left md:px-8 ${isActive ? "pt-8" : ""}`}
-                >
-                  <span className={`title block ${isActive ? "text-foreground" : "text-muted-foreground transition-colors hover:text-foreground"}`}>
-                    {w.title}
-                  </span>
-                </button>
-                {isActive && (
-                  <div className="px-6 pb-8 md:px-8">
-                    {w.chip && (
-                      <span className="micro inline-block rounded-sm bg-brand px-2 py-1 text-brand-foreground">{w.chip}</span>
-                    )}
-                    {(w.client || w.year) && (
-                      <p className="label mt-4 font-normal text-muted-foreground">
-                        {[w.client, w.year].filter(Boolean).join(" • ")}
-                      </p>
-                    )}
-                    {w.summary ? (
-                      <p className="mt-4 text-muted-foreground">{w.summary}</p>
-                    ) : (
-                      <p className="mt-4 text-muted-foreground">
-                        <span className="subtitle text-foreground">{w.metric}</span> {w.metricLabel}
-                      </p>
-                    )}
-                    <div role="group" aria-label="View" className="mt-6 grid grid-cols-2 rounded-md border border-hairline p-[5px] text-xs uppercase">
-                      {(["screens", "case"] as const).map((v) => (
-                        <button
-                          key={v}
-                          type="button"
-                          aria-pressed={view === v}
-                          onClick={() => setView(v)}
-                          className={`h-8 rounded-sm uppercase ${view === v ? "bg-brand text-brand-foreground" : "text-foreground"}`}
-                        >
-                          {v === "screens" ? "Final screens" : "Case study"}
-                        </button>
-                      ))}
-                    </div>
-                    <a href={`/work/${w.slug}`} className="label mt-6 inline-block underline underline-offset-4">
-                      Read the full case study ↗
-                    </a>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+      <div className="border-t border-hairline lg:grid lg:grid-cols-[var(--works-rail-w)_1fr]">
+        <div className="lg:border-r lg:border-hairline">
+          <div className="flex flex-col gap-4 bg-card px-4 py-6 lg:bg-transparent lg:p-8">
+            <div className="flex items-start justify-between gap-3">
+              <h3 className="title flex-1">{active.title}</h3>
+              <span aria-hidden className="subtitle text-muted-foreground lg:hidden">−</span>
+            </div>
+            <span className="micro self-start rounded-full border border-hairline px-2 py-1 text-brand lg:rounded-[var(--radius-sm)] lg:border-0 lg:bg-brand lg:text-brand-foreground">{active.chip}</span>
+            <p className="label whitespace-pre-wrap text-muted-foreground">{`${active.client}  •  ${active.year}`}</p>
+            <p className="text-muted-foreground">{active.summary}</p>
+            <Toggle />
+            <span className="label hidden underline lg:block">{worksSection.readCase}</span>
+            <div className="flex h-work-screen-sm items-center justify-center rounded-lg border border-hairline bg-background lg:hidden">
+              <span className="micro text-center text-muted-foreground">{screenLabel(1)}</span>
+            </div>
+            <div className="flex h-work-screen-sm items-center justify-center rounded-lg border border-hairline bg-background lg:hidden">
+              <span className="micro text-center text-muted-foreground">{screenLabel(2)}</span>
+            </div>
+            <span className="label rounded-btn border border-hairline px-4 py-3 text-center lg:hidden">{worksSection.showMore}</span>
+            <span className="label text-brand lg:hidden">{worksSection.readCase}</span>
+          </div>
+          {rest.map((w) => (
+            <div key={w.slug} className="flex items-center justify-between gap-3 border-t border-hairline px-4 py-6 lg:px-8 lg:py-4">
+              <p className="title flex-1 lg:text-muted-foreground">{w.title}</p>
+              <span aria-hidden className="subtitle text-muted-foreground lg:hidden">+</span>
+            </div>
+          ))}
         </div>
 
-        <div key={`${work.slug}-${view}`} className="works-panel border-t border-hairline p-6 md:p-8 lg:border-t-0">
-          <h3 className="title text-[28px] md:text-[32px]">{work.title}</h3>
-          {view === "screens" ? (
-            <>
-              <div className="mt-6 space-y-6">
-                {screens.map((n) => (
-                  <div key={n} className="flex h-[260px] items-center justify-center rounded-lg border border-border bg-card md:h-[440px]">
-                    <span className="micro text-muted-foreground">Screen 0{n} — drop final design here</span>
-                  </div>
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowAll((s) => !s)}
-                className="label mt-6 inline-flex h-[42px] items-center rounded-btn border border-hairline px-6"
-              >
-                {showAll ? "Show fewer screens ↑" : "Show the other screens ↓"}
-              </button>
-            </>
-          ) : (
-            <div className="mt-6 flex h-[260px] items-center justify-center rounded-lg border border-border bg-card md:h-[440px]">
-              <span className="micro text-muted-foreground">Case study — coming soon</span>
+        <div className="hidden flex-col items-start gap-6 p-8 lg:flex">
+          <h3 className="title">{active.title}</h3>
+          {[1, 2].map((n) => (
+            <div key={n} className="flex h-work-screen w-full items-center justify-center rounded-lg border border-border bg-card">
+              <span className="micro text-muted-foreground">{screenLabel(n)}</span>
             </div>
-          )}
+          ))}
+          <span className="label rounded-btn border border-hairline px-6 py-3">{worksSection.showMore}</span>
         </div>
+      </div>
+
+      <div className="flex border-t border-hairline px-4 pb-8 pt-6 lg:hidden">
+        <span className={`${cta} flex flex-1 py-4`}>{worksSection.cta}</span>
       </div>
     </section>
   );

@@ -1,0 +1,221 @@
+/* Single source for every design value. Colors, type and shape come from the Figma variables
+   (file uDzkzeMLL6tOJaT0lf2hNy); imported by globals.css. Tailwind's numeric spacing (p-6 = 24px)
+   is the Figma space/N scale, so it is not repeated here. */
+
+:root {
+  /* Light theme */
+  --background: #fff;
+  --foreground: #181818;
+  --card: #f9f9f9;
+  --card-foreground: #111;
+  --popover: #fff;
+  --popover-foreground: #111;
+  --primary: #111;
+  --primary-foreground: #fff;
+  --secondary: #f1f1f1;
+  --secondary-foreground: #111;
+  --muted: #f4f4f4;
+  --muted-foreground: #5c5c5c;
+  --accent: #f7f7f7;
+  --accent-foreground: #111;
+  --destructive: #e54d2e;
+  --destructive-foreground: #fff;
+  --border: #e4e4e4;
+  --input: #e4e4e4;
+  --ring: #c2c2c2;
+  --hairline: var(--border);
+  --brand: #e5ff5d;
+  --brand-foreground: #111;
+  --pos: #16a34a;
+  --neg: #e5484d;
+  --radius: 0.5rem;
+  --radius-xl: 12px;             /* prompt-bar shell, large cards */
+
+  /* Knowledge-graph category colours (same in both themes) */
+  --graph-companies: #6cb6ff;
+  --graph-industries: #ffa24d;
+  --graph-skills: #ff7ab6;
+  --graph-tools: #4fd8eb;
+  --graph-projects: #e5ff5d;
+  --graph-impact: #b69cff;
+
+  --font-sans: var(--font-satoshi), var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* body, nav, buttons */
+  --font-heading: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* headings, display */
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Type scale (measured) */
+  --text-display: 56px;          /* h1/h2: weight 500, line-height 0.92, tracking -0.04em */
+  --text-body: 16px;             /* weight 400, line-height 1.4, tracking -0.02em */
+  --text-label: 12px;            /* nav + buttons: weight 500, uppercase, tracking -0.02em */
+  --text-title: 32px;            /* weight 500, lh 1.10, tracking -0.03em */
+  --text-subtitle: 20px;         /* weight 500, lh 1.20, tracking -0.02em */
+  --text-micro: 9px;             /* mono tags: uppercase, tracking 0.18em (1.6px) */
+
+  /* Shape */
+  --radius-btn: 4px;
+  --radius-sm: 3.2px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* Mobile type (frame 27:5) */
+  --text-display-sm: 36px;
+  --leading-display-sm: 0.96;
+  --leading-display: 0.92;
+  --text-title-sm: 24px;
+  --leading-title-sm: 1.12;
+  --text-subtitle-sm: 18px;
+
+  /* Header nav and glow button (sizes from Figma heading-sm, body-md) */
+  --nav-link: #c7c7d0;
+  --text-nav: 20px;
+  --leading-nav: 28px;
+  --leading-glow: 26px;
+  --tracking-glow: 0.08px;
+  --shadow-glow: 0 0 14px 0 color-mix(in srgb, var(--brand) 16%, transparent);
+  --glow-w: 72px;
+  --glow-h: 44px;
+  --glow-br-x: 41px;
+  --glow-br-y: 14px;
+  --glow-tl-x: -18px;
+  --glow-tl-y: -22px;
+
+  /* Layout */
+  --frame-w: 1214px;             /* centered content frame with 1px hairline side borders */
+  --header-w: 1212px;
+  --header-offset-sm: 72px;      /* mobile header height: content starts below it */
+  --header-offset: 104px;        /* desktop: 24px top gap + 80px header */
+  --hero-headline-w: 820px;
+  --hero-subline-w: 560px;
+  --logo-size-sm: 40px;
+  --logo-size: 48px;
+  --nav-gap: 36px;
+  --intro-w: 420px;
+  --works-intro-w: 400px;
+  --works-rail-w: 395px;
+  --screen-h-sm: 220px;
+  --screen-h: 440px;
+  --visual-h: 232px;
+  --prompt-w: 880px;
+  --graph-search-w: 280px;
+  --graph-select-w: 220px;
+  --graph-panel-w: 340px;
+  --carousel-card-w: 300px;
+  --pagination-active-w: 20px;
+  --pagination-h: 6px;
+  --shadow-prompt-sm: 0 12px 24px 0 rgb(0 0 0 / 0.5), 0 0 40px 0 color-mix(in srgb, var(--brand) 10%, transparent);
+  --shadow-prompt: 0 12px 24px 0 rgb(0 0 0 / 0.5), 0 0 48px 0 color-mix(in srgb, var(--brand) 10%, transparent);
+  --shadow-avatar: 0 0 12px color-mix(in srgb, var(--brand) 25%, transparent);
+  --menu-bar-gap: 5px;
+
+  /* Header hide and reveal (animations.md) */
+  --nav-duration: 250ms;
+  --nav-ease: ease-out;
+}
+
+.dark {
+  --background: #181818;
+  --foreground: #e8e8e8;
+  --card: #1f1f1f;
+  --card-foreground: #e1e8ee;
+  --popover: #191919;
+  --popover-foreground: #eee;
+  --primary: #e5ff5d;
+  --primary-foreground: #081a1b;
+  --secondary: #292929;
+  --secondary-foreground: #eee;
+  --muted: #222;
+  --muted-foreground: #b4b4b4;
+  --accent: #2a2a2a;
+  --accent-foreground: #e5ff5d;
+  --destructive: #e54d2e;
+  --destructive-foreground: #fff;
+  --border: #2c2c2c;
+  --input: #3a3a3a;
+  --ring: #4a4a4a;
+  --hairline: #3d4045;
+  --brand: #e5ff5d;
+  --brand-foreground: #111;
+  --pos: #00e599;
+  --neg: #fd607f;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-hairline: var(--hairline);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-pos: var(--pos);
+  --color-neg: var(--neg);
+  --color-nav-link: var(--nav-link);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-heading);
+  --shadow-glow: var(--shadow-glow);
+  --breakpoint-frame: 75.875rem; /* 1214px: --frame-w, media queries can't read variables */
+  --container-header: var(--header-w);
+  --container-hero-headline: var(--hero-headline-w);
+  --container-hero-subline: var(--hero-subline-w);
+  --spacing-header-offset-sm: var(--header-offset-sm);
+  --spacing-header-offset: var(--header-offset);
+  --spacing-nav: var(--nav-gap);
+  --container-intro: var(--intro-w);
+  --container-works-intro: var(--works-intro-w);
+  --container-prompt: var(--prompt-w);
+  --spacing-work-screen-sm: var(--screen-h-sm);
+  --spacing-work-screen: var(--screen-h);
+  --spacing-visual: var(--visual-h);
+  --spacing-works-rail: var(--works-rail-w);
+  --spacing-graph-search: var(--graph-search-w);
+  --spacing-graph-select: var(--graph-select-w);
+  --spacing-graph-panel: var(--graph-panel-w);
+  --spacing-carousel-card: var(--carousel-card-w);
+  --spacing-pagination-active: var(--pagination-active-w);
+  --spacing-pagination: var(--pagination-h);
+  --shadow-prompt-sm: var(--shadow-prompt-sm);
+  --shadow-prompt: var(--shadow-prompt);
+  --spacing-menu-bar: var(--menu-bar-gap);
+  --radius-btn: var(--radius-btn);
+  --radius-xl: var(--radius-xl);
+  --color-graph-companies: var(--graph-companies);
+  --color-graph-industries: var(--graph-industries);
+  --color-graph-skills: var(--graph-skills);
+  --color-graph-tools: var(--graph-tools);
+  --color-graph-projects: var(--graph-projects);
+  --color-graph-impact: var(--graph-impact);
+}
+
+/* Base type rules. Display is 36 on mobile and 56 from md, per frames 27:5 and 2:2. */
+body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); font-size: var(--text-body); line-height: 1.4; letter-spacing: -0.02em; }
+.display, .title, .subtitle { font-family: var(--font-heading); }
+.display { font-size: var(--text-display-sm); font-weight: 500; line-height: var(--leading-display-sm); letter-spacing: -0.04em; @variant md { font-size: var(--text-display); line-height: var(--leading-display); } }
+.title { font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; @variant lg { font-size: var(--text-title); line-height: 1.1; } }
+.subtitle { font-size: var(--text-subtitle-sm); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; @variant lg { font-size: var(--text-subtitle); } }
+.label { font-size: var(--text-label); font-weight: 500; line-height: 1.33; letter-spacing: -0.02em; text-transform: uppercase; }
+.micro { font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1.5; letter-spacing: 0.18em; text-transform: uppercase; }
+.nav-link { font-size: var(--text-nav); font-weight: 600; line-height: var(--leading-nav); letter-spacing: 0; color: var(--nav-link); }
+.glow-label { font-size: var(--text-body); line-height: var(--leading-glow); letter-spacing: var(--tracking-glow); }
+.frame { max-width: var(--frame-w); margin-inline: auto; @variant frame { border-inline: 1px solid var(--hairline); } } /* side borders drop below the frame width */
+.logo { position: relative; display: block; flex-shrink: 0; overflow: hidden; width: var(--logo-size-sm); height: var(--logo-size-sm); @variant md { width: var(--logo-size); height: var(--logo-size); } }
+.logo-r { position: absolute; left: 25.67%; top: 47.33%; width: 52.71%; height: 61%; max-width: none; } /* R stroke over the Subtract cut-out, as a share of the logo box */
+.glow-br, .glow-tl { position: absolute; display: block; width: var(--glow-w); height: var(--glow-h); max-width: none; }
+.glow-br { left: var(--glow-br-x); top: var(--glow-br-y); }
+.glow-tl { left: var(--glow-tl-x); top: var(--glow-tl-y); }
+.site-header { transition: transform var(--nav-duration) var(--nav-ease); &[data-hidden="true"] { transform: translateY(-100%); } @media (prefers-reduced-motion: reduce) { transition: none; } }
+.no-scrollbar { scrollbar-width: none; }

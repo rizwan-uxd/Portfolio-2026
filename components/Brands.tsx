@@ -1,11 +1,14 @@
-import { brands } from "@/lib/content";
+import { brands, brandsLabel } from "@/lib/content";
 
 export function Brands() {
   return (
     <section aria-label="Selected clients" className="border-t border-hairline">
-      <ul className="grid grid-cols-2 gap-y-6 px-6 py-10 text-muted-foreground md:flex md:h-[119px] md:items-center md:justify-between md:px-12 md:py-0">
-        {brands.map((b) => (
-          <li key={b} className="text-base">{b}</li>
+      <p className="micro px-4 pb-2 pt-4 text-muted-foreground lg:hidden">{brandsLabel}</p>
+      <ul className="grid grid-cols-2 text-muted-foreground lg:flex lg:items-center lg:justify-between lg:gap-16 lg:p-12">
+        {brands.map((b, i) => (
+          <li key={b} className={`border-t border-hairline px-3 py-4 text-center lg:border-0 lg:p-0 ${i % 2 === 0 ? "border-r lg:border-r-0" : ""}`}>
+            {b}
+          </li>
         ))}
       </ul>
     </section>

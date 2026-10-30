@@ -1,6 +1,6 @@
 # Design decisions
 
-Values live in `tokens.css` (copied from Figma variables; prefer `get_variable_defs` if they differ). This file records how we use them.
+Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variable_defs` if they differ). This file records how we use them.
 
 ## Tokens (summary, see tokens.css)
 - Dark: bg `#181818`, fg `#e8e8e8`, card `#1f1f1f`, secondary `#292929`, muted-fg `#b4b4b4`, border `#2c2c2c`, hairline `#3d4045`, brand `#e5ff5d` (text on brand `#111`), pos `#00e599`, neg `#fd607f`.
@@ -14,24 +14,27 @@ Values live in `tokens.css` (copied from Figma variables; prefer `get_variable_d
 - Hairline grid: sections separated by `border-t border-hairline`; two-column splits use a hairline divider only from `md`/`lg` up.
 - Cards: `bg-card border border-border rounded-lg`.
 - Buttons: lime fill (`bg-brand text-brand-foreground rounded-btn h-10 label`), ghost (hairline border), outline-brand (graph Trace). Header Linkedin is an outlined pill with soft lime glow.
-- Headline pattern: first part foreground, remainder `text-muted-foreground`. Hero splits mid-line ("...products that" / "create measurable business impact.").
+- Headline pattern: first part foreground, remainder `text-muted-foreground`. Hero's muted part starts at "create" on desktop and at "that" on mobile, as in frames `2:2` and `27:5`.
 
 ## Responsive decisions (owner, 2026-10-30)
 - Desktop is 1440 in Figma. Mobile frame `27:5` (390) also exists. Tablet (768) is not designed: follow Codex behaviour and ask before inventing.
 - Below 1214px the frame loses its side borders and goes full width.
-- Two- and three-column layouts (bento cells, testimonial cards, contact split, works rail + preview) stack to one column on mobile.
+- Mobile follows frame `27:5`: works as an accordion list, graph as chips, category list and thumbnail, testimonials as a swipe row with pagination dots.
 - Header collapses to a compact bar. Collapsed AI twin bar goes full width.
-- Display type scales with `clamp(36px, 6vw, 56px)`.
-- Knowledge graph scales with its container; tap-to-highlight replaces hover.
+- Display type is 36/0.96 on mobile (frame `27:5`) and 56/0.92 from `md`, not fluid.
+- Header and hero use the mobile frame below `md` (768) and the desktop frame from `md` up. This is the interim 768 behaviour, awaiting the owner's tablet decision.
 - Review every section at 1440, 768 and 390.
 
 ## Decisions log
 - Header nav: Works / AI projects / About, Linkedin pill (from Figma `3:33`).
-- Fonts: Geist everywhere for now. Satoshi deferred until the file is added.
-- Header background: translucent dark with blur (Figma is transparent, but content ran through the nav on scroll). Tell the owner if they want it fully transparent.
+- Fonts (owner, Option A, 2026-10-30): Geist for headings and display text. Satoshi (local `app/fonts/Satoshi-Variable.ttf`, via `next/font/local`) for body, nav links and buttons, replacing Host Grotesk. JetBrains Mono for labels. The original site uses Satoshi for body/UI and Clash Display for headings; we deliberately use Geist for headings to follow the Codex style.
+- Header background (owner, 2026-10-30): fully transparent at the top of the page; dark translucent blur plus a hairline bottom border after scrolling past the top. Motion is in animations.md.
 - Graph cross-links (28) are inferred and unconfirmed.
 - Testimonial headlines ("Proactive", "Always curious", "Iterates fast") come from Figma, not the live site. Unconfirmed.
-- Remaining sections: the Mac-built version replaces the earlier pushed one (owner choice, 2026-10-30).
+- Remaining sections: the Mac-built version replaces the earlier pushed one (owner choice, 2026-10-30): real photo, live-site copy, Figma-derived graph data.
+
+- Build order (owner, 2026-10-30): lay out all sections from Figma in one pass with no per-section approval; behaviour and animation follow, one section at a time.
+- Sections keep the mobile frame up to 1023px and use the desktop frame from `lg` (1024); header and hero switch at `md` (768). Interim until the owner decides tablet.
 
 ## Not designed (ask first)
 Hover/focus/pressed states, expanded AI twin, menu sheet (mobile nav), tablet layouts, light theme, AI projects section, About + stats, case-study pages, hero dot-matrix background.

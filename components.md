@@ -4,24 +4,16 @@ Figma file `uDzkzeMLL6tOJaT0lf2hNy`. Desktop frame `2:2`, mobile frame `27:5`.
 
 | Component | File | Node | Behaviour and states |
 |---|---|---|---|
-| Header | `components/Header.tsx` | `3:33` (button `12:13`) | Fixed. Logo, nav (Works, AI projects, About), Linkedin pill. Nav hidden below `md`; menu sheet not designed. Hover not designed. |
-| Hero | `app/page.tsx` | `2:15` | Eyebrow, headline, subline, lime "Let's connect →" to Calendly. Dot-matrix background not drawn. |
-| Brands strip | `components/Brands.tsx` | `2:21` | Four text names from Figma (KATIM, Digital Dubai, Emirates NBD, Etihad Airways). Live site has 8 logos; owner to decide. 2×2 on mobile. |
-| Selected works | `components/Works.tsx` | `8:2` | Rail of 5 projects, only the active one expanded. Click switches the panel with a 200ms crossfade. "Final screens / Case study" toggle and "Case studies instead" switch the view. Only Hajj has detail copy; others show title + metric. Screens are Figma placeholders. Rows link to `/work/[slug]` (not built). |
-| What I can do | `components/Services.tsx` | `10:2` | 2×2 cells (1 column on mobile), bullets fade top to bottom. No chevrons, numbers or accordion. |
-| AI twin (collapsed) | `components/AiTwinBar.tsx` | `19:17` | 880px max bar, lime glow, sparkle, input, 40px lime send. Submit does nothing yet. Status line is Figma placeholder; must come from the real rate limiter. |
+| Header | `components/Header.tsx` | `3:33`, mobile `27:6` (button `12:13`) | Fixed, hides on scroll (animations.md). Desktop: logo 48, nav (Works, AI projects, About), glow Linkedin button. Mobile: logo 40, Linkedin, menu button. Menu button is inert because the sheet isn't designed. Hover not designed. |
+| Hero | `components/Hero.tsx` | `2:15`, mobile `27:32` | Eyebrow, headline, subline, lime "Let's connect →" to Calendly (full width on mobile). The dot-matrix background in HANDOFF.md isn't in the Figma node, so it's not drawn. |
+| Brands strip | `components/Brands.tsx` | `2:21`, mobile `27:38` | Four text names from Figma. Live site has 8 logos; owner to decide. |
+| Selected works | `components/Works.tsx` | `8:2`, mobile `29:6` | Static: first project open. Screens are Figma placeholders. To build: project switching, Final screens/Case study toggle, show other screens, `/work/[slug]` links. |
+| What I can do | `components/Services.tsx` | `10:2`, mobile `29:46` | Static. Desktop list fades out, mobile doesn't. No chevrons, numbers or accordion. |
+| AI twin (collapsed) | `components/AiTwinBar.tsx` | `19:17`, mobile `29:98` | Static. Status line is Figma placeholder; must come from the real rate limiter. To build: input, send. |
 | AI twin (expanded) | not built | `17:2`, section `13:2` | Designed but the open transition is not decided. Ask first. |
-| Knowledge graph | `components/Graph.tsx`, `lib/graph.ts` | `14:58` (canvas `14:113`) | Click/tap a node to highlight it and its neighbours. Category chips toggle visibility, search highlights, Trace finds shortest path, Reset clears. Stats are computed from data. Timeline and Take the tour are disabled (not designed). |
-| Testimonials | `components/Testimonials.tsx` | `20:2` | Three top-aligned cards with natural height, highlighted phrases, initial avatars. No star ratings. |
-| Contact + footer | `components/Contact.tsx` | `21:2` (card `23:3`, footer `23:22`) | Split card, email and phone as link cards, footer with socials. Avatar is "MR" placeholder until the photo is added. |
-
-## Mobile frame `27:5` notes (to verify per section at review)
-Seen at low resolution only. It differs from the simple stacking used so far:
-- Works as a list of project titles with a toggle for the active one.
-- Graph as category list with counts, a small graph and an "Open interactive graph" button.
-- Testimonials as a horizontally scrolling row (next card peeks in).
-- Compact AI twin bar and header with logo + Linkedin.
-Each section gets its own `get_design_context` on `27:5` children before it is finalised.
+| Knowledge graph | `components/Graph.tsx`, `lib/graph.ts` | `14:58` (canvas `14:113`), mobile `30:6` | Static. Stats are computed from data. To build: search, filters, trace, node details, drag and zoom, timeline, tour, reset; mobile category tap and "Open interactive graph". |
+| Testimonials | `components/Testimonials.tsx` | `20:2`, mobile `30:148` | Three top-aligned cards with natural height, initial avatars, no star ratings. Mobile is a swipe row with static dots. To build: dots following the swipe. |
+| Contact + footer | `components/Contact.tsx` | `21:2` (card `23:3`, footer `23:22`), mobile `30:197` | Real photo from the live site. Email, phone, Calendly and socials are live links. |
 
 ## Open questions
 - Where `/api/twin` gets answers (model, knowledge source, rate limit).

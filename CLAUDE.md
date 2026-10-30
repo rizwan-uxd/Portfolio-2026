@@ -1,11 +1,11 @@
 # Portfolio 2026 (rizwanux.work rebuild)
 
 Responsive Next.js rebuild of https://www.rizwanux.work/ from Figma `uDzkzeMLL6tOJaT0lf2hNy`.
-Desktop frame `2:2` (1440), mobile frame `27:5` (390). Style base: Codex (dark, lime `#e5ff5d`, hairline grid, Geist + JetBrains Mono). We reuse Codex's visual language only, never its logo, partner logos, token art or copy.
+Desktop frame `2:2` (1440), mobile frame `27:5` (390). Style base: Codex (dark, lime `#e5ff5d`, hairline grid, Geist + Satoshi + JetBrains Mono). We reuse Codex's visual language only, never its logo, partner logos, token art or copy.
 
 ## Stack
 - Next.js 16 **App Router** (`app/`, no `pages/`), React 19, TypeScript strict, Tailwind CSS v4 (`@theme inline`).
-- Fonts via `next/font` in `lib/fonts.ts`: Geist, JetBrains Mono. Satoshi is optional and local (`next/font/local`); the file is not in the repo yet.
+- Fonts in `lib/fonts.ts`: Geist (headings, display), Satoshi (body, nav, buttons; local via `next/font/local`, `app/fonts/Satoshi-Variable.ttf`), JetBrains Mono (labels).
 - Dark only: `<html className="dark">`. Light theme tokens exist but are not designed.
 
 ## Commands
@@ -13,23 +13,23 @@ Desktop frame `2:2` (1440), mobile frame `27:5` (390). Style base: Codex (dark, 
 - `npm run lint` runs `tsc --noEmit`. Run it and `npm run build` before every push.
 
 ## Layout of the repo
-- `app/` routes, `globals.css`, `api/twin/route.ts` (stub, returns 501)
-- `components/` one file per section (Header, Brands, Works, Services, AiTwinBar, Graph, Testimonials, Contact) plus `Frame`
-- `lib/content.ts` copy and data, `lib/graph.ts` graph nodes and edges, `lib/fonts.ts`
+- `app/` routes, `tokens.css` (all values), `globals.css`, `api/twin/route.ts` (stub, returns 501)
+- `components/` one file per section (Header, Hero, Brands, Works, Services, AiTwinBar, Graph, Testimonials, Contact) plus `Frame` and `SectionHeading`.
+- `lib/content.ts` copy and data, `lib/graph.ts` graph positions and edges from Figma, `lib/fonts.ts`
 - `HANDOFF.md` and `NOTES.md` are the source briefs. Distilled docs: `design.md`, `components.md`, `animations.md`.
 
 ## Conventions
-- Tokens in `tokens.css` are the single source for every value. Use Tailwind token classes (`bg-card`, `text-muted-foreground`, `border-hairline`, `bg-brand`, `rounded-btn`) or `var(--token)`. Never hardcode colors, sizes or radii.
+- Tokens in `app/tokens.css` are the single source for every value. Use Tailwind token classes (`bg-card`, `text-muted-foreground`, `border-hairline`, `bg-brand`, `rounded-btn`) or `var(--token)`. Never hardcode colors, sizes or radii. Tailwind's numeric spacing (`p-6` = 24px) is the Figma `space/N` scale. Don't name a `--spacing-*` token the same as a `--container-*` one: `max-w-*` picks the spacing value.
 - Text styles are utility classes from the tokens: `.display`, `.title`, `.subtitle`, `.label`, `.micro`. Display second line or half uses `text-muted-foreground`.
-- Content frame is `.frame` (`max-w-[1214px]`, hairline side borders only at 1214px and up).
-- Sections are server components unless they need state (Works, Graph, AiTwinBar are client).
-- Mobile-first Tailwind: base is 390, `md:` 768, `lg:` 1024, wide 1214+.
+- Content frame is `.frame` (`--frame-w`, hairline side borders only at 1214px and up).
+- Sections are server components; the layout pass is static. Only Header is a client component so far.
+- Mobile-first Tailwind: base is frame `27:5` (390). Header and hero switch to frame `2:2` at `md:` (768), all other sections at `lg:` (1024), until a tablet layout is decided. `frame:` is 1214+.
 - Accessibility: focus ring uses `--ring`; interactive SVG nodes are keyboard reachable; respect `prefers-reduced-motion`.
 
 ## Rules
 1. Use the Figma connection (`get_design_context`, `get_screenshot`) per section. Treat its output as reference and adapt it to this stack.
 2. Never invent copy, metrics or ratings. Use `lib/content.ts`, Figma text, or the live site. Say so when a gap is filled with a placeholder.
-3. Build desktop, tablet and mobile together, one section at a time. Show screenshots at 1440, 768 and 390 and wait for approval before the next section.
+3. Owner, 2026-10-30: lay out all sections in one pass without per-section approval, then add behaviour and animation one section at a time.
 4. Do not design what is not designed: hover/focus/pressed states, expanded AI twin, menu sheet, tablet layouts, light theme. Ask first.
 5. Record every decision the owner makes in the matching .md file (design.md, components.md, animations.md).
 6. Out of scope for v1: case-study pages (`/work/[slug]`), real AI twin backend.

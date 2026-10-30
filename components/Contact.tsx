@@ -1,4 +1,5 @@
-import { person, contact } from "@/lib/content";
+import Image from "next/image";
+import { contact, person } from "@/lib/content";
 
 const fields = [
   { label: "Email", value: person.email, href: `mailto:${person.email}` },
@@ -14,49 +15,42 @@ const socials = [
 export function Contact() {
   return (
     <section id="contact" className="border-t border-hairline">
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="min-w-0 px-6 py-12 md:border-r md:border-hairline md:px-12 md:py-16">
-          {/* Placeholder initials: swap for the real photo from the live site's public/images/profile.png */}
-          <div className="flex size-[88px] items-center justify-center rounded-full border-2 border-brand bg-secondary text-[32px] shadow-[0_0_24px_rgb(229_255_93/.35)]" aria-hidden>
-            MR
-          </div>
-          <p className="micro mt-6 text-brand">{contact.label}</p>
-          <h2 className="display mt-6 max-w-[510px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="flex flex-col items-start gap-6 px-4 py-12 lg:border-r lg:border-hairline lg:px-12 lg:py-16">
+          <span className="relative block size-18 overflow-hidden rounded-full border-2 border-brand bg-secondary drop-shadow-[var(--shadow-avatar)] lg:size-22">
+            <Image src="/images/profile.png" alt={`Portrait of ${person.name}`} fill sizes="(min-width: 64rem) 88px, 72px" className="origin-top scale-125 object-cover object-top" />
+          </span>
+          <p className="micro text-brand">{contact.label}</p>
+          <h2 className="display">
             {contact.heading[0]} <span className="text-muted-foreground">{contact.heading[1]}</span>
           </h2>
-          <a href={person.calendly} className="label mt-10 inline-flex h-10 items-center gap-3 rounded-btn bg-brand px-6 text-brand-foreground">
+          <a href={person.calendly} className="label flex w-full items-center justify-center gap-2 rounded-btn bg-brand px-6 py-4 text-brand-foreground lg:w-auto lg:py-3">
             {contact.cta} <span aria-hidden>↗</span>
           </a>
         </div>
-
-        <div className="min-w-0 border-t border-hairline px-6 py-12 md:border-t-0 md:px-12 md:py-16">
+        <div className="flex flex-col gap-3 border-t border-hairline px-4 pb-12 pt-8 lg:gap-4 lg:border-t-0 lg:px-12 lg:py-16">
           <p className="micro text-muted-foreground">{contact.connectLabel}</p>
-          <div className="mt-4 space-y-4">
-            {fields.map((f) => (
-              <a key={f.label} href={f.href} className="flex items-center gap-4 rounded-lg border border-border bg-card px-6 py-4 transition-colors hover:border-hairline">
-                <span className="micro w-16 shrink-0 text-muted-foreground">{f.label}</span>
-                <span className="subtitle min-w-0 flex-1 break-words">{f.value}</span>
-                <span aria-hidden className="text-muted-foreground">↗</span>
-              </a>
-            ))}
-          </div>
+          {fields.map((f) => (
+            <a key={f.label} href={f.href} className="flex items-center gap-3 rounded-lg border border-hairline bg-card p-4 lg:gap-4 lg:px-6">
+              <span className="micro w-12 shrink-0 text-muted-foreground lg:w-16">{f.label}</span>
+              <span className="subtitle min-w-0 flex-1">{f.value}</span>
+              <span aria-hidden className="subtitle shrink-0 text-muted-foreground">↗</span>
+            </a>
+          ))}
         </div>
       </div>
-
-      <footer className="flex flex-col gap-6 border-t border-hairline px-6 py-6 md:flex-row md:items-center md:justify-between md:px-12">
-        <div>
+      <footer className="flex flex-col-reverse gap-4 border-t border-hairline px-4 pb-8 pt-6 lg:flex-row lg:items-center lg:justify-between lg:px-12 lg:py-6">
+        <div className="flex flex-col gap-1">
           <p>{person.name}</p>
-          <p className="micro mt-1 text-muted-foreground">{contact.copyright}</p>
+          <p className="micro text-muted-foreground">{contact.copyright}</p>
         </div>
-        <ul className="flex gap-8">
+        <div className="label flex justify-between lg:gap-8">
           {socials.map((s) => (
-            <li key={s.label}>
-              <a href={s.href} className="label inline-flex items-center gap-1">
-                {s.label} <span aria-hidden className="text-[10px]">↗</span>
-              </a>
-            </li>
+            <a key={s.label} href={s.href} className="flex items-center gap-1">
+              {s.label} <span aria-hidden className="text-muted-foreground">↗</span>
+            </a>
           ))}
-        </ul>
+        </div>
       </footer>
     </section>
   );
