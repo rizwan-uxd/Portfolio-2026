@@ -1,7 +1,6 @@
 import { works, worksSection } from "@/lib/content";
 import { Heading } from "@/components/SectionHeading";
 
-const cta = "label items-center justify-center rounded-btn bg-brand px-6 text-brand-foreground";
 const screenLabel = (n: number) => worksSection.screenLabel.replace("%n", String(n));
 
 function Toggle() {
@@ -17,13 +16,9 @@ function Toggle() {
 export function Works() {
   const [active, ...rest] = works;
   return (
-    <section id="works" className="border-t border-hairline">
-      <div className="flex flex-col gap-4 px-4 pb-8 pt-12 lg:flex-row lg:items-end lg:justify-between lg:px-12 lg:pb-12 lg:pt-16">
+    <section id="works">
+      <div className="px-4 pb-8 pt-12 lg:px-12 lg:pb-12 lg:pt-16">
         <Heading lines={worksSection.heading} />
-        <div className="flex flex-col items-start gap-6 lg:w-full lg:max-w-works-intro">
-          <p className="text-muted-foreground">{worksSection.intro}</p>
-          <span className={`${cta} hidden py-3 lg:inline-flex`}>{worksSection.cta}</span>
-        </div>
       </div>
 
       <div className="border-t border-hairline lg:grid lg:grid-cols-[var(--works-rail-w)_1fr]">
@@ -64,10 +59,6 @@ export function Works() {
           ))}
           <span className="label rounded-btn border border-hairline px-6 py-3">{worksSection.showMore}</span>
         </div>
-      </div>
-
-      <div className="flex border-t border-hairline px-4 pb-8 pt-6 lg:hidden">
-        <span className={`${cta} flex flex-1 py-4`}>{worksSection.cta}</span>
       </div>
     </section>
   );

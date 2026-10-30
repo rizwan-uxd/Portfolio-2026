@@ -93,7 +93,6 @@
   --nav-gap: 36px;
   --nav-link-gap: 28px;          /* between hover pills: keeps the 52px text spacing from Figma (36 + 2 x 8) */
   --intro-w: 420px;
-  --works-intro-w: 400px;
   --works-rail-w: 395px;
   --screen-h-sm: 220px;
   --screen-h: 440px;
@@ -230,7 +229,6 @@
   --spacing-nav: var(--nav-gap);
   --spacing-nav-link: var(--nav-link-gap);
   --container-intro: var(--intro-w);
-  --container-works-intro: var(--works-intro-w);
   --container-prompt: var(--prompt-w);
   --spacing-work-screen-sm: var(--screen-h-sm);
   --spacing-work-screen: var(--screen-h);

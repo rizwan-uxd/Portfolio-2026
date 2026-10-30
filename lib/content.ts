@@ -61,8 +61,6 @@ export const works: Work[] = [
 
 export const worksSection = {
   heading: ["Selected works", "Enterprise impact"], // 2nd line muted
-  intro: "Every project opens on its finished screens. Switch any one to its case study for the problem, process and outcome.",
-  cta: "Case studies instead ↙",
   screenLabel: "Screen 0%n — drop final design here", // Figma placeholder until the final screens are added
   showMore: "Show the other screens ↓",
   readCase: "Read the full case study ↗",
