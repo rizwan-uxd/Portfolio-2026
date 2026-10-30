@@ -18,7 +18,7 @@ Rule: respect `prefers-reduced-motion` for everything below.
   - Hover (pointer devices) and keyboard focus: Magic UI "interactive hover button" motion. A small lime dot at the left grows to fill the pill, the label slides right and fades, and "Linkedin →" slides in centred in brand-foreground. 300ms ease. The dot is hidden at rest because Figma's default has no dot.
   - Reduced motion: no glow travel, state swaps instantly.
 
-- Nav links Works / AI projects / About (owner, 2026-10-30, surinder.design): on hover and keyboard focus a soft pill (foreground at 8%) fades in behind the link and the text brightens to foreground, 200ms ease. Links are now `px-3 py-2` pills with a 28px gap, so the text keeps Figma's spacing. Same in the full-bleed header and the floating bar. Reduced motion: instant.
+- Nav links Works / AI projects / About (owner, 2026-10-30, surinder.design): on hover and keyboard focus a soft pill (foreground at 8%) fades in behind the link and the text brightens to foreground, 200ms ease. Links are `px-3 py-1` pills (36px tall) with a 28px gap and a -4px right margin on the nav, so the labels stay exactly where Figma puts them. Same in the full-bleed header and the floating bar. Reduced motion: instant.
 
 ## Not decided (ask before building)
 - Hero dot-matrix / ASCII background motion.
