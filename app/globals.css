@@ -147,3 +147,6 @@ html { scroll-behavior: smooth; }
 @keyframes works-fade { from { opacity: 0; } to { opacity: 1; } }
 .works-panel { animation: works-fade 200ms ease-out; }
 @media (prefers-reduced-motion: reduce) { .works-panel { animation: none; } }
+
+/* Graph labels are too small to read on phones: show them only for the active nodes */
+@media (max-width: 639px) { .leaf-label:not(.is-active) { display: none; } }

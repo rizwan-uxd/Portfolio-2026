@@ -1,6 +1,10 @@
 import { Header } from "@/components/Header";
 import { Brands } from "@/components/Brands";
 import { Works } from "@/components/Works";
+import { Services } from "@/components/Services";
+import { Graph } from "@/components/Graph";
+import { Testimonials } from "@/components/Testimonials";
+import { Contact } from "@/components/Contact";
 import { Frame } from "@/components/Frame";
 import { hero, person } from "@/lib/content";
 
@@ -26,6 +30,10 @@ export default function Home() {
           </section>
           <Brands />
           <Works />
+          <Services />
+          <Graph />
+          <Testimonials />
+          <Contact />
         </Frame>
       </main>
     </>

@@ -56,6 +56,43 @@ export const worksSection = {
 
 export const capabilities = ["Product/UX design", "Design systems/strategy", "Vibe coding and prototyping", "Discovery and user testing"]; // no numbering
 
+export const servicesSection = {
+  heading: ["What I can do", "for you"], // 2nd line muted
+  intro:
+    "As a digital designer, with an empathetic, human-first mindset and a structured way of thinking, I translate real user needs and business goals into clear journeys and polished UI — reducing friction, making decisions easier, and helping teams ship with confidence.",
+};
+
+// Description and bullets come from the Figma cells; titles match the live site.
+export const services = [
+  {
+    title: "Product/UX design",
+    description: "End-to-end product design — research, journey mapping, wireframes, and polished UI that reduces friction and helps teams ship with confidence.",
+    items: ["Research", "Journey mapping", "Wireframes", "Polished UI"],
+  },
+  {
+    title: "Design systems/strategy",
+    description: "Building and scaling reusable design systems and component libraries so product teams move faster without sacrificing quality or consistency.",
+    items: ["Reusable design systems", "Component libraries", "Faster product teams", "Consistent quality"],
+  },
+  {
+    title: "Vibe coding and prototyping",
+    description: "Turning intent into working prototypes with Cursor and Claude — fast, AI-assisted builds that validate flows before full engineering investment.",
+    items: ["Cursor", "Claude", "Working prototypes", "Validated flows"],
+  },
+  {
+    title: "Discovery and user testing",
+    description: "Structured discovery and usability testing that turns real user behavior into clear, actionable direction for product decisions.",
+    items: ["Structured discovery", "Usability testing", "Real user behavior", "Actionable direction"],
+  },
+];
+
+export const testimonialsSection = {
+  eyebrow: "Testimonials",
+  heading: ["What clients", "say about me."], // 2nd line muted
+  intro:
+    "Here's what my clients have shared about their experiences working with me. Their trust and satisfaction motivate me to continue delivering designs that make an impact.",
+};
+
 export const aiTwin = {
   placeholder: "Do you work on banking apps?",
   tagline: "Ask my AI twin anything about my work before you email.",
