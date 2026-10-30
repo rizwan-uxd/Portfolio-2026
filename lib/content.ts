@@ -15,7 +15,10 @@ export const person = {
 };
 
 export const hero = {
-  headline: ["Designing enterprise products", "that create measurable business impact."], // 2nd line is muted
+  eyebrow: "Senior UX/Product Designer · Dubai",
+  headline: ["Designing enterprise products that ", "create measurable business impact."], // 2nd part is muted (wraps mid-line in Figma)
+  subline:
+    "15+ years designing banking, government and enterprise platforms. AI accelerates my design process — enabling faster delivery, broader exploration and uncompromising quality.",
   cta: "Let's connect",
 };
 

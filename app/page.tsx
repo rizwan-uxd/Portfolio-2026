@@ -6,15 +6,21 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main id="top" className="pt-16">
+      <main id="top" className="pt-16 md:pt-20">
         <Frame>
           <section className="flex min-h-[540px] flex-col items-center justify-center px-4 py-16 text-center md:px-12">
-            <p className="micro mb-6 text-muted-foreground">{person.role} · {person.location}</p>
-            <h1 className="display max-w-[24ch]">
+            <p className="micro mb-6 text-muted-foreground">{hero.eyebrow}</p>
+            <h1 className="display max-w-[800px]">
               {hero.headline[0]}
-              <br />
-              <span className="muted">{hero.headline[1]}</span>
+              <span className="text-muted-foreground">{hero.headline[1]}</span>
             </h1>
+            <p className="mt-8 max-w-[560px] text-muted-foreground">{hero.subline}</p>
+            <a
+              href={person.calendly}
+              className="label mt-8 inline-flex h-10 items-center rounded-btn bg-brand px-6 text-brand-foreground"
+            >
+              {hero.cta} →
+            </a>
           </section>
         </Frame>
       </main>
