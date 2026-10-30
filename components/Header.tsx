@@ -68,9 +68,9 @@ function MenuButton() {
 
 function Nav() {
   return (
-    <nav aria-label="Primary" className="hidden items-center gap-nav md:flex">
+    <nav aria-label="Primary" className="hidden items-center gap-nav-link md:flex">
       {links.map((l) => (
-        <a key={l.href} href={l.href} className="nav-link p-2">
+        <a key={l.href} href={l.href} className="nav-link rounded-full px-3 py-2">
           {l.label}
         </a>
       ))}

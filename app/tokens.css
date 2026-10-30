@@ -89,6 +89,7 @@
   --logo-size-sm: 40px;
   --logo-size: 48px;
   --nav-gap: 36px;
+  --nav-link-gap: 28px;          /* between hover pills: keeps the 52px text spacing from Figma (36 + 2 x 8) */
   --intro-w: 420px;
   --works-intro-w: 400px;
   --works-rail-w: 395px;
@@ -127,6 +128,8 @@
   --hover-dot: 8px;
   --hover-dot-scale: 40;
   --hover-shift: 48px;
+  --nav-pill-hover: color-mix(in srgb, var(--foreground) 8%, transparent); /* nav link hover pill (surinder.design) */
+  --nav-pill-duration: 200ms;
 }
 
 .dark {
@@ -193,6 +196,7 @@
   --spacing-header-offset-sm: var(--header-offset-sm);
   --spacing-header-offset: var(--header-offset);
   --spacing-nav: var(--nav-gap);
+  --spacing-nav-link: var(--nav-link-gap);
   --container-intro: var(--intro-w);
   --container-works-intro: var(--works-intro-w);
   --container-prompt: var(--prompt-w);
@@ -227,7 +231,13 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .subtitle { font-size: var(--text-subtitle-sm); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; @variant lg { font-size: var(--text-subtitle); } }
 .label { font-size: var(--text-label); font-weight: 500; line-height: 1.33; letter-spacing: -0.02em; text-transform: uppercase; }
 .micro { font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1.5; letter-spacing: 0.18em; text-transform: uppercase; }
-.nav-link { font-size: var(--text-nav); font-weight: 600; line-height: var(--leading-nav); letter-spacing: 0; color: var(--nav-link); }
+.nav-link {
+  font-size: var(--text-nav); font-weight: 600; line-height: var(--leading-nav); letter-spacing: 0; color: var(--nav-link);
+  transition: background-color var(--nav-pill-duration) ease, color var(--nav-pill-duration) ease;
+  &:focus-visible { background: var(--nav-pill-hover); color: var(--foreground); }
+  @media (hover: hover) { &:hover { background: var(--nav-pill-hover); color: var(--foreground); } }
+  @media (prefers-reduced-motion: reduce) { transition: none; }
+}
 .glow-label { font-size: var(--text-body); line-height: var(--leading-glow); letter-spacing: var(--tracking-glow); }
 .frame { max-width: var(--frame-w); margin-inline: auto; @variant frame { border-inline: 1px solid var(--hairline); } } /* side borders drop below the frame width */
 .logo { position: relative; display: block; flex-shrink: 0; overflow: hidden; width: var(--logo-size-sm); height: var(--logo-size-sm); @variant md { width: var(--logo-size); height: var(--logo-size); } }
