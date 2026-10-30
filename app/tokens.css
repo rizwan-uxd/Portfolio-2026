@@ -132,6 +132,19 @@
   --hover-shift: 48px;
   --nav-pill-hover: color-mix(in srgb, var(--foreground) 8%, transparent); /* nav link hover pill (surinder.design) */
   --nav-pill-duration: 200ms;
+  /* Hero horizon: sits in its own band below the CTA (components/HeroHorizon.tsx) */
+  --horizon-h-sm: 200px;
+  --horizon-h: 320px;
+  --horizon-gap-sm: -24px;       /* the band overlaps the CTA so the faint top of the beams reaches it (owner, 2026-10-30) */
+  --horizon-gap: -32px;
+  --horizon-radius: 1.3;         /* planet radius / band width, measured from the reference */
+  --horizon-rim-y: 0.4;          /* top of the arc, as a share of the band height from the bottom */
+  --horizon-rim-glow: 0.75;
+  --horizon-atmosphere: 0.3;
+  --horizon-beams: 0.3;
+  --horizon-flare: 0.7;
+  --horizon-intro: 4;            /* seconds for the light to spread along the arc on load */
+  --horizon-max-dpr: 2;
   /* Brands carousel: motion measured from poulo.site, positions in units of the circle size */
   --brands-size-ratio-sm: 0.21;  /* circle size / panel width, larger below lg: so wordmarks stay legible */
   --brands-size-ratio: 0.1335;
@@ -303,6 +316,8 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .glow-btn:focus-visible .glow-text { opacity: 0; transform: translateX(var(--hover-shift)); }
 .glow-btn:focus-visible .glow-hover { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .glow-br, .glow-tl { animation: none; } .glow-dot, .glow-text, .glow-hover { transition: none; } }
+.hero { padding-bottom: calc(var(--horizon-h-sm) + var(--horizon-gap-sm)); @variant md { padding-bottom: calc(var(--horizon-h) + var(--horizon-gap)); } }
+.hero-horizon { position: absolute; z-index: -1; inset-inline: 0; bottom: 0; display: block; width: 100%; height: var(--horizon-h-sm); pointer-events: none; @variant md { height: var(--horizon-h); } }
 @property --brands-phase { syntax: "<number>"; inherits: true; initial-value: 0; }
 @property --brands-nudge { syntax: "<number>"; inherits: true; initial-value: 0; }
 @keyframes brands-spin { to { --brands-phase: 1; } } /* one full loop; --p multiplies it by the item count */

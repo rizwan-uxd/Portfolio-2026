@@ -1,8 +1,9 @@
 import { hero, person } from "@/lib/content";
+import { HeroHorizon } from "./HeroHorizon";
 
 export function Hero() {
   return (
-    <section className="flex flex-col items-center gap-6 px-4 py-12 text-center md:px-8 md:py-24">
+    <section className="hero relative isolate flex flex-col items-center gap-6 overflow-hidden px-4 pt-6 text-center md:px-8 md:pt-6">
       <p className="micro text-muted-foreground">{hero.eyebrow}</p>
       <h1 className="display w-full max-w-hero-headline">
         {hero.headline[0]}
@@ -13,6 +14,7 @@ export function Hero() {
       <a href={person.calendly} data-nav-reveal-after className="label flex w-full items-center justify-center rounded-btn bg-brand px-6 py-4 text-brand-foreground md:w-auto md:py-3">
         {hero.cta} →
       </a>
+      <HeroHorizon />
     </section>
   );
 }

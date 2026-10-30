@@ -15,8 +15,8 @@ export default function Home() {
       <main id="top" className="pt-header-offset-sm md:pt-header-offset">
         <Frame>
           <Hero />
-          <Brands />
           <Works />
+          <Brands />
           <Services />
           <Graph />
           <Testimonials />
