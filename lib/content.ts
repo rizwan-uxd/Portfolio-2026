@@ -22,8 +22,18 @@ export const hero = {
   cta: "Let's connect",
 };
 
-export const brandsLabel = "Trusted by"; // mobile frame only
-export const brands = ["KATIM", "Digital Dubai", "Emirates NBD", "Etihad Airways"]; // Figma shows text names
+export const brandsTitle = "Led Impactful initiatives for";
+// Names and logos from the live site, in its order
+export const brands = [
+  { name: "Horizontal Digital", logo: "/images/brands/6_Horizontal.svg", width: 75, height: 53 },
+  { name: "KATIM", logo: "/images/brands/7_katim.svg", width: 126, height: 35 },
+  { name: "Digital Dubai", logo: "/images/brands/4_DD.svg", width: 126, height: 43 },
+  { name: "Emirates NBD", logo: "/images/brands/5_enbd.svg", width: 152, height: 43 },
+  { name: "Etihad Airways", logo: "/images/brands/3_etihad.svg", width: 126, height: 42 },
+  { name: "BNY Mellon", logo: "/images/brands/1_BNYM.svg", width: 115, height: 40 },
+  { name: "Cognizant", logo: "/images/brands/2_CS.svg", width: 126, height: 28 },
+  { name: "Abu Dhabi Commercial Bank", logo: "/images/brands/8_ADCB.svg", width: 123, height: 37 },
+];
 
 export type Work = {
   slug: string; title: string; metric: string; metricLabel: string;

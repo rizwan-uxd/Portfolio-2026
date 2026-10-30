@@ -21,6 +21,13 @@ Rule: respect `prefers-reduced-motion` for everything below.
 
 - Nav links Works / AI projects / About (owner, 2026-10-30, surinder.design): on hover and keyboard focus a soft pill (foreground at 8%) fades in behind the link and the text brightens to foreground, 200ms ease. Links are `px-3 py-1` pills (36px tall) with a 28px gap and a -4px right margin on the nav, so the labels stay exactly where Figma puts them. Same in the full-bleed header and the floating bar. Reduced motion: instant.
 
+- Brands carousel (owner, 2026-10-30, follows poulo.site's logo carousel; motion only, our colours; title "Led Impactful initiatives for", owner's capitalisation). `components/Brands.tsx`, `.brands-*` in `app/tokens.css`:
+  - Circles ride a shallow arc and move right to left at a constant 0.35 items per second, so one loop of 8 takes about 23s. Linear, no stops.
+  - Position `p` is the item's distance from the centre in items. Scale is `0.55 + 0.15 x |p|`, so the smallest circle is in the centre. In circle sizes, `x = 2.29 x tan(0.296 x p)` and `y = 0.175 - x^2 / 22.5`. Items wrap off-screen at `p = 4`. These numbers are fitted to measurements of the reference.
+  - Hover pauses it and it resumes on leave. Drag moves it (no momentum). Left and right arrow keys move one item when focused, 1.2s.
+  - Circle size is 13.35% of the panel width at `lg:` and up, and 21% below it (owner, 2026-10-30: 0.75x of the first pass, which used the reference's 17.8% and 28%). Larger below `lg:` so the wordmarks stay legible.
+  - Reduced motion: no auto-scroll or arc, a static row that scrolls sideways, so all 8 logos can be reached.
+
 ## Not decided (ask before building)
 - Hero dot-matrix / ASCII background motion.
 - Scroll reveals and section entrance animations.

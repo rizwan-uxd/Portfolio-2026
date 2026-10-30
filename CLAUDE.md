@@ -22,7 +22,7 @@ Desktop frame `2:2` (1440), mobile frame `27:5` (390). Style base: Codex (dark, 
 - Tokens in `app/tokens.css` are the single source for every value. Use Tailwind token classes (`bg-card`, `text-muted-foreground`, `border-hairline`, `bg-brand`, `rounded-btn`) or `var(--token)`. Never hardcode colors, sizes or radii. Tailwind's numeric spacing (`p-6` = 24px) is the Figma `space/N` scale. Don't name a `--spacing-*` token the same as a `--container-*` one: `max-w-*` picks the spacing value.
 - Text styles are utility classes from the tokens: `.display`, `.title`, `.subtitle`, `.label`, `.micro`. Display second line or half uses `text-muted-foreground`.
 - Content frame is `.frame` (`--frame-w`, hairline side borders only at 1214px and up).
-- Sections are server components; the layout pass is static. Only Header is a client component so far.
+- Sections are server components; the layout pass is static. Only Header and Brands are client components so far.
 - Mobile-first Tailwind: base is frame `27:5` (390). Header and hero switch to frame `2:2` at `md:` (768), all other sections at `lg:` (1024), until a tablet layout is decided. `frame:` is 1214+.
 - Accessibility: focus ring uses `--ring`; interactive SVG nodes are keyboard reachable; respect `prefers-reduced-motion`.
 

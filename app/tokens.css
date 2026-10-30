@@ -132,6 +132,23 @@
   --hover-shift: 48px;
   --nav-pill-hover: color-mix(in srgb, var(--foreground) 8%, transparent); /* nav link hover pill (surinder.design) */
   --nav-pill-duration: 200ms;
+  /* Brands carousel: motion measured from poulo.site, positions in units of the circle size */
+  --brands-size-ratio-sm: 0.21;  /* circle size / panel width, larger below lg: so wordmarks stay legible */
+  --brands-size-ratio: 0.1335;
+  --brands-height-ratio: 1.483;  /* track height / circle size */
+  --brands-speed: 0.35;          /* items per second, linear */
+  --brands-scale-min: 0.55;      /* at the centre */
+  --brands-scale-step: 0.15;     /* per item away from the centre */
+  --brands-x-gain: 2.29;         /* x = gain * tan(curve * position) */
+  --brands-x-curve: 0.296;
+  --brands-arc-rise: 0.175;      /* y = rise - x^2 / radius */
+  --brands-arc-radius: 22.5;
+  --brands-logo-size: 66%;
+  --brands-logo-brightness: 1.4;
+  --brands-gap: 12px;            /* reduced-motion strip */
+  --brands-strip-size: 96px;
+  --brands-step-duration: 1.2s;  /* arrow key move */
+  --brands-step-ease: cubic-bezier(0.33, 0, 0.2, 1);
 }
 
 .dark {
@@ -286,4 +303,30 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .glow-btn:focus-visible .glow-text { opacity: 0; transform: translateX(var(--hover-shift)); }
 .glow-btn:focus-visible .glow-hover { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .glow-br, .glow-tl { animation: none; } .glow-dot, .glow-text, .glow-hover { transition: none; } }
+@property --brands-phase { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --brands-nudge { syntax: "<number>"; inherits: true; initial-value: 0; }
+@keyframes brands-spin { to { --brands-phase: 1; } } /* one full loop; --p multiplies it by the item count */
+.brands-panel { container-type: inline-size; --brands-size: calc(var(--brands-size-ratio-sm) * 100cqw); @variant lg { --brands-size: calc(var(--brands-size-ratio) * 100cqw); } }
+.brands-track {
+  position: relative; overflow: clip; height: calc(var(--brands-size) * var(--brands-height-ratio)); touch-action: pan-y; user-select: none; cursor: grab;
+  animation: brands-spin calc(var(--brands-count) / var(--brands-speed) * 1s) linear infinite;
+  transition: --brands-nudge var(--brands-step-duration) var(--brands-step-ease);
+  &[data-dragging="true"] { cursor: grabbing; animation-play-state: paused; transition: none; }
+  &:focus-visible { animation-play-state: paused; outline-offset: -2px; }
+  @media (hover: hover) { &:hover { animation-play-state: paused; } }
+}
+.brands-item { /* --p: the item's position from the centre, wrapped to the range -count/2 to count/2 */
+  --p: calc(mod(var(--i) - var(--brands-phase) * var(--brands-count) + var(--brands-nudge) + var(--brands-count) / 2, var(--brands-count)) - var(--brands-count) / 2);
+  --x: calc(var(--brands-x-gain) * tan(var(--brands-x-curve) * var(--p)));
+  --y: calc(var(--brands-arc-rise) - var(--x) * var(--x) / var(--brands-arc-radius));
+  position: absolute; left: 50%; top: 50%; width: var(--brands-size); height: var(--brands-size); margin: calc(var(--brands-size) / -2);
+  display: flex; align-items: center; justify-content: center; border-radius: 9999px; border: 1px solid var(--hairline); background: var(--secondary);
+  transform: translate(calc(var(--x) * 100%), calc(var(--y) * 100%)) scale(calc(var(--brands-scale-min) + var(--brands-scale-step) * max(var(--p), -1 * var(--p))));
+}
+.brands-logo { display: block; width: var(--brands-logo-size); height: var(--brands-logo-size); object-fit: contain; filter: brightness(var(--brands-logo-brightness)); pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  .brands-track { height: auto; overflow-x: auto; animation: none; cursor: auto; transition: none; touch-action: auto; }
+  .brands-list { position: static; display: flex; width: max-content; gap: var(--brands-gap); padding-inline: var(--brands-gap); }
+  .brands-item { position: static; flex: none; margin: 0; width: var(--brands-strip-size); height: var(--brands-strip-size); transform: none; }
+}
 .no-scrollbar { scrollbar-width: none; }
