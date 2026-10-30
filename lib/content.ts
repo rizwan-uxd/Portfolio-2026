@@ -22,15 +22,37 @@ export const hero = {
   cta: "Let's connect",
 };
 
-export const brands = ["KATIM", "Digital Dubai", "Emirates NBD", "Etihad"];
+export const brands = ["KATIM", "Digital Dubai", "Emirates NBD", "Etihad Airways"]; // Figma shows text names
 
-export const works = [
-  { slug: "hajj-operations-platform", title: "Hajj Enterprise Operations Platform", metric: "+25%", metricLabel: "efficiency" },
+export type Work = {
+  slug: string; title: string; metric: string; metricLabel: string;
+  chip?: string; client?: string; year?: string; summary?: string;
+};
+
+export const works: Work[] = [
+  {
+    slug: "hajj-operations-platform",
+    title: "Hajj Enterprise Operations Platform",
+    metric: "+25%",
+    metricLabel: "efficiency",
+    // Only the Hajj project has detail copy in Figma; add the rest as it is finalised.
+    chip: "Enterprise UX",
+    client: "Horizontal Digital",
+    year: "2026",
+    summary:
+      "Led the UX transformation of a PowerPoint- and meeting-driven Hajj reporting process into a connected enterprise platform for operational data capture, validation, reporting and executive decision-making.",
+  },
   { slug: "dubainow-mobile-app", title: "DubaiNow Mobile App", metric: "+30%", metricLabel: "service completion" },
   { slug: "secure-communication-app", title: "Secure Communication App", metric: "3 months", metricLabel: "dev time saved" },
   { slug: "emirates-islamic-digital-ux", title: "Emirates Islamic Digital UX", metric: "+30%", metricLabel: "task completion" },
   { slug: "ai-banking-copilot", title: "AI Banking Copilot", metric: "6 days", metricLabel: "concept to prototype" },
 ];
+
+export const worksSection = {
+  heading: ["Selected works", "Enterprise impact"], // 2nd line muted
+  intro: "Every project opens on its finished screens. Switch any one to its case study for the problem, process and outcome.",
+  cta: "Case studies instead ↙",
+};
 
 export const capabilities = ["Product/UX design", "Design systems/strategy", "Vibe coding and prototyping", "Discovery and user testing"]; // no numbering
 

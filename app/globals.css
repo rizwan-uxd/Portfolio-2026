@@ -143,3 +143,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 @media (min-width: 1214px) { .frame { border-inline: 1px solid var(--hairline); } }
 html { scroll-behavior: smooth; }
 :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+@keyframes works-fade { from { opacity: 0; } to { opacity: 1; } }
+.works-panel { animation: works-fade 200ms ease-out; }
+@media (prefers-reduced-motion: reduce) { .works-panel { animation: none; } }

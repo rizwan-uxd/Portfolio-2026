@@ -1,4 +1,6 @@
 import { Header } from "@/components/Header";
+import { Brands } from "@/components/Brands";
+import { Works } from "@/components/Works";
 import { Frame } from "@/components/Frame";
 import { hero, person } from "@/lib/content";
 
@@ -22,6 +24,8 @@ export default function Home() {
               {hero.cta} →
             </a>
           </section>
+          <Brands />
+          <Works />
         </Frame>
       </main>
     </>
