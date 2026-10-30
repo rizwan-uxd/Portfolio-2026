@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+/* Design tokens scraped from codex.io/launchpads (computed styles, 2026-10-30).
+   Drop into app/globals.css (or import it). Tailwind v4 `@theme inline` block at the bottom;
+   for Tailwind v3, map these variables in tailwind.config.ts via `colors: { background: 'var(--background)', ... }`. */
+
+:root {
+  /* Light theme */
+  --background: #fff;
+  --foreground: #181818;
+  --card: #f9f9f9;
+  --card-foreground: #111;
+  --popover: #fff;
+  --popover-foreground: #111;
+  --primary: #111;
+  --primary-foreground: #fff;
+  --secondary: #f1f1f1;
+  --secondary-foreground: #111;
+  --muted: #f4f4f4;
+  --muted-foreground: #5c5c5c;
+  --accent: #f7f7f7;
+  --accent-foreground: #111;
+  --destructive: #e54d2e;
+  --destructive-foreground: #fff;
+  --border: #e4e4e4;
+  --input: #e4e4e4;
+  --ring: #c2c2c2;
+  --hairline: var(--border);
+  --brand: #e5ff5d;
+  --brand-foreground: #111;
+  --pos: #16a34a;
+  --neg: #e5484d;
+  --radius: 0.5rem;
+  --radius-xl: 12px;             /* prompt-bar shell, large cards */
+
+  /* Knowledge-graph category colours (same in both themes) */
+  --graph-companies: #6cb6ff;
+  --graph-industries: #ffa24d;
+  --graph-skills: #ff7ab6;
+  --graph-tools: #4fd8eb;
+  --graph-projects: #e5ff5d;
+  --graph-impact: #b69cff;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-data: var(--font-satoshi), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; /* optional, tables/data */
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Type scale (measured) */
+  --text-display: 56px;          /* h1/h2: weight 500, line-height 0.92, tracking -0.04em */
+  --text-body: 16px;             /* weight 400, line-height 1.4, tracking -0.02em */
+  --text-label: 12px;            /* nav + buttons: weight 500, uppercase, tracking -0.02em */
+  --text-title: 32px;            /* weight 500, lh 1.10, tracking -0.03em */
+  --text-subtitle: 20px;         /* weight 500, lh 1.20, tracking -0.02em */
+  --text-micro: 9px;             /* mono tags: uppercase, tracking 0.18em (1.6px) */
+
+  /* Shape */
+  --radius-btn: 4px;
+  --radius-sm: 3.2px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* Layout */
+  --header-h: 64px;
+  --frame-w: 1214px;             /* centered content frame with 1px hairline side borders */
+}
+
+.dark {
+  --background: #181818;
+  --foreground: #e8e8e8;
+  --card: #1f1f1f;
+  --card-foreground: #e1e8ee;
+  --popover: #191919;
+  --popover-foreground: #eee;
+  --primary: #e5ff5d;
+  --primary-foreground: #081a1b;
+  --secondary: #292929;
+  --secondary-foreground: #eee;
+  --muted: #222;
+  --muted-foreground: #b4b4b4;
+  --accent: #2a2a2a;
+  --accent-foreground: #e5ff5d;
+  --destructive: #e54d2e;
+  --destructive-foreground: #fff;
+  --border: #2c2c2c;
+  --input: #3a3a3a;
+  --ring: #4a4a4a;
+  --hairline: #3d4045;
+  --brand: #e5ff5d;
+  --brand-foreground: #111;
+  --pos: #00e599;
+  --neg: #fd607f;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-hairline: var(--hairline);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-pos: var(--pos);
+  --color-neg: var(--neg);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --radius-btn: var(--radius-btn);
+  --radius-xl: var(--radius-xl);
+  --color-graph-companies: var(--graph-companies);
+  --color-graph-industries: var(--graph-industries);
+  --color-graph-skills: var(--graph-skills);
+  --color-graph-tools: var(--graph-tools);
+  --color-graph-projects: var(--graph-projects);
+  --color-graph-impact: var(--graph-impact);
+}
+
+/* Base type rules matching the measured values */
+body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); font-size: 16px; line-height: 1.4; letter-spacing: -0.02em; }
+.display { font-size: clamp(36px, 6vw, 56px); font-weight: 500; line-height: 0.92; letter-spacing: -0.04em; }
+.display .muted { color: var(--muted-foreground); }   /* second headline line is dimmed, as on Codex */
+.title { font-size: 32px; font-weight: 500; line-height: 1.1; letter-spacing: -0.03em; }
+.subtitle { font-size: 20px; font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; }
+.label { font-size: 12px; font-weight: 500; line-height: 16px; letter-spacing: -0.02em; text-transform: uppercase; }
+.micro { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; }
+.btn-brand { background: var(--brand); color: var(--brand-foreground); border-radius: var(--radius-btn); padding: 0 16px; height: 40px; }
+.frame { max-width: var(--frame-w); margin-inline: auto; border-inline: 1px solid var(--hairline); }
+
+/* Responsive frame: side borders drop below the frame width */
+.frame { border-inline: 0; }
+@media (min-width: 1214px) { .frame { border-inline: 1px solid var(--hairline); } }
+html { scroll-behavior: smooth; }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
