@@ -11,7 +11,8 @@ Rule: respect `prefers-reduced-motion` for everything below.
   - A 120px blur veil fades in behind the bar so content softens under it (hidden under `prefers-reduced-transparency`).
   - The hidden bar is `inert`, so it is never in the tab order. Same bar on all breakpoints (surinder.design hides its mobile bar on scroll down instead; we kept one behaviour).
   - Reduced motion: 200ms opacity only, no slide.
-  - The floating bar's contents (pill shape, 40px logo, shadow) are not in Figma; built from existing tokens. Confirm or adjust.
+  - Floating bar logo is 0.75x the header logo: 36px desktop, 30px mobile (owner, 2026-10-30).
+  - The floating bar's pill shape and shadow are not in Figma; built from existing tokens.
 - Logo R draw (owner, 2026-10-30, Figma `3:39` motion): plays once on load. The R channel starts filled by a thick lime stroke, which retracts along the letter from the stem foot to the leg tip, revealing the R as a drawn line. Figma timeline: 2s, stroke retracts 0.15s to 1.35s linear, then hidden. We play it once instead of looping. Only the full-bleed header animates; the floating bar shows the end state. Reduced motion: end state, no animation.
 - Linkedin button (owner, 2026-10-30):
   - Rest: React Bits "star border" motion. The two Figma glows travel along the bottom (right to left) and top (left to right) edges and fade, 6s linear, infinite, alternate.

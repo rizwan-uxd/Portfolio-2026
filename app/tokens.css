@@ -88,6 +88,7 @@
   --hero-subline-w: 560px;
   --logo-size-sm: 40px;
   --logo-size: 48px;
+  --logo-float-scale: 0.75;      /* floating bar logo: 36px desktop, 30px mobile (owner, 2026-10-30) */
   --nav-gap: 36px;
   --nav-link-gap: 28px;          /* between hover pills: keeps the 52px text spacing from Figma (36 + 2 x 8) */
   --intro-w: 420px;
@@ -245,7 +246,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .glow-br, .glow-tl { position: absolute; display: block; width: var(--glow-w); height: var(--glow-h); max-width: none; }
 .glow-br { left: var(--glow-br-x); top: var(--glow-br-y); }
 .glow-tl { left: var(--glow-tl-x); top: var(--glow-tl-y); }
-.logo-compact { @variant md { width: var(--logo-size-sm); height: var(--logo-size-sm); } }
+.logo-compact { width: calc(var(--logo-size-sm) * var(--logo-float-scale)); height: calc(var(--logo-size-sm) * var(--logo-float-scale)); @variant md { width: calc(var(--logo-size) * var(--logo-float-scale)); height: calc(var(--logo-size) * var(--logo-float-scale)); } }
 .logo-draw { color: var(--brand); overflow: visible; animation: logo-draw var(--logo-draw-duration) linear var(--logo-draw-delay) both; @media (prefers-reduced-motion: reduce) { display: none; } }
 @keyframes logo-draw {
   from { stroke-dasharray: 1 1; stroke-dashoffset: 0; opacity: 1; }
