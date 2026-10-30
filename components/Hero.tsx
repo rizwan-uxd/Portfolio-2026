@@ -10,7 +10,7 @@ export function Hero() {
         <span className="text-muted-foreground">{hero.headline[2]}</span>
       </h1>
       <p className="w-full max-w-hero-subline text-muted-foreground">{hero.subline}</p>
-      <a href={person.calendly} className="label flex w-full items-center justify-center rounded-btn bg-brand px-6 py-4 text-brand-foreground md:w-auto md:py-3">
+      <a href={person.calendly} data-nav-reveal-after className="label flex w-full items-center justify-center rounded-btn bg-brand px-6 py-4 text-brand-foreground md:w-auto md:py-3">
         {hero.cta} →
       </a>
     </section>

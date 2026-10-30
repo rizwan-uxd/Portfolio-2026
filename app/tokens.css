@@ -107,9 +107,26 @@
   --shadow-avatar: 0 0 12px color-mix(in srgb, var(--brand) 25%, transparent);
   --menu-bar-gap: 5px;
 
-  /* Header hide and reveal (animations.md) */
-  --nav-duration: 250ms;
-  --nav-ease: ease-out;
+  /* Header: full bleed at the top, floating bar after the hero CTA (animations.md) */
+  --nav-float-top-sm: 12px;
+  --nav-float-top: 24px;
+  --nav-float-duration: 300ms;
+  --nav-float-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --nav-float-fade: 200ms;       /* reduced motion: opacity only */
+  --nav-veil-h: 120px;
+  --nav-veil-blur: 9px;
+  --shadow-pill: 0 10px 30px 0 rgb(0 0 0 / 0.35), inset 0 1px 0 0 color-mix(in srgb, var(--foreground) 8%, transparent);
+
+  /* Logo R draw on load (Figma 3:39: 2s timeline, stroke retracts 0.15s to 1.35s, linear) */
+  --logo-draw-delay: 150ms;
+  --logo-draw-duration: 1200ms;
+
+  /* Linkedin button: star-border glow at rest, interactive-hover fill on hover */
+  --glow-orbit: 6s;
+  --hover-duration: 300ms;
+  --hover-dot: 8px;
+  --hover-dot-scale: 40;
+  --hover-shift: 48px;
 }
 
 .dark {
@@ -168,6 +185,7 @@
   --font-mono: var(--font-mono);
   --font-heading: var(--font-heading);
   --shadow-glow: var(--shadow-glow);
+  --shadow-pill: var(--shadow-pill);
   --breakpoint-frame: 75.875rem; /* 1214px: --frame-w, media queries can't read variables */
   --container-header: var(--header-w);
   --container-hero-headline: var(--hero-headline-w);
@@ -217,5 +235,43 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .glow-br, .glow-tl { position: absolute; display: block; width: var(--glow-w); height: var(--glow-h); max-width: none; }
 .glow-br { left: var(--glow-br-x); top: var(--glow-br-y); }
 .glow-tl { left: var(--glow-tl-x); top: var(--glow-tl-y); }
-.site-header { transition: transform var(--nav-duration) var(--nav-ease); &[data-hidden="true"] { transform: translateY(-100%); } @media (prefers-reduced-motion: reduce) { transition: none; } }
+.logo-compact { @variant md { width: var(--logo-size-sm); height: var(--logo-size-sm); } }
+.logo-draw { color: var(--brand); overflow: visible; animation: logo-draw var(--logo-draw-duration) linear var(--logo-draw-delay) both; @media (prefers-reduced-motion: reduce) { display: none; } }
+@keyframes logo-draw {
+  from { stroke-dasharray: 1 1; stroke-dashoffset: 0; opacity: 1; }
+  99% { stroke-dasharray: 0 1; stroke-dashoffset: -1; opacity: 1; }
+  to { stroke-dasharray: 0 1; stroke-dashoffset: -1; opacity: 0; } /* the square cap would linger as a dot */
+}
+.nav-float {
+  position: fixed; inset-inline: 0; top: var(--nav-float-top-sm); z-index: 50; display: flex; justify-content: center; padding-inline: calc(var(--spacing) * 4); pointer-events: none;
+  opacity: 0; transform: translateY(-140%); transition: transform var(--nav-float-duration) var(--nav-float-ease), opacity var(--nav-float-duration) ease;
+  & > * { pointer-events: auto; }
+  &[data-shown="true"] { opacity: 1; transform: none; }
+  @variant md { top: var(--nav-float-top); }
+  @media (prefers-reduced-motion: reduce) { transform: none; transition: opacity var(--nav-float-fade) ease; }
+}
+.nav-veil {
+  position: fixed; inset-inline: 0; top: 0; z-index: 40; height: var(--nav-veil-h); pointer-events: none;
+  backdrop-filter: blur(var(--nav-veil-blur)); mask-image: linear-gradient(to top, transparent, black 55%);
+  opacity: 0; transition: opacity var(--nav-float-duration) ease;
+  &[data-shown="true"] { opacity: 1; }
+  @media (prefers-reduced-transparency: reduce) { display: none; }
+}
+.glow-br { animation: star-bottom var(--glow-orbit) linear infinite alternate; }
+.glow-tl { animation: star-top var(--glow-orbit) linear infinite alternate; }
+@keyframes star-bottom { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-100%); opacity: 0; } }
+@keyframes star-top { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+.glow-dot { position: absolute; left: calc(var(--spacing) * 3); top: 50%; width: var(--hover-dot); height: var(--hover-dot); margin-top: calc(var(--hover-dot) / -2); border-radius: 9999px; background: var(--brand); transform: scale(0); }
+.glow-text { position: relative; display: inline-block; }
+.glow-hover { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: var(--spacing); color: var(--brand-foreground); opacity: 0; transform: translateX(var(--hover-shift)); }
+.glow-dot, .glow-text, .glow-hover { transition: transform var(--hover-duration) ease, opacity var(--hover-duration) ease; }
+@media (hover: hover) {
+  .glow-btn:hover .glow-dot { transform: scale(var(--hover-dot-scale)); }
+  .glow-btn:hover .glow-text { opacity: 0; transform: translateX(var(--hover-shift)); }
+  .glow-btn:hover .glow-hover { opacity: 1; transform: none; }
+}
+.glow-btn:focus-visible .glow-dot { transform: scale(var(--hover-dot-scale)); }
+.glow-btn:focus-visible .glow-text { opacity: 0; transform: translateX(var(--hover-shift)); }
+.glow-btn:focus-visible .glow-hover { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .glow-br, .glow-tl { animation: none; } .glow-dot, .glow-text, .glow-hover { transition: none; } }
 .no-scrollbar { scrollbar-width: none; }

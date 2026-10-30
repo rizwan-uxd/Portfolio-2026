@@ -4,7 +4,7 @@ Figma file `uDzkzeMLL6tOJaT0lf2hNy`. Desktop frame `2:2`, mobile frame `27:5`.
 
 | Component | File | Node | Behaviour and states |
 |---|---|---|---|
-| Header | `components/Header.tsx` | `3:33`, mobile `27:6` (button `12:13`) | Fixed, hides on scroll (animations.md). Desktop: logo 48, nav (Works, AI projects, About), glow Linkedin button. Mobile: logo 40, Linkedin, menu button. Menu button is inert because the sheet isn't designed. Hover not designed. |
+| Header | `components/Header.tsx` | `3:33`, mobile `27:6` (button `12:13`) | Full bleed at the top, then a floating bar after the hero CTA; logo R draws on load; Linkedin star-border glow and hover fill (animations.md). Desktop: logo 48, nav (Works, AI projects, About), glow Linkedin button. Mobile: logo 40, Linkedin, menu button. Menu button is inert because the sheet isn't designed. Nav link hover not designed. |
 | Hero | `components/Hero.tsx` | `2:15`, mobile `27:32` | Eyebrow, headline, subline, lime "Let's connect →" to Calendly (full width on mobile). The dot-matrix background in HANDOFF.md isn't in the Figma node, so it's not drawn. |
 | Brands strip | `components/Brands.tsx` | `2:21`, mobile `27:38` | Four text names from Figma. Live site has 8 logos; owner to decide. |
 | Selected works | `components/Works.tsx` | `8:2`, mobile `29:6` | Static: first project open. Screens are Figma placeholders. To build: project switching, Final screens/Case study toggle, show other screens, `/work/[slug]` links. |
