@@ -15,7 +15,7 @@ export const person = {
 };
 
 export const hero = {
-  eyebrow: "Senior UX/Product Designer · Dubai",
+  intro: { greeting: "Hi", lead: "I'm Mohammed Rizwan from", place: "Dubai" },
   headline: ["Designing enterprise products ", "that ", "create measurable business impact."], // last part is muted; "that " is muted only on mobile (frame 27:5)
   subline:
     "15+ years designing banking, government and enterprise platforms. AI accelerates my design process — enabling faster delivery, broader exploration and uncompromising quality.",

@@ -28,6 +28,12 @@ Rule: respect `prefers-reduced-motion` for everything below.
   - Project list: fades in from 80% to 100%, starting only once the heading is fully visible (owner, 2026-10-31).
   - The globe's edge flattens evenly until it is a straight line at 100%, so Selected works arrives full width and square. The rim and beams ride that edge and fade out late in the move.
   - Reduced motion: plain scroll, no scaling, clipping or fades.
+- Hero intro line (owner, 2026-10-31, follows Magic UI "Typing Animation"; our own code). Replaces the "Senior UX/Product Designer · Dubai" eyebrow above the headline. `components/HeroIntro.tsx`, `.hero-intro`, `.hero-flag*` and `--intro-*` in `app/tokens.css`:
+  - It must not steal the show (owner, 2026-10-31), so it is quick, small and settles. About 1.4s in total.
+  - Plays once on load: after 300ms it types "Hi" at 28ms per character, with a thin muted cursor. A hand fades in and waves once (owner, 2026-10-31). It types "I'm Mohammed Rizwan from", the UAE flag fades in and ripples for two cycles, then it types "Dubai". The hand and flag each get 120ms, and the cursor leaves after 500ms. Nothing moves once it has settled.
+  - The untyped text is held invisibly, so the centred line doesn't shift as it types. Screen readers get the whole sentence.
+  - Mono at 12px, not the 9px uppercase eyebrow style. That size is not in Figma. The hand is the system emoji, the flag is drawn in code.
+  - Reduced motion: the final line at once, with a still hand and flag and no cursor.
 - Logo R draw (owner, 2026-10-30, Figma `3:39` motion): plays once on load. The R channel starts filled by a thick lime stroke, which retracts along the letter from the stem foot to the leg tip, revealing the R as a drawn line. Figma timeline: 2s, stroke retracts 0.15s to 1.35s linear, then hidden. We play it once instead of looping. Only the full-bleed header animates; the floating bar shows the end state. Reduced motion: end state, no animation.
 - Linkedin button (owner, 2026-10-30):
   - Rest: React Bits "star border" motion. The two Figma glows travel along the bottom (right to left) and top (left to right) edges and fade, 6s linear, infinite, alternate.

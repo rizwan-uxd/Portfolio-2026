@@ -1,10 +1,11 @@
 import { hero, person } from "@/lib/content";
+import { HeroIntro } from "@/components/HeroIntro";
 
 export function Hero() {
   return (
     <section className="hero">
       <div className="hero-content flex flex-col items-center gap-6 px-4 text-center md:px-8">
-        <p className="micro text-muted-foreground">{hero.eyebrow}</p>
+        <HeroIntro />
         <h1 className="display w-full max-w-hero-headline">
           {hero.headline[0]}
           <span className="text-muted-foreground md:text-foreground">{hero.headline[1]}</span>

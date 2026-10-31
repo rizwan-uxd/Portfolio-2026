@@ -49,6 +49,7 @@
   --text-label: 12px;            /* nav + buttons: weight 500, uppercase, tracking -0.02em */
   --text-title: 32px;            /* weight 500, lh 1.10, tracking -0.03em */
   --text-subtitle: 20px;         /* weight 500, lh 1.20, tracking -0.02em */
+  --text-intro: 12px;            /* typed line above the hero headline */
   --text-micro: 9px;             /* mono tags: uppercase, tracking 0.18em (1.6px) */
 
   /* Shape */
@@ -147,6 +148,17 @@
   --works-peek: 135px;           /* how much of the globe shows at the bottom of the first screen */
   --hero-top-sm: 28px;           /* space between the header and the eyebrow */
   --hero-top: 68px;
+  --intro-delay: 300;            /* typed line: ms before it starts */
+  --intro-char: 28;              /* ms per character */
+  --intro-mark-pause: 120;       /* ms the hand and the flag get before typing carries on */
+  --intro-cursor-hold: 500;      /* ms the cursor stays after the last character */
+  --flag-w: 16px;
+  --flag-h: 11px;
+  --flag-slice-w: calc(var(--flag-w) / 10);
+  --flag-uae-red: #ff0000;       /* the flag's own colours */
+  --flag-uae-green: #00732f;
+  --flag-uae-white: #ffffff;
+  --flag-uae-black: #000000;
   --hero-end-scale: 0.1;         /* hero size once it has gone into the horizon */
   --hero-vanish: 48px;           /* vanishing point below the rim, so the hero slips behind the globe */
   --works-heading-from: 0.4;     /* Selected works heading size when it starts to appear */
@@ -321,6 +333,25 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .glow-btn:focus-visible .glow-text { opacity: 0; transform: translateX(var(--hover-shift)); }
 .glow-btn:focus-visible .glow-hover { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .glow-br, .glow-tl { animation: none; } .glow-dot, .glow-text, .glow-hover { transition: none; } }
+.hero-intro { font-family: var(--font-mono); font-size: var(--text-intro); line-height: 1.5; }
+.hero-intro-cursor { display: inline-block; width: 0; height: 1em; vertical-align: text-bottom; border-left: 1px solid var(--muted-foreground); margin-right: -1px; }
+.hero-hand { display: inline-block; margin-inline: 0.5ch; font-size: 0.95em; line-height: 1; opacity: 0; transform-origin: 70% 80%; }
+.hero-flag { display: inline-flex; width: var(--flag-w); height: var(--flag-h); margin-inline: 0.6ch; vertical-align: -1px; opacity: 0; }
+.hero-mark-in { opacity: 1; animation: intro-mark-in 200ms ease-out; }
+.hero-hand.hero-mark-in { animation: intro-mark-in 200ms ease-out, hand-wave 900ms ease-in-out; }
+.hero-flag-slice {
+  width: var(--flag-slice-w); height: 100%;
+  background:
+    linear-gradient(to right, var(--flag-uae-red) 25%, transparent 25%),
+    linear-gradient(var(--flag-uae-green) 33.34%, var(--flag-uae-white) 33.34% 66.67%, var(--flag-uae-black) 66.67%);
+  background-size: var(--flag-w) var(--flag-h);
+  background-position-x: calc(var(--i) * var(--flag-slice-w) * -1);
+}
+.hero-mark-in .hero-flag-slice { animation: flag-wave 1.4s ease-in-out 2; animation-delay: calc(var(--i) * 70ms); }
+@keyframes intro-mark-in { from { opacity: 0; } }
+@keyframes hand-wave { 0%, 100% { transform: rotate(0); } 25%, 75% { transform: rotate(14deg); } 50% { transform: rotate(-6deg); } }
+@keyframes flag-wave { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-0.75px); } 75% { transform: translateY(0.75px); } }
+@media (prefers-reduced-motion: reduce) { .hero-mark-in, .hero-hand.hero-mark-in, .hero-mark-in .hero-flag-slice { animation: none; } }
 .hero-stage { --hero-scale: 1; --hero-fade: 1; --hero-p: 0; --hero-ease: 0; --works-heading-in: 0; --works-list-in: 0; }
 .hero-content { padding-top: var(--hero-top-sm); @variant md { padding-top: var(--hero-top); } }
 .hero {
