@@ -7,6 +7,8 @@ import { Graph } from "@/components/Graph";
 import { Testimonials } from "@/components/Testimonials";
 import { Contact } from "@/components/Contact";
 import { Frame } from "@/components/Frame";
+import { HeroHorizon } from "@/components/HeroHorizon";
+import { HeroStage } from "@/components/HeroStage";
 
 export default function Home() {
   return (
@@ -14,8 +16,13 @@ export default function Home() {
       <Header />
       <main id="top" className="pt-header-offset-sm md:pt-header-offset">
         <Frame>
-          <Hero />
-          <Works />
+          <HeroStage>
+            <Hero />
+            <div className="hero-horizon-anchor">
+              <HeroHorizon />
+            </div>
+            <Works />
+          </HeroStage>
           <Brands />
           <Services />
           <Graph />

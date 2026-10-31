@@ -16,12 +16,13 @@ function Toggle() {
 export function Works() {
   const [active, ...rest] = works;
   return (
-    <section id="works">
-      <div className="px-4 pb-8 pt-12 lg:px-12 lg:pb-12 lg:pt-16">
+    <section id="works" className="works-card">
+      <span aria-hidden data-nav-reveal-after className="absolute left-1/2 top-0 h-px w-px" />
+      <div className="works-heading px-4 pb-8 pt-10 lg:px-12 lg:pb-12 lg:pt-12">
         <Heading lines={worksSection.heading} />
       </div>
 
-      <div className="border-t border-hairline lg:grid lg:grid-cols-[var(--works-rail-w)_1fr]">
+      <div className="works-list border-t border-hairline lg:grid lg:grid-cols-[var(--works-rail-w)_1fr]">
         <div className="lg:border-r lg:border-hairline">
           <div className="flex flex-col gap-4 bg-card px-4 py-6 lg:bg-transparent lg:p-8">
             <div className="flex items-start justify-between gap-3">

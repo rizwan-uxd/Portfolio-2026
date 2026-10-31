@@ -6,7 +6,7 @@ Rule: respect `prefers-reduced-motion` for everything below.
 - Works panel switch: 200ms opacity crossfade (`.works-panel` in globals.css).
 - Header (owner, 2026-10-30, follows surinder.design's behaviour; motion only, our colours). Supersedes the earlier hide-on-scroll-down spec. `components/Header.tsx`, `.nav-float` / `.nav-veil` in `app/tokens.css`:
   - At the top: the full-bleed header from Figma `3:33`, absolutely positioned, so it scrolls away with the page.
-  - Once the hero CTA (`data-nav-reveal-after`) has scrolled out above the viewport, a floating bar slides down from above: centred pill (full width minus 16px gutters on mobile), glass card fill, hairline border, soft shadow, 24px from the top (12px on mobile). It hides again when the CTA comes back into view.
+  - Once Selected works fills the whole screen (its top reaches the viewport top, owner, 2026-10-30; `data-nav-reveal-after` sits at the top of the section), a floating bar slides down from above: centred pill (full width minus 16px gutters on mobile), glass card fill, hairline border, soft shadow, 24px from the top (12px on mobile). It hides again when scrolling back above that point.
   - 300ms translateY(-140% to 0) with `cubic-bezier(0.2, 0.8, 0.2, 1)` plus an opacity fade.
   - A 120px blur veil fades in behind the bar so content softens under it (hidden under `prefers-reduced-transparency`).
   - The hidden bar is `inert`, so it is never in the tab order. Same bar on all breakpoints (surinder.design hides its mobile bar on scroll down instead; we kept one behaviour).
@@ -15,11 +15,19 @@ Rule: respect `prefers-reduced-motion` for everything below.
   - The floating bar's pill shape and shadow are not in Figma; built from existing tokens.
 - Hero horizon (owner, 2026-10-30, follows React Bits Pro "Horizon Bloom"; our own shader, none of its code or colours). `components/HeroHorizon.tsx`, `--horizon-*` in `app/tokens.css`:
   - A glowing planet edge with beams radiating up from a point of light at the centre, in `--brand` with a `--foreground` core. Decorative and non-interactive.
-  - It has its own band at the bottom of the hero, behind the content (200px on mobile, 320px from `md:`). The band overlaps the CTA by 24px on mobile and 32px from `md:`, so the faint top of the beams can touch the button (owner, 2026-10-30). The light fades to nothing at the band's top edge, so it stays clear of the headline and subline.
-  - The hero's top spacing is 24px, so the top of the arc shows inside the first screen (owner, 2026-10-30).
+  - It sits at the top of Selected works, behind the hero content. The faint top of the beams can touch the CTA (owner, 2026-10-30). The light fades with its distance from the rim and each shaft has its own length, up to 150px (120px on mobile), so there is no straight line where the beams stop (owner, 2026-10-31; length shortened the same day).
+  - The hero's top spacing is 68px (28px on mobile, both 20px less than the owner's first image, owner, 2026-10-31), (owner, 2026-10-31, from the owner's image; supersedes 24px). The rim stays 135px above the bottom of the first screen (owner, 2026-10-31: hero and horizon moved up 20px together). Extra screen height is shared equally between the space above the hero and the gap below the CTA, which is at least 64px (48px on mobile).
   - On load the light spreads along the arc over 4s with an ease-out, as on the reference. After that the beams shift slowly, the glow breathes and the sun drifts slightly.
   - Pauses off-screen and when the tab is hidden. Reduced motion: one still frame with the light fully risen.
 
+- Hero to Selected works scroll transition (owner, 2026-10-31: no pause or pinning, so the scroll feels organic, "not hampered, not hastened"; supersedes the earlier pinned versions). `components/HeroStage.tsx`, `.hero-*`, `.works-heading`, `.works-list` and `.works-card` in `app/tokens.css`:
+  - At rest the first screen is the hero and the empty globe: the section is clipped to the circle the horizon draws, in the page colour, and all of Selected works is hidden. 135px of the globe shows, unless the hero content needs more height.
+  - The page scrolls normally, so the horizon rises 1:1 with the scroll from the first pixel until it reaches the top of the screen. Everything below is a straight line against scroll position, as a share of that travel, with no easing.
+  - Hero, eyebrow to CTA: scales from 100% to 10% towards a point 48px below the top of the rim over the whole travel, and fades out from 30% to 85%.
+  - Selected works heading: from 33% to 80%, it goes from 40% size (owner, 2026-10-31), invisible and 80px below its place, to full size, opacity and position, riding up with the horizon.
+  - Project list: fades in from 80% to 100%, starting only once the heading is fully visible (owner, 2026-10-31).
+  - The globe's edge flattens evenly until it is a straight line at 100%, so Selected works arrives full width and square. The rim and beams ride that edge and fade out late in the move.
+  - Reduced motion: plain scroll, no scaling, clipping or fades.
 - Logo R draw (owner, 2026-10-30, Figma `3:39` motion): plays once on load. The R channel starts filled by a thick lime stroke, which retracts along the letter from the stem foot to the leg tip, revealing the R as a drawn line. Figma timeline: 2s, stroke retracts 0.15s to 1.35s linear, then hidden. We play it once instead of looping. Only the full-bleed header animates; the floating bar shows the end state. Reduced motion: end state, no animation.
 - Linkedin button (owner, 2026-10-30):
   - Rest: React Bits "star border" motion. The two Figma glows travel along the bottom (right to left) and top (left to right) edges and fade, 6s linear, infinite, alternate.

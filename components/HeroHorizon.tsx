@@ -4,13 +4,13 @@ import { useEffect, useRef } from "react";
 
 const VERTEX = `attribute vec2 a; void main() { gl_Position = vec4(a, 0.0, 1.0); }`;
 
-// Distances are in canvas heights, measured from the top of the arc. The light fades to nothing at the
-// canvas top edge, and the canvas sits below the CTA, so it can't reach the hero text.
+// Distances are in canvas heights, measured from the top of the arc. The light fades with its distance from
+// the rim, and each shaft has its own length, so nothing reaches the canvas top or ends in a line. uFlat goes from 1 to 0 as Works rises, flattening the arc to match its clip circle.
 const FRAGMENT = `
 precision highp float;
 uniform vec2 uRes;
 uniform vec3 uBrand, uCore;
-uniform float uTime, uIntro, uRadius, uRimY, uRimGlow, uAtmosphere, uBeams, uFlare;
+uniform float uTime, uIntro, uFlat, uRadius, uRimY, uRimGlow, uAtmosphere, uBeams, uFlare;
 
 float hash(float n) { return fract(sin(n) * 43758.5453); }
 float noise(float x) {
@@ -22,7 +22,7 @@ void main() {
   vec2 p = gl_FragCoord.xy;
   vec2 q = (p - vec2(0.5 * uRes.x, uRimY * uRes.y)) / uRes.y;
   float aspect = uRes.x / uRes.y;
-  float R = uRadius * aspect;
+  float R = uRadius * aspect / max(uFlat, 0.02);
   float d = length(q - vec2(0.0, -R)) - R;
 
   vec2 sun = vec2(sin(uTime * 0.05) * 0.03 * aspect, 0.0);
@@ -31,25 +31,26 @@ void main() {
   float along = exp(-arc * arc / (spread * spread));
   float breathe = 0.92 + 0.08 * sin(uTime * 0.4);
 
-  float rim = exp(-abs(d) / (d > 0.0 ? 0.008 : 0.003)) * (0.12 + along) * uRimGlow;
+  float rim = exp(-abs(d) / (d > 0.0 ? 0.0075 : 0.0028)) * (0.12 + along) * uRimGlow;
   float above = smoothstep(-0.002, 0.006, d);
-  float atmosphere = exp(-max(d, 0.0) / 0.2) * (0.08 + 0.6 * along) * above * uAtmosphere * breathe;
+  float atmosphere = exp(-max(d, 0.0) / 0.15) * (0.08 + 0.6 * along) * above * uAtmosphere * breathe;
 
   // Beams fan out from a point behind the horizon, so they read as a sunburst and not one thin spike.
   vec2 v = q - sun;
-  vec2 origin = q - sun + vec2(0.0, 0.7);
+  vec2 origin = q - sun + vec2(0.0, 0.62);
   float a = atan(origin.x, origin.y);
   float wide = noise(a * 15.0 + uTime * 0.14);
   float fine = noise(a * 41.0 - uTime * 0.09 + 7.0);
   float shafts = pow(0.7 * wide + 0.3 * fine, 2.0) * 1.6;
-  float beams = shafts * (0.25 + 0.75 * along) * exp(-max(d, 0.0) / 0.42) * above * uBeams * uIntro * breathe;
-
-  float flare = exp(-dot(v * vec2(0.28, 1.0), v * vec2(0.28, 1.0)) / 0.003) * uFlare * uIntro;
+  float beams = shafts * (0.25 + 0.75 * along) * exp(-max(d, 0.0) / 0.32) * above * uBeams * uIntro * breathe;
   float top = 1.0 - uRimY;
-  float fade = smoothstep(top, top * 0.45, q.y);
+  beams *= 1.0 - smoothstep(0.1 * top, top * (0.55 + 0.45 * noise(a * 23.0 + 3.0)), d);
 
-  float tint = (rim + atmosphere + beams) * fade;
-  float core = (flare + rim * along * along * 0.8) * fade;
+  float flare = exp(-dot(v * vec2(0.28, 1.0), v * vec2(0.28, 1.0)) / 0.0025) * uFlare * uIntro;
+  atmosphere *= 1.0 - smoothstep(0.0, top, d);
+
+  float tint = rim + atmosphere + beams;
+  float core = flare + rim * along * along * 0.8;
   vec3 color = uBrand * tint + uCore * core;
   float dither = (fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) / 255.0;
   color = max(color + dither, 0.0);
@@ -94,14 +95,16 @@ export function HeroHorizon() {
     gl.uniform3fv(at("uBrand"), rgb(css.getPropertyValue("--brand")));
     gl.uniform3fv(at("uCore"), rgb(css.getPropertyValue("--foreground")));
     gl.uniform1f(at("uRadius"), token("--horizon-radius"));
-    gl.uniform1f(at("uRimY"), token("--horizon-rim-y"));
     gl.uniform1f(at("uRimGlow"), token("--horizon-rim-glow"));
     gl.uniform1f(at("uAtmosphere"), token("--horizon-atmosphere"));
     gl.uniform1f(at("uBeams"), token("--horizon-beams"));
     gl.uniform1f(at("uFlare"), token("--horizon-flare"));
-    const uRes = at("uRes"), uTime = at("uTime"), uIntro = at("uIntro");
+    const uRes = at("uRes"), uTime = at("uTime"), uIntro = at("uIntro"), uFlat = at("uFlat"), uRimY = at("uRimY");
     const introLength = token("--horizon-intro");
     const maxDpr = token("--horizon-max-dpr");
+    const radius = token("--horizon-radius");
+    const stage = canvas.closest<HTMLElement>(".hero-stage");
+    const band = document.querySelector<HTMLElement>(".hero-band");
 
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     let time = 0, last = 0, frame = 0, onScreen = true;
@@ -110,6 +113,7 @@ export function HeroHorizon() {
       const settled = motion.matches ? 1 : 1 - Math.pow(1 - Math.min(time / introLength, 1), 3);
       gl.uniform1f(uTime, time);
       gl.uniform1f(uIntro, settled);
+      gl.uniform1f(uFlat, 1 - (parseFloat(stage?.style.getPropertyValue("--hero-ease") ?? "") || 0));
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
     const tick = (now: number) => {
@@ -126,16 +130,26 @@ export function HeroHorizon() {
       else if (onScreen && !document.hidden) frame = requestAnimationFrame(tick);
     };
     const resize = () => {
+      // The canvas spans from the top of the band down past the arc's lowest point at the sides.
+      const width = canvas.clientWidth;
+      if (!width) return;
+      const r = radius * width;
+      const below = Math.ceil(r - Math.sqrt(r * r - width * width / 4)) + 8;
+      const height = Math.max(band?.offsetHeight ?? 0, token("--reach")) + below;
+      canvas.style.height = `${height}px`;
+      canvas.style.bottom = `${-below}px`;
       const dpr = Math.min(devicePixelRatio, maxDpr);
-      canvas.width = Math.round(canvas.clientWidth * dpr);
-      canvas.height = Math.round(canvas.clientHeight * dpr);
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.uniform2f(uRes, canvas.width, canvas.height);
+      gl.uniform1f(uRimY, below / height);
       draw();
     };
 
     const sizes = new ResizeObserver(resize);
     sizes.observe(canvas);
+    if (band) sizes.observe(band);
     const visible = new IntersectionObserver(([e]) => {
       onScreen = e.isIntersecting;
       sync();
