@@ -9,6 +9,7 @@ import { Contact } from "@/components/Contact";
 import { Frame } from "@/components/Frame";
 import { HeroHorizon } from "@/components/HeroHorizon";
 import { HeroStage } from "@/components/HeroStage";
+import { AiTwinBar } from "@/components/AiTwinBar";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
             </div>
             <Works />
           </HeroStage>
+          <div aria-hidden data-twin-reveal-after />
           <Brands />
           <Services />
           <Graph />
@@ -30,6 +32,7 @@ export default function Home() {
           <Contact />
         </Frame>
       </main>
+      <AiTwinBar />
     </>
   );
 }

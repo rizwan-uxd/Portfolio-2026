@@ -308,42 +308,147 @@ export const testimonialsSection = {
     "Here's what my clients have shared about their experiences working with me. Their trust and satisfaction motivate me to continue delivering designs that make an impact.",
 };
 
-export const aiTwin = {
-  placeholder: "Do you work on banking apps?",
-  tagline: "Ask my AI twin anything about my work before you email.",
-  status: "AI TWIN ONLINE  ·  5 MESSAGES LEFT THIS HOUR", // rate-limit number is a design placeholder, wire to real limiter
+// Title, intro, starter questions and footnote come from Figma 13:2. Card labels and the panel's button and status
+// wording are placeholders in the reference's pattern, for the owner to confirm. The "messages left" line is dropped until there is a real limiter.
+// From the owner's CV (2026-10-31). The AI twin answers from this and the works above (lib/twin.ts).
+export const cv = {
+  title: "Senior Product Designer and UX Lead",
+  summary: "15+ years across fintech, enterprise, and government, combining product strategy, UX, design systems, and AI-native design.",
+  handsOn: "Hands-on from discovery to prototyping, with a track record of measurable user and business impact.",
+  experience: [
+    {
+      id: "horizontal",
+      keywords: ["horizontal digital", "horizontal"],
+      role: "Senior UX designer (contract)",
+      company: "Horizontal Digital",
+      place: "Remote, Dubai",
+      dates: "July 2025 - Present",
+      highlights: [
+        "Led 0 to 1 MVP UX design for a Hajj live portal for KSA's largest utility, driving discovery, user research, stakeholder alignment, and prototype validation to accelerate partner onboarding and adoption.",
+        "Designed an end-to-end project submission and review platform with contextual feedback and revision tracking, reducing review cycles by 35%.",
+      ],
+    },
+    {
+      id: "adcb",
+      keywords: ["adcb", "abu dhabi commercial bank", "publicis( sapient)?", "sapient"],
+      role: "Design lead - UX (contract)",
+      company: "Abu Dhabi Commercial Bank - Publicis Sapient",
+      place: "Abu Dhabi",
+      dates: "Feb 2025 - July 2025",
+      highlights: [
+        "Led discovery and competitive benchmarking for ADCB's retail banking experience, translating insights into AI-powered banking concepts and UX solutions for mobile retail banking.",
+        "Designed and AI-prototyped an intent-driven banking copilot, taking the concept to a working React Native prototype in 3 days using Claude Code and Cursor.",
+      ],
+    },
+    {
+      id: "katim",
+      keywords: ["katim"],
+      role: "Senior product designer - UX/UI",
+      company: "Katim",
+      place: "Abu Dhabi",
+      dates: "Oct 2022 - Nov 2024",
+      highlights: [
+        "Built and scaled design systems across two product lines, integrating design tokens and automated workflows to improve consistency and accelerate design-to-development delivery.",
+        "Saved 3 months of development time by establishing reusable components, tokenized foundations, and scalable design-system practices.",
+      ],
+    },
+    {
+      id: "digital-dubai",
+      keywords: ["digital dubai", "invest in dubai"],
+      role: "CX designer",
+      company: "Digital Dubai Government",
+      place: "Dubai",
+      dates: "May 2019 - Sep 2022",
+      highlights: [
+        "Led the UX redesign of DubaiNow services, increasing conversion by 30% through user-centered design and journey optimization.",
+        "Redesigned signup and verification flows for Invest in Dubai, increasing new-user onboarding by 20%.",
+      ],
+    },
+    {
+      id: "enbd",
+      keywords: ["emirates nbd", "enbd"],
+      role: "Senior UX designer",
+      company: "Emirates NBD",
+      place: "Dubai",
+      dates: "Feb 2018 - March 2019",
+      highlights: [
+        "Reduced Emirates Islamic bill-payment task time from 5 minutes to under 2.5 minutes through usability testing and iterative UX improvements.",
+        "Increased digital adoption to 55%, exceeding the target by 20% within two months of squad launch.",
+      ],
+    },
+    { id: "cognizant", keywords: ["cognizant"], role: "UX design consultant - UX/UI", company: "Cognizant", place: "Chennai - Abu Dhabi", dates: "Feb 2013 - Feb 2018", highlights: [] },
+    { id: "danube", keywords: ["danube"], role: "Customer research analyst", company: "Danube Retail chain", place: "Jeddah, KSA", dates: "Aug 2011 - Jan 2013", highlights: [] },
+    { id: "bny", keywords: ["bny", "bny mellon", "new york mellon"], role: "Usability analyst", company: "Bank of New York Mellon", place: "Chennai, India", dates: "Jun 2008 - Aug 2009", highlights: [] },
+  ],
+  education: ["MBA in Product Development, UK", "Google UX Design Professional Certificate", "IDEO design Kit, HCD certified", "AI for visual design (Design lab)"],
+  award: "ICXA award for the DubaiNow app, 2020",
+  skills: {
+    "Product & UX": ["Product strategy", "Product discovery", "UX research", "Usability testing", "Information architecture", "Stakeholder workshops", "Complex workflow design", "Journey mapping", "Conversational UX"],
+    "Design systems": ["Design systems architecture", "Design tokens", "Component systems", "Design governance", "AI-ready design systems", "Motion & interaction"],
+    "AI & prototyping": ["AI-native product design", "AI-assisted prototyping", "Design-to-code workflows", "Claude", "Cursor", "React Native", "TypeScript"],
+    Tools: ["Figma", "Miro", "ChatGPT", "Hotjar", "Google Analytics", "Midjourney", "Ideogram"],
+  },
 };
 
-export const graph = {
-  hubs: {
-    Companies: ["KATIM", "DIGITAL DUBAI", "EMIRATES NBD", "ETIHAD", "SMART DUBAI"],
-    Tools: ["CURSOR", "CLAUDE", "REACT", "REACT NATIVE"],
-    Impact: ["+25%", "+30%", "3 MONTHS", "+30%", "6 DAYS"],
-    Industries: ["BANKING", "GOVERNMENT", "ENTERPRISE OPS", "AVIATION"],
-    Projects: ["HAJJ PLATFORM", "DUBAINOW", "SECURE COMMS", "EMIRATES ISLAMIC", "AI COPILOT"],
-    Skills: ["PRODUCT/UX", "DESIGN SYSTEMS", "VIBE CODING", "DISCOVERY"],
-  },
-  stats: "27 nodes · 61 connections.", // 28 cross-links are inferred by me, confirm or edit
+export const aiTwin = {
+  ask: "Ask my AI twin",
+  title: "Rizwan's AI twin",
+  subtitle: "Grounded on my real work",
+  intro: "Hey, I'm an AI version of Rizwan, grounded on his real work. Ask me anything, or tap a starter below.",
+  barQuestions: ["Do you work on banking apps?", "What have you built with AI?", "Where have you worked?", "Biggest enterprise win?", "How fast can you prototype?"],
+  cards: [
+    { label: "AI", question: "What have you built with AI?" },
+    { label: "Experience", question: "Banking and government experience?" },
+    { label: "Fit", question: "Fit for a senior product design role?" },
+  ],
+  starters: ["Biggest enterprise win?", "How do you approach design systems?", "How fast can you prototype?", "Where have you worked?", "Any awards or certifications?", "What tools do you use?"],
+  placeholder: "Ask something…",
+  footnote: "Grounded on my real work, not a guarantee of accuracy. For anything specific,",
+  footnoteLink: "email me directly",
+  noAnswer: "I only answer from my real work and CV, and that isn't covered there. For anything specific, email me directly.",
+  error: "I couldn't answer that just now. For anything specific, email me directly.",
+  thinking: "Thinking…",
+  askNext: "Ask next",
+  emailChat: "Email this chat to Rizwan",
+  emailSubject: "My questions from your AI twin",
+  newChat: "New chat",
+  minimize: "Minimize",
+  close: "Close",
+  send: "Send",
+  bookCall: "Book a call",
+  seeWorks: "See works",
 };
 
 export const graphSection = {
   eyebrow: "Click any node to see how it connects",
-  eyebrowMobile: "Tap a category to see how it connects",
+  eyebrowMobile: "Tap any node to see how it connects",
   heading: ["Career", "knowledge graph"], // 2nd line muted
-  intro: "Click any node to see what it is, what it delivered, and everything it connects to. Try Hajj platform or AI Banking Copilot.",
-  hint: "Drag nodes · Scroll or pinch to zoom · Click a node for details · Dashed lines are cross-links",
+  intro: ["Click any node to see what it is, what it delivered, and everything it connects to. Try ", "Hajj platform", " or ", "AI Banking Copilot", "."],
+  hint: "Drag to rotate · Drag a node to move it · Pinch, or click then scroll, to zoom · Click a node for details · Dashed lines are cross-links",
+  searchLabel: "Search the graph",
   searchPlaceholder: "Search… e.g. KATIM, Claude",
-  traceFrom: "KATIM",
-  traceTo: "AI Banking Copilot",
-  openGraph: "Open interactive graph ↗",
+  noMatches: "Nothing matches that.",
+  viewLabel: "Graph or timeline view",
+  rootTag: "Me",
+  traceFrom: "bny",
+  traceTo: "ai-copilot",
   categories: [
-    { id: "companies", label: "Companies", preview: "KATIM · Digital Dubai · Emirates NBD" },
-    { id: "industries", label: "Industries", preview: "Banking · Government · Aviation" },
-    { id: "skills", label: "Skills", preview: "Product/UX · Design systems" },
-    { id: "tools", label: "Tools", preview: "Cursor · Claude · React" },
-    { id: "projects", label: "Projects", preview: "Hajj platform · DubaiNow" },
-    { id: "impact", label: "Impact", preview: "+25% · +30% · 3 months" },
-  ],
+    { id: "companies", label: "Companies" },
+    { id: "industries", label: "Industries" },
+    { id: "skills", label: "Skills" },
+    { id: "tools", label: "Tools" },
+    { id: "projects", label: "Projects" },
+    { id: "certifications", label: "Certifications" },
+    { id: "impact", label: "Impact" },
+  ] as const,
+  tour: [
+    { node: "rizwan", title: "Everything connects to one career", body: "15+ years across fintech, enterprise and government. Each point on the sphere is a company, project, skill, tool or result from it." },
+    { node: "hajj-platform", title: "Hajj operations platform", body: "A PowerPoint- and meeting-driven reporting process became a connected enterprise platform, with a 25% efficiency gain." },
+    { node: "ai-copilot", title: "AI Banking Copilot", body: "An intent-driven banking copilot, from concept to a working React Native prototype in 3 days with Claude Code and Cursor." },
+    { node: "dubainow", title: "DubaiNow", body: "A redesign of a large-scale government app raised service completion by 30% and won an ICXA award in 2020." },
+    { node: "secure-comms", title: "Secure Communication App", body: "A scalable design system and reusable React components saved 3 months of development time." },
+    { node: "ai-copilot", path: ["bny", "ai-copilot"], title: "Trace any path", body: "From usability analyst at BNY Mellon in 2008 to an AI copilot for ADCB in 2025, connected through banking. Pick any two points above to trace your own." },
+  ] as { node: string; path?: [string, string]; title: string; body: string }[],
 };
 
 export const testimonials = [

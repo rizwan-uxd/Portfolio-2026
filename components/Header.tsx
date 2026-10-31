@@ -39,9 +39,9 @@ function Arrow() {
 }
 
 // Star-border glow at rest, interactive-hover fill on hover (animations.md).
-function GlowButton({ href, children }: { href: string; children: React.ReactNode }) {
+export function GlowButton({ href, external = false, children }: { href: string; external?: boolean; children: React.ReactNode }) {
   return (
-    <a href={href} className="glow-btn group relative flex shrink-0 items-center justify-center overflow-clip rounded-full bg-hairline p-px shadow-glow">
+    <a href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} className="glow-btn group relative flex shrink-0 items-center justify-center overflow-clip rounded-full bg-hairline p-px shadow-glow">
       <img src="/figma/glow.svg" alt="" className="glow-br" />
       <img src="/figma/glow.svg" alt="" className="glow-tl" />
       <span className="glow-label relative flex items-center justify-center overflow-clip rounded-full bg-card px-4 py-1 text-foreground">

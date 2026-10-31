@@ -56,11 +56,30 @@ Rule: respect `prefers-reduced-motion` for everything below.
   - Circle size is 13.35% of the panel width at `lg:` and up, and 21% below it (owner, 2026-10-30: 0.75x of the first pass, which used the reference's 17.8% and 28%). Larger below `lg:` so the wordmarks stay legible.
   - Reduced motion: no auto-scroll or arc, a static row that scrolls sideways, so all 8 logos can be reached.
 
+## AI twin bar and panel (owner, 2026-10-31)
+Function and timing measured from surinder.design, colours from our tokens. Values live in `--twin-*` in `tokens.css`.
+- Trigger: the bar slides up when the end of Selected works reaches the middle of the screen, and leaves when Contact reaches 80% of the screen height. The owner's message cut off at "when it reaches about", so this point is a best guess until confirmed.
+- Bar: in 500ms, out to the panel in 220ms. The placeholder types a question, holds, erases, then moves on. Reduced motion: static first question.
+- Panel: rises 56px from 0.98 scale with a 3px blur clearing, 480ms; closes in 340ms. Scrim fades and blurs the page, which stops scrolling. Below `lg:` the panel is full screen.
+- Messages rise 10px with a blur clearing, 400ms. A shimmering "Thinking…" shows for at least 700ms.
+
+## Services diagrams (owner, 2026-10-31)
+Motion and drawing style from the tracks section on pleurat.com, colours from our tokens. `components/ServiceDiagrams.tsx`, `components/ServiceBox.tsx`, `.iso-*` and `--iso-*` in `tokens.css`.
+- Trigger: hovering anywhere on the box. Touch screens have no hover, so the diagram plays while 60% of the box is in view (our call, not in the brief).
+- At rest the diagram is still and assembled. On hover the lines brighten and the parts loop. Every loop starts and ends with the part in place, and on leave each part finishes its current loop, so nothing snaps back.
+- Product/UX design: the screen's blocks lift off and land in a stagger (3.6s). Design systems: tokens, parts and pages layers land from the bottom up (4.4s). Vibe coding: prompt lines write, a token runs down the wire and the prototype stacks up (4.4s). Discovery: a signal runs the loop and each station lifts and lights as it arrives (4s).
+- Reduced motion: no loops, only the colour change.
+
+## Knowledge graph sphere (owner, 2026-10-31)
+Interactions from sankar.work, look from Riz's sphere references, colours from our tokens. `components/GraphSphere.tsx`.
+- Real 3D: nodes sit on a unit sphere with the root at its centre, inside a coarse bright shell and an irregular web, with violet lines running towards the core and short rays leaving the rim (owner's images 2 and 3). Hub-to-node links arc along the surface; spokes and cross-links are straight chords through the inside, so the inner lines move with depth.
+- Slow auto-rotation that stops while a node is hovered or selected or a path is traced, and resumes after. Selecting or tracing flies the camera to it. Reduced motion: no spin, and the camera jumps.
+- Drag empty space to rotate, with inertia. Drag a node to move it over the surface; Reset puts it back. Pinch or ctrl + wheel zooms always; plain wheel only after clicking in the graph (our call), so the page still scrolls past it. Touch keeps vertical swipes for the page.
+- Rendering pauses off screen and in a hidden tab.
+
 ## Not decided (ask before building)
 - Hero dot-matrix / ASCII background motion.
 - Scroll reveals and section entrance animations.
 - Hover/focus/pressed states for everything except the header Linkedin button and nav links.
-- Knowledge graph: node hover, selection transitions, drag and zoom feel, tour.
-- AI twin: expand/collapse transition into the chat (Figma `17:2`).
 - Mobile menu sheet open/close.
 - Testimonials carousel motion on mobile.
