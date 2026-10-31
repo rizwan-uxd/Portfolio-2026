@@ -163,6 +163,17 @@
   --hero-vanish: 48px;           /* vanishing point below the rim, so the hero slips behind the globe */
   --works-heading-from: 0.4;     /* Selected works heading size when it starts to appear */
   --works-rise: 80px;            /* how far below its place the heading starts */
+  /* Selected works scroll behaviour (components/WorksShowcase.tsx, animations.md) */
+  --works-rail-top: 112px;       /* clears the floating bar */
+  --works-bar-top: 72px;         /* mobile project bar, under the floating bar */
+  --works-group-margin-sm: 128px;
+  --works-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --works-expand: 550ms;
+  --works-colour: 350ms;
+  --works-reveal: 1250ms;
+  --works-reveal-fade: 800ms;
+  --works-reveal-y: 56px;
+  --works-reveal-clip: 16%;
   /* Brands carousel: motion measured from poulo.site, positions in units of the circle size */
   --brands-size-ratio-sm: 0.21;  /* circle size / panel width, larger below lg: so wordmarks stay legible */
   --brands-size-ratio: 0.1335;
@@ -387,6 +398,29 @@ body { background: var(--background); color: var(--foreground); font-family: var
   .works-list { opacity: var(--works-list-in); }
   .hero-stage[data-covered] .works-card { clip-path: none; }
 }
+.works-rail {
+  position: sticky; top: var(--works-rail-top); align-self: start; max-height: calc(100vh - var(--works-rail-top) - 24px); overflow-y: auto; scrollbar-width: none;
+  & .works-rail-title { color: var(--muted-foreground); transition: color var(--works-colour) var(--works-ease); }
+  & li[data-on] .works-rail-title { color: var(--foreground); }
+}
+.works-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--works-expand) var(--works-ease); }
+.works-rail li[data-on] .works-more { grid-template-rows: 1fr; }
+.works-bar {
+  position: sticky; top: var(--works-bar-top); z-index: 8; display: flex; @variant lg { display: none; } gap: calc(var(--spacing) * 5); overflow-x: auto; scrollbar-width: none;
+  padding-inline: calc(var(--spacing) * 4); background: var(--background); border-bottom: 1px solid var(--hairline);
+  & button { flex: none; padding-block: calc(var(--spacing) * 3); white-space: nowrap; color: var(--muted-foreground); box-shadow: inset 0 -2px 0 transparent; transition: color var(--works-colour) var(--works-ease), box-shadow var(--works-colour) var(--works-ease); cursor: pointer; }
+  & button[aria-current] { color: var(--foreground); box-shadow: inset 0 -2px 0 var(--brand); }
+}
+.works-list :is(button, a):focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+.works-phones { display: grid; grid-template-columns: repeat(2, 1fr); gap: calc(var(--spacing) * 4); width: 100%; @variant lg { grid-template-columns: repeat(5, 1fr); } }
+.works-flow { position: relative; min-width: 0; }
+.works-group { scroll-margin-top: var(--works-group-margin-sm); @variant lg { scroll-margin-top: var(--works-rail-top); } }
+.works-rule { position: absolute; inset-block: 0; left: 0; width: 1px; background: var(--hairline); &::after { content: ""; position: absolute; inset: 0; background: var(--brand); transform: scaleY(var(--works-p, 0)); transform-origin: 50% 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .works-ix[data-ready] .works-fig { transition: opacity var(--works-reveal-fade) ease, translate var(--works-reveal) var(--works-ease), clip-path var(--works-reveal) var(--works-ease); }
+  .works-ix[data-ready] .works-fig:not([data-in]) { opacity: 0; translate: 0 var(--works-reveal-y); clip-path: inset(var(--works-reveal-clip) 0 0); }
+}
+@media (prefers-reduced-motion: reduce) { .works-more, .works-rail-title, .works-bar button { transition: none; } }
 @property --brands-phase { syntax: "<number>"; inherits: true; initial-value: 0; }
 @property --brands-nudge { syntax: "<number>"; inherits: true; initial-value: 0; }
 @keyframes brands-spin { to { --brands-phase: 1; } } /* one full loop; --p multiplies it by the item count */

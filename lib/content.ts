@@ -35,34 +35,239 @@ export const brands = [
   { name: "Abu Dhabi Commercial Bank", logo: "/images/brands/8_ADCB.svg", width: 123, height: 37 },
 ];
 
+export type WorkScreen = { src: string; w: number; h: number; alt: string };
 export type Work = {
-  slug: string; title: string; metric: string; metricLabel: string;
-  chip?: string; client?: string; year?: string; summary?: string;
+  slug: string; title: string; metric: string; metricLabel: string; chip: string; client?: string; year?: string; summary: string;
+  overview: string[]; facts: { label: string; value: string }[];
+  initialScreens: number; // how many show before "Show the other screens"
+  screens: WorkScreen[];
 };
 
+// All of this comes from the live site (home page cards and /work/<slug> pages), and the images from its /images/work.
+export const liveSite = "https://www.rizwanux.work";
 export const works: Work[] = [
   {
     slug: "hajj-operations-platform",
     title: "Hajj Enterprise Operations Platform",
     metric: "+25%",
-    metricLabel: "efficiency",
-    // Only the Hajj project has detail copy in Figma; add the rest as it is finalised.
+    metricLabel: "Efficiency gain",
     chip: "Enterprise UX",
-    client: "Horizontal Digital",
-    year: "2026",
-    summary:
-      "Led the UX transformation of a PowerPoint- and meeting-driven Hajj reporting process into a connected enterprise platform for operational data capture, validation, reporting and executive decision-making.",
+    summary: "Led the UX transformation of a PowerPoint- and meeting-driven Hajj reporting process into a connected enterprise platform for operational data capture, validation, reporting and executive decision-making.",
+    overview: [
+      "Led the UX transformation of a PowerPoint- and meeting-driven Hajj reporting process into a connected enterprise platform for operational data capture, validation, reporting and executive decision-making."
+    ],
+    facts: [
+      {
+        label: "Role",
+        value: "UX Lead + Product Designer"
+      },
+      {
+        label: "Duration",
+        value: "4 months"
+      },
+      {
+        label: "Team",
+        value: "2 designers, with PM, Ops, Mecca and development counterparts"
+      },
+      {
+        label: "Delivery",
+        value: "2026 Hajj season — MVP 3"
+      }
+    ],
+    initialScreens: 2,
+    screens: [
+      {
+        src: "/images/work/hajj-operations-platform/banner.png",
+        w: 2560,
+        h: 1097,
+        alt: "Hajj Enterprise Operations Platform"
+      },
+      {
+        src: "/images/work/hajj-operations-platform/hero-dashboard.png",
+        w: 3184,
+        h: 1832,
+        alt: "The live power monitoring dashboard for the Hajj period alongside the project-manager data entry platform, showing load, meter connectivity, interruptions, readiness and the projects list."
+      },
+      {
+        src: "/images/work/hajj-operations-platform/legacy-vs-digital.png",
+        w: 3184,
+        h: 1944,
+        alt: "A legacy Arabic project report slide next to the new digital project detail screens that replaced it."
+      },
+      {
+        src: "/images/work/hajj-operations-platform/governance-flow.png",
+        w: 3344,
+        h: 1360,
+        alt: "The initial information architecture next to the structure confirmed in the users and stakeholder workshop sessions."
+      },
+      {
+        src: "/images/work/hajj-operations-platform/flow-composite.png",
+        w: 3392,
+        h: 1792,
+        alt: "Requirements and operational understanding on the left, and the confirmed PM-to-Mecca-team approval workflow diagram on the right."
+      },
+      {
+        src: "/images/work/hajj-operations-platform/states-board.png",
+        w: 2864,
+        h: 1944,
+        alt: "Data-entry platform wireframes for new project entry and the Mecca review screen, each next to the final UI design."
+      },
+      {
+        src: "/images/work/hajj-operations-platform/phase-dashboards.png",
+        w: 2176,
+        h: 816,
+        alt: "The during-Hajj live operations dashboard next to the pre-Hajj readiness dashboard, showing the same surface with different priorities."
+      },
+      {
+        src: "/images/work/hajj-operations-platform/delivered-ecosystem.png",
+        w: 3104,
+        h: 1944,
+        alt: "Wireframes for the CEO dashboard and the project-manager data-entry landing page, each alongside the delivered UI design."
+      }
+    ],
+    client: "Leading energy provider in Saudi",
+    year: "2026"
   },
-  { slug: "dubainow-mobile-app", title: "DubaiNow Mobile App", metric: "+30%", metricLabel: "service completion" },
-  { slug: "secure-communication-app", title: "Secure Communication App", metric: "3 months", metricLabel: "dev time saved" },
-  { slug: "emirates-islamic-digital-ux", title: "Emirates Islamic Digital UX", metric: "+30%", metricLabel: "task completion" },
-  { slug: "ai-banking-copilot", title: "AI Banking Copilot", metric: "6 days", metricLabel: "concept to prototype" },
+  {
+    slug: "dubainow-mobile-app",
+    title: "DubaiNow Mobile App",
+    metric: "+30%",
+    metricLabel: "Service completion rate",
+    chip: "Product design",
+    summary: "Redesigned a large-scale government mobile app, simplifying complex service journeys to improve usability and completion across key citizen interactions.",
+    overview: [
+      "DubaiNow app serves residents of Dubai with access to more than 120 government services. It's a one stop shop for all government interactions. As a Customer Experience Designer, I optimize user experiences by analyzing app store feedback and designing innovative features for the DubaiNow app."
+    ],
+    facts: [
+      {
+        label: "Role",
+        value: "CX Designer"
+      },
+      {
+        label: "Services",
+        value: "Mobile UX, Design system"
+      }
+    ],
+    initialScreens: 2,
+    screens: [
+      {
+        src: "/images/work/dubainow-mobile-app/banner.png",
+        w: 2400,
+        h: 1976,
+        alt: "DubaiNow Mobile App"
+      },
+      {
+        src: "/images/work/dubainow-mobile-app/detail-1.png",
+        w: 1600,
+        h: 1200,
+        alt: "DubaiNow Mobile App — process detail 1"
+      },
+      {
+        src: "/images/work/dubainow-mobile-app/detail-2.png",
+        w: 1200,
+        h: 675,
+        alt: "DubaiNow Mobile App — process detail 2"
+      }
+    ],
+    client: "Digital Dubai government",
+    year: "2019 – 2022"
+  },
+  {
+    slug: "secure-communication-app",
+    title: "Secure Communication App",
+    metric: "3 months",
+    metricLabel: "Dev time saved",
+    chip: "Design systems",
+    summary: "Designed a secure enterprise communication platform with a scalable design system and reusable React components, standardizing complex workflows across products and platforms.",
+    overview: [
+      "SecureLink (name changed) is a custom-built enterprise communication platform that empowers high security government organizations to connect and collaborate securely. It enables employees to effortlessly schedule meetings, engage in instant messaging, and conduct high-quality voice and video conferences.",
+      "This case study explores the journey of converting a one line sentence from leadership to a full scale enterprise application with a custom built design system to a highest level of security, highlighting the challenges faced, the approach taken to address them, and the results achieved."
+    ],
+    facts: [
+      {
+        label: "Role",
+        value: "Senior Product Designer"
+      },
+      {
+        label: "Services",
+        value: "UX, Design system"
+      }
+    ],
+    initialScreens: 2,
+    screens: [
+      {
+        src: "/images/work/secure-communication-app/banner.png",
+        w: 2560,
+        h: 1440,
+        alt: "Secure Communication App"
+      },
+      {
+        src: "/images/work/secure-communication-app/detail-1.png",
+        w: 1400,
+        h: 866,
+        alt: "Secure Communication App — process detail 1"
+      },
+      {
+        src: "/images/work/secure-communication-app/detail-2.png",
+        w: 1290,
+        h: 740,
+        alt: "Secure Communication App — process detail 2"
+      }
+    ],
+    client: "Confidential",
+    year: "2024"
+  },
+  {
+    slug: "emirates-islamic-digital-ux",
+    title: "Emirates Islamic Digital UX",
+    metric: "+30%",
+    metricLabel: "Task completion efficiency",
+    chip: "UX/UI",
+    summary: "Optimized digital banking experiences by simplifying key financial workflows, reducing task time, and improving adoption across core user journeys.",
+    overview: [
+      "Emirates Islamic Bank (EIB) is a United Arab Emirates based bank engaged in the provision of Sharia-compliant banking solutions.",
+      "This is one of the premium Islamic banks in the market, and as it's connected to Emirates NBD, it has its own set of premium and loyal customers."
+    ],
+    facts: [
+      {
+        label: "Role",
+        value: "UX designer"
+      },
+      {
+        label: "Services",
+        value: "Digital banking UX/UI"
+      }
+    ],
+    initialScreens: 2,
+    screens: [
+      {
+        src: "/images/work/emirates-islamic-digital-ux/banner.png",
+        w: 2560,
+        h: 1440,
+        alt: "Emirates Islamic Digital UX"
+      },
+      {
+        src: "/images/work/emirates-islamic-digital-ux/detail-1.png",
+        w: 1260,
+        h: 648,
+        alt: "Emirates Islamic Digital UX — process detail 1"
+      },
+      {
+        src: "/images/work/emirates-islamic-digital-ux/detail-2.png",
+        w: 1260,
+        h: 648,
+        alt: "Emirates Islamic Digital UX — process detail 2"
+      }
+    ],
+    client: "Emirates Islamic Bank",
+    year: "2018"
+  }
 ];
 
 export const worksSection = {
   heading: ["Selected works", "Enterprise impact"], // 2nd line muted
-  screenLabel: "Screen 0%n — drop final design here", // Figma placeholder until the final screens are added
-  showMore: "Show the other screens ↓",
+  showMore: "Show the other %n screens ↓",
+  caseLabel: "Case study",
   readCase: "Read the full case study ↗",
 };
 

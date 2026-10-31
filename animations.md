@@ -34,6 +34,13 @@ Rule: respect `prefers-reduced-motion` for everything below.
   - The untyped text is held invisibly, so the centred line doesn't shift as it types. Screen readers get the whole sentence.
   - Mono at 12px, not the 9px uppercase eyebrow style. That size is not in Figma. The hand is the system emoji, the flag is drawn in code.
   - Reduced motion: the final line at once, with a still hand and flag and no cursor.
+- Selected works scroll behaviour (owner, 2026-10-31, follows pleurat.com/work; motion only, our content and colours). `components/WorksShowcase.tsx`, `.works-rail`, `.works-bar`, `.works-rule`, `.works-fig` in `app/tokens.css`:
+  - Four projects: AI Banking Copilot is not in this list (owner, 2026-10-31). All projects' screens stack in one scrolling column. A project is active once its first row reaches the middle of the screen.
+  - Desktop: the project list is pinned at the left, 112px from the top to clear the floating bar. The active row opens over 550ms and the previous one closes, with its title brightening over 350ms. A lime line on the column edge grows with progress through all the projects. Clicking a title smooth-scrolls to its screens.
+  - Mobile: a pinned bar of project names under the floating bar, with a lime underline on the active name, which centres itself. Tapping a name scrolls to it. Each project shows its own details above its screens.
+  - Screens reveal once as they enter: fade over 800ms, rise 56px and unclip from 16% at the top over 1250ms.
+  - Final screens / Case study flips one project at a time, as on the reference. Case study shows a short summary of that project and a link to its full page. Show the other screens opens the rest for that project and stays open.
+  - Reduced motion: no reveal or transitions. The list and bar still pin and follow the scroll.
 - Logo R draw (owner, 2026-10-30, Figma `3:39` motion): plays once on load. The R channel starts filled by a thick lime stroke, which retracts along the letter from the stem foot to the leg tip, revealing the R as a drawn line. Figma timeline: 2s, stroke retracts 0.15s to 1.35s linear, then hidden. We play it once instead of looping. Only the full-bleed header animates; the floating bar shows the end state. Reduced motion: end state, no animation.
 - Linkedin button (owner, 2026-10-30):
   - Rest: React Bits "star border" motion. The two Figma glows travel along the bottom (right to left) and top (left to right) edges and fade, 6s linear, infinite, alternate.

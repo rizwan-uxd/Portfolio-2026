@@ -43,7 +43,7 @@ Riz's direction: no visible card, and Selected works starts contained inside the
 - The ADCB logo reads brighter than the others because its file has white shapes.
 - The floating bar's design is not in Figma.
 - Not tested: the real reduced-motion setting (carousel, horizon, transition), touch scrolling on a real phone, and the horizon's pause when the tab is hidden.
-- Still unbuilt (see `components.md` and "Not decided" in `animations.md`): project switching in Selected works, mobile menu sheet, AI twin, knowledge graph interactions, tablet layouts. Ask Riz before designing anything undesigned.
+- Still unbuilt (see `components.md` and "Not decided" in `animations.md`): mobile menu sheet, AI twin, knowledge graph interactions, tablet layouts. Ask Riz before designing anything undesigned.
 
 ## Things that cost time
 - **The browser pane does not run animation frames while hidden,** and a script waiting on them times out. For real frames use `playwright-core` with `executablePath` set to the Chrome app and SwiftShader flags.
