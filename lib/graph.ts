@@ -229,7 +229,7 @@ export function shortestPath(from: string, to: string): string[] | null {
   return search(true) ?? search(false);
 }
 
-// Sphere layout: hubs spread evenly, each category's nodes in a cap around its hub, then a few rounds of repulsion so no two sit on top of each other.
+// Ball layout: hubs spread evenly, each category's nodes in a cap around its hub, then a few rounds of repulsion so no two sit on top of each other.
 function layout() {
   const unit = (v: number[]) => {
     const l = Math.hypot(v[0], v[1], v[2]) || 1;
@@ -268,6 +268,15 @@ function layout() {
     }
     leaves.forEach((l, i) => { l.p = unit(l.p.map((v, k) => v + push[i][k])); });
   }
+  // Depth, as on poulo.site: hubs sit part-way out and their nodes scatter in and out around them, so the graph is a ball and not a shell
+  const spread = (i: number) => {
+    const h = Math.sin(i * 12.9898 + 4.1) * 43758.5453;
+    return h - Math.floor(h);
+  };
+  leaves.forEach((l, i) => {
+    const f = l.n.kind === "hub" ? 0.82 : 0.58 + 0.5 * spread(i);
+    l.p = l.p.map((v) => v * f);
+  });
   for (const { n, p } of leaves) [n.x, n.y, n.z] = p;
 }
 layout();

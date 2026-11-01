@@ -16,16 +16,9 @@ export function Services() {
           return (
             <ServiceBox key={s.title} className={`flex flex-col gap-4 border-t border-hairline px-4 py-6 lg:p-8 ${i % 2 === 0 ? "lg:border-r" : ""}`}>
               <h3 className="title">{s.title}</h3>
-              <p className="text-muted-foreground">{s.description}</p>
-              <div className="grid rounded-lg border border-hairline bg-card sm:grid-cols-[1.25fr_1fr] lg:h-visual lg:border-border">
-                <div className="flex min-w-0 items-center justify-center p-2">
-                  <Diagram />
-                </div>
-                <ul className="service-bullets flex flex-col justify-center gap-3 border-t border-hairline p-4 sm:border-t-0 sm:border-l lg:border-border">
-                  {s.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
+              <p className="text-muted-foreground lg:min-h-[3lh]">{s.description}</p>
+              <div className="flex items-center justify-center lg:h-visual">
+                <Diagram />
               </div>
             </ServiceBox>
           );

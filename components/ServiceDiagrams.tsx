@@ -75,7 +75,7 @@ function Art({ x, y, cycle, children }: { x: number; y: number; cycle: string; c
   );
 }
 
-// Product/UX design: a screen assembling itself on its artboard, with the main action lighting up once it lands.
+// Complex Interaction Design: a screen assembling itself on its artboard, with the main action lighting up once it lands.
 function Screen() {
   const [px, py] = at(1.2, 4, 1.5);
   return (
@@ -102,7 +102,7 @@ function Screen() {
   );
 }
 
-// Design systems/strategy: tokens at the base, components on them, patterns on top. The layers land from the bottom up.
+// Scalable Design Systems & Token Ops: tokens at the base, components on them, patterns on top. The layers land from the bottom up.
 function Layers() {
   const size = 7.5;
   const gap = 2.6;
@@ -132,7 +132,7 @@ function Layers() {
   );
 }
 
-// Vibe coding and prototyping: lines of a prompt write themselves, tokens travel down the wire and the prototype builds.
+// Interactive Code Prototyping: lines of a prompt write themselves, tokens travel down the wire and the prototype builds.
 function Build() {
   const rows: [number, number][] = [[1.5, 3.2], [2.4, 2.2], [3.3, 3], [4.2, 1.5]];
   return (
@@ -154,7 +154,7 @@ function Build() {
   );
 }
 
-// Discovery and user testing: a signal runs the loop between stations, each one lifting and lighting as it arrives.
+// UX Research & Validation: a signal runs the loop between stations, each one lifting and lighting as it arrives.
 function Loop() {
   const stations: [number, number, number][] = [[2.5, 2.5, 0], [7.5, 2.5, 1], [2.5, 7.5, 3], [7.5, 7.5, 2]]; // back to front; the last number is the order round the loop
   const [sx, sy] = at(2.5, 2.5, 0.3);
@@ -175,4 +175,50 @@ function Loop() {
   );
 }
 
-export const serviceDiagrams = [Screen, Layers, Build, Loop];
+// Product Strategy & Growth Alignment: bars rise one after the other towards the KPI, beside the roadmap.
+function Growth() {
+  const [px, py] = at(4.5, 2, 3.1);
+  return (
+    <Art x={-9} y={-68} cycle="--iso-cycle-drop">
+      <Box x={0} y={0} w={9} d={8} h={0.3} className="iso-plate" />
+      <Pads w={9} d={8} />
+      {[1.2, 2.4, 3.6, 4.8, 6].map((y, i) => <path key={y} className="iso-dim" d={line([0.8, y, 0.3], [2.6 - (i % 2) * 0.6, y, 0.3])} />)}
+      <Drop i={4.5} x={3.4} y={0.6} z={0.3} w={2.2} d={1.4} h={2.8} className="iso-hot">
+        <path className="iso-stem" d={`M${px.toFixed(1)} ${py.toFixed(1)} v-24`} />
+        <circle className="iso-tip" cx={px.toFixed(1)} cy={py.toFixed(1)} r="3" />
+      </Drop>
+      <Drop i={3} x={3.4} y={2.4} z={0.3} w={2.2} d={1.4} h={2} />
+      <Drop i={1.5} x={3.4} y={4.2} z={0.3} w={2.2} d={1.4} h={1.3} />
+      <Drop i={0} x={3.4} y={6} z={0.3} w={2.2} d={1.4} h={0.7} />
+      <Silk x={5.3} y={0.3} z={4.6} anchor="start">KPI</Silk>
+      <Silk x={2} y={10}>ROADMAP</Silk>
+    </Art>
+  );
+}
+
+// AI-Native & Conversational Experience: the turns of a conversation land in order, and the person's control lights up last.
+function Chat() {
+  const [px, py] = at(2, 7.2, 0.9);
+  const turns: [number, number, number, number][] = [[0.8, 0.7, 5.5, 0], [3.7, 2.4, 5.5, 2], [0.8, 4.1, 6, 4]]; // x, y, width, stagger
+  return (
+    <Art x={-18} y={-90} cycle="--iso-cycle-drop">
+      <Box x={0} y={0} w={10} d={8} h={0.3} className="iso-plate" />
+      <Pads w={10} d={8} />
+      {turns.map(([x, y, w, i]) => (
+        <Drop key={y} i={i} x={x} y={y} z={0.3} w={w} d={1.3} h={0.35}>
+          <path className="iso-dim" d={line([x + 0.5, y + 0.45, 0.65], [x + w - 0.5, y + 0.45, 0.65])} />
+          <path className="iso-dim" d={line([x + 0.5, y + 0.9, 0.65], [x + w - 1.6, y + 0.9, 0.65])} />
+        </Drop>
+      ))}
+      <Drop i={6} x={2} y={5.8} z={0.3} w={7.2} d={1.4} h={0.6} className="iso-hot">
+        <path className="iso-stem" d={`M${px.toFixed(1)} ${py.toFixed(1)} v-30`} />
+        <circle className="iso-tip" cx={px.toFixed(1)} cy={py.toFixed(1)} r="3" />
+        <Led x={8.2} y={6.5} z={0.9} step={1.4} />
+      </Drop>
+      <Silk x={11} y={1.6}>AGENT</Silk>
+      <Silk x={2.2} y={10.2}>HUMAN</Silk>
+    </Art>
+  );
+}
+
+export const serviceDiagrams = [Growth, Loop, Screen, Chat, Build, Layers];

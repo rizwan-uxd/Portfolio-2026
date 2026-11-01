@@ -1,5 +1,6 @@
 import { testimonials, testimonialsSection } from "@/lib/content";
 import { Heading } from "@/components/SectionHeading";
+import { TiltCard } from "@/components/TiltCard";
 
 function Quote({ text, highlights }: { text: string; highlights: string[] }) {
   const parts = text.split(new RegExp(`(${highlights.join("|")})`));
@@ -21,28 +22,29 @@ export function Testimonials() {
         </div>
         <p className="text-muted-foreground lg:w-full lg:max-w-intro">{testimonialsSection.intro}</p>
       </div>
-      <div className="no-scrollbar flex items-start gap-3 overflow-x-auto border-t border-hairline px-4 pb-4 pt-2 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:p-8">
+      <div className="no-scrollbar flex gap-3 overflow-x-auto border-t border-hairline px-4 pb-4 pt-2 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:p-8">
         {testimonials.map((t) => (
-          <figure key={t.name} className="flex w-carousel-card shrink-0 flex-col gap-4 rounded-lg border border-border bg-card p-6 lg:w-auto lg:p-8">
+          <TiltCard key={t.name} stageClassName="w-carousel-card shrink-0 lg:w-auto" className="flex h-full flex-col gap-4 rounded-lg border border-border bg-card p-6 lg:p-8">
             <span aria-hidden className="title text-brand">“</span>
             <div className="flex flex-col gap-1">
               <p className="title">{t.headline}</p>
               <p className="text-muted-foreground">{t.sub}</p>
             </div>
-            <blockquote>
+            <blockquote className="flex-1">
               <Quote text={t.quote} highlights={t.highlights} />
             </blockquote>
             <div className="h-px w-full bg-hairline" />
-            <figcaption className="flex items-center gap-3">
+            <figcaption className="flex items-start gap-3">
               <span aria-hidden className="label flex size-10 shrink-0 items-center justify-center rounded-full border border-hairline bg-secondary lg:size-11">
                 {t.name.replace("Dr. ", "")[0]}
               </span>
               <span className="flex flex-col gap-1">
                 <span>{t.name}</span>
-                <span className="micro text-muted-foreground">{t.role}</span>
+                {/* Room for two lines, so a role that wraps doesn't move this card's divider out of line with the others */}
+                <span className="micro min-h-[2lh] text-muted-foreground">{t.role}</span>
               </span>
             </figcaption>
-          </figure>
+          </TiltCard>
         ))}
       </div>
       <div aria-hidden className="flex justify-center gap-2 px-4 pb-8 pt-1 lg:hidden">

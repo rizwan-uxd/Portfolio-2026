@@ -4,7 +4,7 @@ Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variab
 
 ## Tokens (summary, see tokens.css)
 - Dark: bg `#181818`, fg `#e8e8e8`, card `#1f1f1f`, secondary `#292929`, muted-fg `#b4b4b4`, border `#2c2c2c`, hairline `#3d4045`, brand `#e5ff5d` (text on brand `#111`), pos `#00e599`, neg `#fd607f`.
-- Graph categories: companies `#6cb6ff`, industries `#ffa24d`, skills `#ff7ab6`, tools `#4fd8eb`, projects `#e5ff5d`, certifications `#00e599`, impact `#b69cff`. Sphere canvas `--graph-canvas` `#050608`. The wire shell uses the tools and companies colours, inner chords the impact violet, and a traced path the brand lime.
+- Knowledge graph (owner, 2026-11-01): monochrome, like poulo.site. Nodes, links and labels are `--foreground` and `--muted-foreground`, fading with depth, on `--graph-canvas` `#0a0a0a`. Highlights are `--brand` only. The `--graph-*` category colours are unused there.
 - Radius: btn 4, sm 3.2, md 6, lg 8 (cards), xl 12 (prompt shell), full (avatars, pills).
 - Spacing scale 4 8 12 16 24 32 48 64 96. Section padding mostly 64 vertical, 48 horizontal on desktop; 48 vertical, 24 horizontal on mobile.
 - Text styles: Display 56/0.92/-0.04em/500, Title 32/1.10/-0.03em/500, Subtitle 20/1.20/-0.02em/500, Body 16/1.40/-0.02em/400, Label 12 uppercase 500, Micro 9 mono uppercase tracking 0.18em.
@@ -36,5 +36,7 @@ Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variab
 - Build order (owner, 2026-10-30): lay out all sections from Figma in one pass with no per-section approval; behaviour and animation follow, one section at a time.
 - Sections keep the mobile frame up to 1023px and use the desktop frame from `lg` (1024); header and hero switch at `md` (768). Interim until the owner decides tablet.
 
+- CTA buttons (owner, 2026-11-01): every CTA ends in a round badge with a dotted arrow (`components/DottedArrow.tsx`, after the "Learn more" button on poulo.site), replacing the arrow glyph. Up-right opens a page or another site, right moves forward. Lime buttons get a dark badge with lime dots; hairline buttons a lime badge with dark dots. Buttons without an arrow (Reset, Done, Trace) stay as they are.
+
 ## Not designed (ask first)
-Hover/focus/pressed states, menu sheet (mobile nav), tablet layouts, light theme, AI projects section, About + stats, case-study pages, hero dot-matrix background.
+Hover/focus/pressed states, menu sheet (mobile nav), tablet layouts, light theme, AI projects section, About + stats, hero dot-matrix background.

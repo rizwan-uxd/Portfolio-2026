@@ -15,6 +15,7 @@ Desktop frame `2:2` (1440), mobile frame `27:5` (390). Style base: Codex (dark, 
 ## Layout of the repo
 - `app/` routes, `tokens.css` (all values), `globals.css`, `api/twin/route.ts` (answers from `lib/twin.ts`, no model yet)
 - `components/` one file per section (Header, Hero, Brands, Works, Services, AiTwinBar, Graph, Testimonials, Contact) plus `Frame` and `SectionHeading`.
+- `app/work/[slug]` case study pages: `components/CaseStudy.tsx`, copy in `lib/case-studies.ts`.
 - `lib/content.ts` copy and data, `lib/graph.ts` graph nodes and links built from content, plus the sphere layout, `lib/twin.ts` AI twin answers built from content, `lib/fonts.ts`
 - `HANDOFF.md` and `NOTES.md` are the source briefs. Distilled docs: `design.md`, `components.md`, `animations.md`.
 - `NEXT-SESSION.md`: where the work stands and what is unpushed. Read it first in a fresh session.
@@ -23,7 +24,7 @@ Desktop frame `2:2` (1440), mobile frame `27:5` (390). Style base: Codex (dark, 
 - Tokens in `app/tokens.css` are the single source for every value. Use Tailwind token classes (`bg-card`, `text-muted-foreground`, `border-hairline`, `bg-brand`, `rounded-btn`) or `var(--token)`. Never hardcode colors, sizes or radii. Tailwind's numeric spacing (`p-6` = 24px) is the Figma `space/N` scale. Don't name a `--spacing-*` token the same as a `--container-*` one: `max-w-*` picks the spacing value.
 - Text styles are utility classes from the tokens: `.display`, `.title`, `.subtitle`, `.label`, `.micro`. Display second line or half uses `text-muted-foreground`.
 - Content frame is `.frame` (`--frame-w`, hairline side borders only at 1214px and up).
-- Sections are server components; the layout pass is static. Only Header, Brands, HeroHorizon, HeroStage, AiTwinBar, Graph and GraphSphere are client components so far.
+- Sections are server components; the layout pass is static. Only Header, Brands, HeroHorizon, HeroStage, AiTwinBar, Graph, GraphSphere, TiltCard, Lanyard, WorkPreview and everything in `components/preview` are client components so far.
 - Mobile-first Tailwind: base is frame `27:5` (390). Header and hero switch to frame `2:2` at `md:` (768), all other sections at `lg:` (1024), until a tablet layout is decided. `frame:` is 1214+.
 - Accessibility: focus ring uses `--ring`; interactive SVG nodes are keyboard reachable; respect `prefers-reduced-motion`.
 
@@ -33,7 +34,7 @@ Desktop frame `2:2` (1440), mobile frame `27:5` (390). Style base: Codex (dark, 
 3. Owner, 2026-10-30: lay out all sections in one pass without per-section approval, then add behaviour and animation one section at a time.
 4. Do not design what is not designed: hover/focus/pressed states, menu sheet, tablet layouts, light theme. Ask first.
 5. Record every decision the owner makes in the matching .md file (design.md, components.md, animations.md).
-6. Out of scope for v1: case-study pages (`/work/[slug]`), real AI twin backend.
+6. Out of scope for v1: real AI twin backend.
 
 ## Working notes
 - Figma image URLs are blocked from the cloud container. Call `get_screenshot` with `enableBase64Response: true`.

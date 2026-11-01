@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
-import { cv, graphSection, liveSite, worksSection } from "@/lib/content";
+import { cv, graphSection, worksSection } from "@/lib/content";
 import { categoryIds, graphLinks, graphNodes, graphStats, leafCount, neighbours, nodeById, shortestPath, type GraphNode } from "@/lib/graph";
 import { GraphSphere, type SphereHandle, type SphereView } from "@/components/GraphSphere";
+import { DottedArrow } from "@/components/DottedArrow";
 import { Heading } from "@/components/SectionHeading";
 
-const catColor = (cat: string) => (cat === "root" ? "var(--foreground)" : `var(--graph-${cat})`);
 const catLabel = (cat: string) => graphSection.categories.find((c) => c.id === cat)?.label ?? "";
-const dot = (cat: string) => <span aria-hidden className="size-2 shrink-0 rounded-full" style={{ background: catColor(cat) }} />;
+const dot = (cat: string) => <span aria-hidden className="size-2 shrink-0 rounded-full" style={{ background: "var(--muted-foreground)" }} />;
 const field = "rounded-btn border border-input bg-background px-4 py-2";
 const traceable = graphNodes.filter((n) => n.kind === "leaf").sort((a, b) => a.label.localeCompare(b.label));
 
@@ -59,7 +59,7 @@ function Panel({ node, onSelect, children }: { node: GraphNode | null; onSelect:
           {node.points.map((p) => <li key={p}>{p}</li>)}
         </ul>
       )}
-      {node.href && <a href={`${liveSite}${node.href}`} target="_blank" rel="noreferrer" className="label w-fit text-brand">{worksSection.readCase}</a>}
+      {node.href && <a href={node.href} className="label w-fit text-brand">{worksSection.readCase}</a>}
       <p className="micro text-muted-foreground">{links.length} {links.length === 1 ? "connection" : "connections"}</p>
       <div className="flex flex-wrap gap-2">
         {links.map((id) => <NodeChip key={id} id={id} onSelect={onSelect} />)}
@@ -106,7 +106,7 @@ function Timeline({ selected, onSelect }: { selected: string | null; onSelect: (
             </button>
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <button type="button" aria-label={`${r.label}, ${r.dates}`} onClick={() => onSelect(r.id)} className="relative block h-3 w-full rounded-full bg-secondary">
-                <span className="absolute inset-y-0 rounded-full" style={{ left: `${pos(r.from)}%`, width: `${Math.max(pos(r.to) - pos(r.from), 1)}%`, background: selected === r.id ? "var(--brand)" : "var(--graph-companies)" }} />
+                <span className="absolute inset-y-0 rounded-full" style={{ left: `${pos(r.from)}%`, width: `${Math.max(pos(r.to) - pos(r.from), 1)}%`, background: selected === r.id ? "var(--brand)" : "var(--muted-foreground)" }} />
               </button>
               {projects.length > 0 && (
                 <div className="flex flex-wrap gap-2">
@@ -211,7 +211,7 @@ export function Graph() {
 
   const node = selected ? nodeById.get(selected) ?? null : null;
   const step = tourStep === null ? null : graphSection.tour[tourStep];
-  const toggleClass = (on: boolean) => `label flex-1 rounded-[var(--radius-sm)] px-3 py-2 text-center lg:px-4 ${on ? "bg-brand text-brand-foreground" : "text-muted-foreground"}`;
+  const toggleClass = (on: boolean) => `label flex-1 rounded-[var(--radius-sm)] px-3 py-2 text-center lg:px-4 ${on ? "bg-secondary text-foreground" : "text-muted-foreground"}`;
 
   return (
     <section id="graph" className="border-t border-hairline">
@@ -227,7 +227,7 @@ export function Graph() {
             <button type="button" aria-pressed={mode === "timeline"} onClick={() => { setMode("timeline"); setTourStep(null); }} className={toggleClass(mode === "timeline")}>Timeline</button>
           </div>
           <div className="flex gap-3">
-            <button type="button" onClick={() => goToStep(0)} className="label flex-1 rounded-btn bg-brand px-6 py-3 text-brand-foreground lg:flex-none">Take the tour →</button>
+            <button type="button" onClick={() => goToStep(0)} className="label flex flex-1 items-center justify-center gap-3 rounded-btn bg-brand py-2 pl-6 pr-2 text-brand-foreground lg:flex-none">Take the tour <DottedArrow direction="right" /></button>
             <button type="button" onClick={reset} className="label flex-1 rounded-btn border border-hairline px-6 py-3 lg:flex-none">Reset</button>
           </div>
         </div>
@@ -296,7 +296,7 @@ export function Graph() {
               {path.map((id, i) => (
                 <span key={id} className="flex items-center gap-2">
                   {i > 0 && <span aria-hidden className="text-muted-foreground">→</span>}
-                  <button type="button" onClick={() => select(id)} style={{ color: catColor(nodeById.get(id)!.cat) }}>{nodeById.get(id)!.label}</button>
+                  <button type="button" onClick={() => select(id)} className="text-brand">{nodeById.get(id)!.label}</button>
                 </span>
               ))}
             </p>
@@ -324,9 +324,9 @@ export function Graph() {
                 <button
                   type="button"
                   onClick={() => (tourStep + 1 < graphSection.tour.length ? goToStep(tourStep + 1) : setTourStep(null))}
-                  className="label w-fit rounded-btn bg-brand px-4 py-2 text-brand-foreground"
+                  className={`label flex w-fit items-center gap-2 rounded-btn bg-brand py-1.5 text-brand-foreground ${tourStep + 1 < graphSection.tour.length ? "pl-4 pr-1.5" : "px-4"}`}
                 >
-                  {tourStep + 1 < graphSection.tour.length ? "Next →" : "Done"}
+                  {tourStep + 1 < graphSection.tour.length ? <>Next <DottedArrow direction="right" size="sm" /></> : "Done"}
                 </button>
               </div>
             )}

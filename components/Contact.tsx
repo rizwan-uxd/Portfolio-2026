@@ -1,4 +1,5 @@
-import Image from "next/image";
+import { Lanyard } from "@/components/Lanyard";
+import { DottedArrow } from "@/components/DottedArrow";
 import { contact, person } from "@/lib/content";
 
 const fields = [
@@ -16,19 +17,19 @@ export function Contact() {
   return (
     <section id="contact" className="border-t border-hairline">
       <div className="grid grid-cols-1 lg:grid-cols-2">
-        <div className="flex flex-col items-start gap-6 px-4 py-12 lg:border-r lg:border-hairline lg:px-12 lg:py-16">
-          <span className="relative block size-18 overflow-hidden rounded-full border-2 border-brand bg-secondary drop-shadow-[var(--shadow-avatar)] lg:size-22">
-            <Image src="/images/profile.png" alt={`Portrait of ${person.name}`} fill sizes="(min-width: 64rem) 88px, 72px" className="origin-top scale-125 object-cover object-top" />
-          </span>
-          <p className="micro text-brand">{contact.label}</p>
-          <h2 className="display">
-            {contact.heading[0]} <span className="text-muted-foreground">{contact.heading[1]}</span>
-          </h2>
-          <a href={person.calendly} className="label flex w-full items-center justify-center gap-2 rounded-btn bg-brand px-6 py-4 text-brand-foreground lg:w-auto lg:py-3">
-            {contact.cta} <span aria-hidden>↗</span>
-          </a>
+        <div className="lg:border-r lg:border-hairline">
+          <Lanyard />
         </div>
         <div className="flex flex-col gap-3 border-t border-hairline px-4 pb-12 pt-8 lg:gap-4 lg:border-t-0 lg:px-12 lg:py-16">
+          <div className="flex flex-col items-start gap-6 pb-6 lg:pb-8">
+            <p className="micro text-brand">{contact.label}</p>
+            <h2 className="display">
+              {contact.heading[0]} <span className="text-muted-foreground">{contact.heading[1]}</span>
+            </h2>
+            <a href={person.calendly} className="label flex w-full items-center justify-center gap-3 rounded-btn bg-brand py-2 pl-6 pr-2 text-brand-foreground lg:w-auto">
+              {contact.cta} <DottedArrow />
+            </a>
+          </div>
           <p className="micro text-muted-foreground">{contact.connectLabel}</p>
           {fields.map((f) => (
             <a key={f.label} href={f.href} className="flex items-center gap-3 rounded-lg border border-hairline bg-card p-4 lg:gap-4 lg:px-6">

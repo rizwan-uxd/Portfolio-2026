@@ -44,7 +44,6 @@ export type Work = {
 };
 
 // All of this comes from the live site (home page cards and /work/<slug> pages), and the images from its /images/work.
-export const liveSite = "https://www.rizwanux.work";
 export const works: Work[] = [
   {
     slug: "hajj-operations-platform",
@@ -266,8 +265,7 @@ export const works: Work[] = [
 
 export const worksSection = {
   heading: ["Selected works", "Enterprise impact"], // 2nd line muted
-  showMore: "Show the other %n screens ↓",
-  caseLabel: "Case study",
+  metricLabel: "Impact", // title of the metric square
   readCase: "Read the full case study ↗",
 };
 
@@ -277,29 +275,61 @@ export const servicesSection = {
     "As a digital designer, with an empathetic, human-first mindset and a structured way of thinking, I translate real user needs and business goals into clear journeys and polished UI — reducing friction, making decisions easier, and helping teams ship with confidence.",
 };
 
-// Description and bullets come from the Figma cells; titles match the live site.
+// Titles and descriptions from the owner (2026-11-01).
 export const services = [
   {
-    title: "Product/UX design",
-    description: "End-to-end product design — research, journey mapping, wireframes, and polished UI that reduces friction and helps teams ship with confidence.",
-    items: ["Research", "Journey mapping", "Wireframes", "Polished UI"],
+    title: "Product Strategy & Growth Alignment",
+    description: "Aligning user journeys and drop-off data with core business KPIs to build a prioritized roadmap that turns product features into measurable revenue.",
   },
   {
-    title: "Design systems/strategy",
-    description: "Building and scaling reusable design systems and component libraries so product teams move faster without sacrificing quality or consistency.",
-    items: ["Reusable design systems", "Component libraries", "Faster product teams", "Consistent quality"],
+    title: "UX Research & Validation",
+    description: "Uncovering real user friction through direct customer interviews and behavioral analytics to de-risk feature launches before developers write code.",
   },
   {
-    title: "Vibe coding and prototyping",
-    description: "Turning intent into working prototypes with Cursor and Claude — fast, AI-assisted builds that validate flows before full engineering investment.",
-    items: ["Cursor", "Claude", "Working prototypes", "Validated flows"],
+    title: "Complex Interaction Design",
+    description: "Untangling dense data tables, multi-tier permissions, and asynchronous edge cases into clear, intuitive mental models that users navigate effortlessly.",
   },
   {
-    title: "Discovery and user testing",
-    description: "Structured discovery and usability testing that turns real user behavior into clear, actionable direction for product decisions.",
-    items: ["Structured discovery", "Usability testing", "Real user behavior", "Actionable direction"],
+    title: "AI-Native & Conversational Experience",
+    description: "Designing natural conversational flows, dynamic canvas workspaces, and human-in-the-loop controls so users trust, inspect, and easily steer autonomous AI actions.",
+  },
+  {
+    title: "Interactive Code Prototyping",
+    description: "Building functional, web-connected prototypes with real APIs and live data to test actual behavior and get stakeholder sign-off before committing sprint hours.",
+  },
+  {
+    title: "Scalable Design Systems & Token Ops",
+    description: "Creating tokenized component foundations that keep layouts accessible, consistent across platforms, and structured for both human engineers and AI code agents.",
   },
 ];
+
+// Copy from the live site's AI projects section (owner, 2026-10-31: two cards).
+export const aiProjectsSection = {
+  eyebrow: "AI projects",
+  heading: ["AI projects", ""], // 2nd line muted, empty
+  note: "Vibe-coded and AI-assisted builds — intent-based flows, prototypes, and automation designed with Cursor and Claude.",
+  projects: [
+    {
+      tag: "Vibe coded",
+      title: "AI Banking Copilot",
+      summary: "An AI-native banking concept designed and vibe coded into a working React Native prototype in six days — intent-driven flows that end in a completed action, not a chat reply.",
+      statLabel: "Concept to prototype",
+      stat: "6 days",
+      image: "/images/work/ai-banking-copilot/banner.png",
+      alt: "AI Banking Copilot",
+      href: "/work/ai-banking-copilot",
+    },
+    {
+      tag: "Case study in development",
+      title: "AI Banking App",
+      summary: "A mobile banking concept currently being refined. The full case study will be published soon.",
+      statLabel: "Status",
+      stat: "Coming soon",
+      image: "/images/work/ai-banking-app/tile.png",
+      alt: "The app's home screen — total balance, send, transfer, pay and topup actions, and recent transactions — dimmed behind a lock.",
+    },
+  ],
+};
 
 export const testimonialsSection = {
   eyebrow: "Testimonials",
@@ -424,7 +454,7 @@ export const graphSection = {
   eyebrowMobile: "Tap any node to see how it connects",
   heading: ["Career", "knowledge graph"], // 2nd line muted
   intro: ["Click any node to see what it is, what it delivered, and everything it connects to. Try ", "Hajj platform", " or ", "AI Banking Copilot", "."],
-  hint: "Drag to rotate · Drag a node to move it · Pinch, or click then scroll, to zoom · Click a node for details · Dashed lines are cross-links",
+  hint: "Drag to rotate · Drag a node to move it · Pinch, or click then scroll, to zoom · Click a node for details",
   searchLabel: "Search the graph",
   searchPlaceholder: "Search… e.g. KATIM, Claude",
   noMatches: "Nothing matches that.",

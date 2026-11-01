@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useImperativeHandle, useRef, type Ref } from "react";
 import { graphLinks, graphNodes, neighbours, nodeById, type GraphNode } from "@/lib/graph";
 
@@ -39,7 +40,7 @@ void main() {
   vSide = aMeta.x;
   vAlong = aAlong;
   vDash = aStyle.y;
-  vDepth = (mix(za, zb, aMeta.y) + 1.0) * 0.5;
+  vDepth = clamp((mix(za, zb, aMeta.y) + 1.0) * 0.5, 0.0, 1.0);
 }`;
 
 const LINE_FS = `
@@ -49,13 +50,12 @@ varying vec4 vColor;
 varying float vSide, vAlong, vDash, vDepth;
 void main() {
   float edge = 1.0 - abs(vSide);
-  float a = edge * edge * vColor.a * mix(0.32, 1.0, vDepth) * uFade;
+  float a = edge * vColor.a * mix(0.14, 1.0, vDepth) * uFade;
   if (vDash > 0.5) {
     float flow = vDash > 1.5 ? uTime * 0.6 : 0.0;
     a *= step(fract(vAlong * 22.0 - flow * 22.0 * 0.25), 0.55);
   }
-  vec3 c = mix(vColor.rgb, vec3(1.0), edge * edge * edge * 0.12);
-  gl_FragColor = vec4(c * a, a);
+  gl_FragColor = vec4(vColor.rgb * a, a);
 }`;
 
 const POINT_VS = `
@@ -71,7 +71,7 @@ void main() {
   float s = 1.0 / (uDist - v.z);
   gl_Position = vec4(v.xy * s * uScale, 0.0, 1.0);
   gl_PointSize = aSize * uDpr * uSizeScale * s * uDist * 0.82;
-  vColor = vec4(aColor.rgb, aColor.a * mix(0.3, 1.0, (v.z + 1.0) * 0.5));
+  vColor = vec4(aColor.rgb, aColor.a * mix(0.22, 1.0, clamp((v.z + 1.0) * 0.5, 0.0, 1.0)));
 }`;
 
 const POINT_FS = `
@@ -81,23 +81,20 @@ varying vec4 vColor;
 void main() {
   float r = length(gl_PointCoord - 0.5) * 2.0;
   if (r > 1.0) discard;
-  vec2 q = abs(gl_PointCoord - 0.5) * 2.0;
-  float core = smoothstep(0.24, 0.12, r);
-  float halo = pow(1.0 - r, 2.2) * 1.1;
-  float spike = (exp(-q.x * 24.0 - q.y * 3.6) + exp(-q.y * 24.0 - q.x * 3.6)) * 0.8;
-  float a = (core + halo + spike) * vColor.a * uFade;
-  vec3 c = mix(vColor.rgb, vec3(1.0), core * 0.55);
-  gl_FragColor = vec4(c * a, a);
+  float disc = 1.0 - smoothstep(0.5, 0.58, r);
+  float halo = pow(1.0 - r, 3.0) * 0.2;
+  float a = (disc + halo) * vColor.a * uFade;
+  gl_FragColor = vec4(vColor.rgb * a, a);
 }`;
 
 const CAMERA = 3.4; // camera distance, in sphere radii
-const FOCAL = 2.72;
+const FOCAL = 3;
 const ZOOM_MIN = 0.7;
 const ZOOM_MAX = 2.6;
 const AUTO_SPIN = 0.07; // radians per second
 const START = { yaw: 0.5, pitch: 0.22 };
-const SIZES: Record<GraphNode["kind"], number> = { root: 70, hub: 58, leaf: 36 };
-const ARC_SEGMENTS = 10;
+const SIZES: Record<GraphNode["kind"], number> = { root: 38, hub: 28, leaf: 16 };
+const ARC_SEGMENTS = 14;
 
 const hexToRgb = (value: string) => {
   let hex = value.trim().replace("#", "");
@@ -117,39 +114,8 @@ function compile(gl: WebGLRenderingContext, vs: string, fs: string) {
   return program;
 }
 
-// The wire shell: an icosphere subdivided a few times, so its edges form the faceted lattice around the data.
-function icosphere(depth: number) {
-  const t = (1 + Math.sqrt(5)) / 2;
-  let verts = [[-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0], [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t], [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1]];
-  let faces = [[0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11], [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8], [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9], [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]];
-  const unit = (v: number[]) => {
-    const l = Math.hypot(v[0], v[1], v[2]);
-    return [v[0] / l, v[1] / l, v[2] / l];
-  };
-  verts = verts.map(unit);
-  for (let d = 0; d < depth; d++) {
-    const mids = new Map<string, number>();
-    const mid = (a: number, b: number) => {
-      const key = a < b ? `${a}_${b}` : `${b}_${a}`;
-      if (!mids.has(key)) {
-        mids.set(key, verts.length);
-        verts.push(unit(verts[a].map((v, i) => (v + verts[b][i]) / 2)));
-      }
-      return mids.get(key)!;
-    };
-    faces = faces.flatMap(([a, b, c]) => {
-      const ab = mid(a, b), bc = mid(b, c), ca = mid(c, a);
-      return [[a, ab, ca], [b, bc, ab], [c, ca, bc], [ab, bc, ca]];
-    });
-  }
-  const edges = new Set<string>();
-  for (const [a, b, c] of faces) for (const [p, q] of [[a, b], [b, c], [c, a]]) edges.add(p < q ? `${p}_${q}` : `${q}_${p}`);
-  return { verts, edges: [...edges].map((e) => e.split("_").map(Number) as [number, number]) };
-}
-
-// Decorative structure around the data, from Riz's sphere references: a coarse bright shell, an irregular web
-// between extra points on the surface, violet lines running in towards the core, and short rays leaving the rim.
-function sphereStructure(cyan: number[], blue: number[], violet: number[]) {
+// A quiet field of dust around the graph, as on poulo.site. Seeded, so it is the same on every load.
+function dust(count: number) {
   let seed = 11;
   const random = () => {
     seed = (seed + 0x6d2b79f5) | 0;
@@ -157,34 +123,10 @@ function sphereStructure(cyan: number[], blue: number[], violet: number[]) {
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
-  const randomUnit = () => {
-    const y = random() * 2 - 1, a = random() * Math.PI * 2, ring = Math.sqrt(1 - y * y);
-    return [Math.cos(a) * ring, y, Math.sin(a) * ring];
-  };
-  const tint = (v: number[]) => {
-    const t = Math.sin(v[1] * 2.6 + v[0] * 1.7) * 0.5 + 0.5;
-    return cyan.map((c, i) => c + (blue[i] - c) * t);
-  };
-  const shell = icosphere(1);
-  const webPoints = [...shell.verts, ...Array.from({ length: 64 }, randomUnit)];
-  const distance = (a: number[], b: number[]) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
-  type Segment = { a: number[]; b: number[]; rgb: number[]; from: number; to: number; width: number };
-  const segments: Segment[] = shell.edges.map(([p, q]) => ({ a: shell.verts[p], b: shell.verts[q], rgb: tint(shell.verts[p]), from: 0.62, to: 0.62, width: 1.5 }));
-  webPoints.forEach((p, i) => {
-    const nearest = webPoints.map((q, j) => ({ j, d: distance(p, q) })).filter(({ j }) => j !== i).sort((a, b) => a.d - b.d).slice(2, 5);
-    for (const { j } of nearest) if (j > i) segments.push({ a: p, b: webPoints[j], rgb: tint(p), from: 0.3, to: 0.3, width: 1 });
+  return Array.from({ length: count }, () => {
+    const y = random() * 2 - 1, a = random() * Math.PI * 2, ring = Math.sqrt(1 - y * y), r = 0.2 + 1.5 * Math.cbrt(random());
+    return { v: [Math.cos(a) * ring * r, y * r, Math.sin(a) * ring * r], size: 5 + random() * 5, alpha: 0.12 + random() * 0.35 };
   });
-  for (const v of shell.verts) segments.push({ a: v, b: v.map((c) => c * 0.2), rgb: violet, from: 0.26, to: 0.72, width: 1.2 });
-  for (let i = 0; i < 26; i++) {
-    const v = randomUnit();
-    segments.push({ a: v, b: v.map((c) => c * 0.3), rgb: violet, from: 0.1, to: 0.5, width: 0.9 });
-  }
-  for (let i = 0; i < 80; i++) {
-    const v = randomUnit();
-    segments.push({ a: v, b: v.map((c) => c * (1.05 + random() * 0.14)), rgb: tint(v), from: 0.55, to: 0, width: 0.8 });
-  }
-  const points = webPoints.map((v, i) => ({ v, rgb: tint(v), size: i < shell.verts.length ? 19 : 11 + random() * 6, alpha: i < shell.verts.length ? 0.95 : 0.8 }));
-  return { segments, points };
 }
 
 type Props = {
@@ -217,17 +159,18 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
     const labels = new Map<string, HTMLElement>();
     stage.querySelectorAll<HTMLElement>("[data-node]").forEach((el) => labels.set(el.dataset.node!, el));
 
+    // The root node is drawn as an HTML photo over the canvas, not as a sprite
+    const photo = stage.querySelector<HTMLElement>("[data-root-photo]");
+
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const css = getComputedStyle(stage);
     const color = (name: string) => hexToRgb(css.getPropertyValue(name));
+    const photoSize = parseFloat(css.getPropertyValue("--graph-photo-size")) || 44;
     const palette = {
       brand: color("--brand"),
-      violet: color("--graph-impact"),
-      cyan: color("--graph-tools"),
-      blue: color("--graph-companies"),
-      root: color("--foreground"),
+      fg: color("--foreground"),
+      muted: color("--muted-foreground"),
     };
-    const catColor = (cat: string) => (cat === "root" ? palette.root : color(`--graph-${cat}`));
 
     const nodes = graphNodes;
     const index = new Map(nodes.map((n, i) => [n.id, i]));
@@ -239,11 +182,8 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
     });
     placeNodes();
 
-    // ---- Link geometry: arcs along the surface for structure, straight chords through the sphere for spokes and cross-links
-    const links = graphLinks.map((l) => {
-      const segments = l.kind === "structure" ? ARC_SEGMENTS : 1;
-      return { ...l, ia: index.get(l.a)!, ib: index.get(l.b)!, segments, start: 0 };
-    });
+    // ---- Link geometry: every link is a curved arc bowed away from the centre, as on poulo.site
+    const links = graphLinks.map((l) => ({ ...l, ia: index.get(l.a)!, ib: index.get(l.b)!, segments: ARC_SEGMENTS, start: 0 }));
     let quadCount = 0;
     links.forEach((l) => { l.start = quadCount; quadCount += l.segments; });
 
@@ -262,21 +202,24 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
       });
     };
     const pointAt = (i: number) => [positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]];
+    const cross = (u: number[], v: number[]) => [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+    const unitOf = (v: number[]) => {
+      const l = Math.hypot(v[0], v[1], v[2]) || 1;
+      return [v[0] / l, v[1] / l, v[2] / l];
+    };
     const writeLink = (l: typeof links[number]) => {
       const a = pointAt(l.ia), b = pointAt(l.ib);
-      if (l.segments === 1) {
-        writeQuad(linkGeom, l.start, a, b, 0, Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]));
-        return;
-      }
-      const angle = Math.acos(Math.min(1, Math.max(-1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2])));
-      const sin = Math.sin(angle) || 1;
-      const at = (t: number) => {
-        const f = Math.sin((1 - t) * angle) / sin, g = Math.sin(t * angle) / sin;
-        return [a[0] * f + b[0] * g, a[1] * f + b[1] * g, a[2] * f + b[2] * g];
-      };
-      for (let s = 0; s < l.segments; s++) {
-        const t0 = s / l.segments, t1 = (s + 1) / l.segments;
-        writeQuad(linkGeom, l.start + s, at(t0), at(t1), t0 * angle, t1 * angle);
+      const ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
+      const chord = Math.hypot(ab[0], ab[1], ab[2]);
+      const mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2];
+      const out = unitOf(Math.hypot(mid[0], mid[1], mid[2]) > 0.05 ? mid : [0, 1, 0]);
+      const side = unitOf(cross(ab, Math.abs(out[1]) > 0.95 ? [1, 0, 0] : out).map((v, k) => (Math.hypot(...cross(ab, out)) > 1e-4 ? cross(ab, out)[k] : cross(ab, [0, 1, 0])[k])));
+      const lean = l.start % 2 ? 0.1 : -0.1;
+      const c = [0, 1, 2].map((k) => mid[k] + out[k] * chord * 0.26 + side[k] * chord * lean);
+      const at = (t: number) => [0, 1, 2].map((k) => (1 - t) * (1 - t) * a[k] + 2 * (1 - t) * t * c[k] + t * t * b[k]);
+      for (let seg = 0; seg < l.segments; seg++) {
+        const t0 = seg / l.segments, t1 = (seg + 1) / l.segments;
+        writeQuad(linkGeom, l.start + seg, at(t0), at(t1), t0 * chord, t1 * chord);
       }
     };
     links.forEach(writeLink);
@@ -287,25 +230,19 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
       return out;
     };
 
-    // ---- Wire shell
-    const structure = sphereStructure(palette.cyan, palette.blue, palette.violet);
-    const shellGeom = new Float32Array(structure.segments.length * 4 * GEOM);
-    const shellStyle = new Float32Array(structure.segments.length * 4 * STYLE);
-    const shellPoints = new Float32Array(structure.points.length * 8);
-    structure.segments.forEach(({ a, b, rgb, from, to, width }, e) => {
-      writeQuad(shellGeom, e, a, b, 0, 0);
-      [from, from, to, to].forEach((alpha, c) => shellStyle.set([rgb[0], rgb[1], rgb[2], alpha, width, 0], (e * 4 + c) * STYLE));
-    });
-    structure.points.forEach(({ v, rgb, size, alpha }, i) => shellPoints.set([v[0], v[1], v[2], rgb[0], rgb[1], rgb[2], alpha, size], i * 8));
+    // ---- Dust
+    const dustList = dust(260);
+    const dustPoints = new Float32Array(dustList.length * 8);
+    dustList.forEach(({ v, size, alpha }, i) => dustPoints.set([v[0], v[1], v[2], palette.muted[0], palette.muted[1], palette.muted[2], alpha, size], i * 8));
 
     // ---- Animated state per node and link
-    const nodeState = nodes.map((n) => ({ a: 1, ta: 1, s: 1, ts: 1, rgb: catColor(n.cat), size: SIZES[n.kind] }));
+    const leafRgb = palette.muted.map((c, i) => c + (palette.fg[i] - c) * 0.55);
+    const baseRgb = (n: GraphNode) => (n.kind === "leaf" ? leafRgb : palette.fg);
+    const nodeState = nodes.map((n) => ({ a: 1, ta: 1, s: 1, ts: 1, rgb: [...baseRgb(n)], trgb: baseRgb(n), size: SIZES[n.kind] }));
     const nodePoints = new Float32Array(nodes.length * 8);
     const linkState = links.map((l) => {
-      const other = nodes[l.ib];
-      const rgb = l.kind === "structure" ? catColor(other.cat) : palette.violet;
-      const base = l.kind === "structure" ? { a: 0.6, w: 1.4, dash: 0 } : l.kind === "spoke" ? { a: 0.7, w: 1.6, dash: 0 } : { a: 0.62, w: 1.3, dash: 1 };
-      return { rgb: [...rgb], a: base.a, w: base.w, dash: base.dash, base: { rgb, ...base }, t: { rgb: [...rgb], a: base.a, w: base.w } };
+      const base = l.kind === "spoke" ? { a: 0.42, w: 1, dash: 0 } : l.kind === "structure" ? { a: 0.3, w: 1, dash: 0 } : { a: 0.2, w: 1, dash: 0 };
+      return { rgb: [...palette.fg], a: base.a, w: base.w, dash: base.dash, base: { rgb: palette.fg, ...base }, t: { rgb: [...palette.fg], a: base.a, w: base.w } };
     });
 
     let hover: string | null = null;
@@ -324,6 +261,7 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
         const s = nodeState[i];
         s.ta = isHidden(n) ? 0 : focus ? (focus.has(n.id) ? 1 : 0.1) : 1;
         s.ts = n.id === active || pathSet?.has(n.id) ? 1.4 : 1;
+        s.trgb = focus && focus.has(n.id) ? palette.brand : baseRgb(n);
       });
       links.forEach((l, i) => {
         const s = linkState[i];
@@ -335,12 +273,13 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
         if (s.t.a === 0 || !focus) return;
         if (pathSet) {
           if (pathEdges.has([a.id, b.id].sort().join("|"))) {
-            s.t.rgb = palette.brand; s.t.a = 1; s.t.w = 3.2; s.dash = 2;
+            s.t.rgb = palette.brand; s.t.a = 1; s.t.w = 2.8; s.dash = 2;
           } else s.t.a = 0.05;
         } else if (active && (a.id === active || b.id === active)) {
-          s.t.rgb = catColor((a.id === active ? b : a).cat); s.t.a = 0.95; s.t.w = 2.4;
+          s.t.rgb = palette.brand; s.t.a = 0.95; s.t.w = 2;
         } else s.t.a = active || !focus.has(a.id) || !focus.has(b.id) ? 0.05 : s.base.a;
       });
+      if (photo) photo.dataset.lit = String(!!focus && focus.has(nodes[rootIndex].id));
       settling = 60;
     };
 
@@ -390,7 +329,7 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
         out.x = w / 2 + vx * s;
         out.y = h / 2 - vy * s;
         out.z = n.kind === "root" ? 0 : vz;
-        out.r = (nodeState[i].size * 0.2 * Math.sqrt(zoom) * CAMERA) / (CAMERA - vz);
+        out.r = n.kind === "root" ? (photoSize / 2) * Math.sqrt(zoom) : (nodeState[i].size * 0.24 * Math.sqrt(zoom) * CAMERA) / (CAMERA - vz);
       });
     };
     const pick = (x: number, y: number) => {
@@ -420,7 +359,7 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
       for (const { n, i } of order) {
         const s = screen[i];
         const pin = pinned.has(n.id);
-        if (nodeState[i].ta < 0.5 || (!pin && n.kind !== "root" && s.z < 0.05)) continue;
+        if (nodeState[i].ta < 0.5 || (!pin && n.kind !== "root" && s.z < -0.4)) continue;
         const el = labels.get(n.id);
         if (!el) continue;
         if (!widths.has(n.id)) widths.set(n.id, el.offsetWidth);
@@ -432,16 +371,24 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
       }
       labels.forEach((el, id) => {
         const on = shown.has(id);
-        if (el.dataset.on !== String(on)) {
-          el.dataset.on = String(on);
-          el.style.opacity = on ? "1" : "0";
-        }
+        if (el.dataset.on !== String(on)) el.dataset.on = String(on);
       });
     };
+    const rootIndex = nodes.findIndex((n) => n.kind === "root");
     const placeLabels = () => {
+      if (photo) {
+        const half = photoSize / 2, root = screen[rootIndex];
+        photo.style.transform = `translate3d(${(root.x - half).toFixed(1)}px, ${(root.y - half).toFixed(1)}px, 0) scale(${Math.sqrt(zoom).toFixed(3)})`;
+        photo.style.opacity = nodeState[rootIndex].a.toFixed(2);
+      }
       nodes.forEach((n, i) => {
         const el = labels.get(n.id);
-        if (el) el.style.transform = `translate3d(${screen[i].x.toFixed(1)}px, ${(screen[i].y + screen[i].r + 2).toFixed(1)}px, 0) translateX(-50%)`;
+        if (!el) return;
+        el.style.transform = `translate3d(${screen[i].x.toFixed(1)}px, ${(screen[i].y + screen[i].r + 2).toFixed(1)}px, 0) translateX(-50%)`;
+        // Labels fade with depth, so the far side of the ball stays quiet
+        const depth = Math.max(0, Math.min(1, (screen[i].z + 1.2) / 2.4));
+        const floor = n.kind === "leaf" ? 0.28 : 0.6;
+        el.style.opacity = shown.has(n.id) ? (floor + (1 - floor) * depth).toFixed(2) : "0";
       });
     };
 
@@ -457,9 +404,8 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
         gl.bufferData(target, data, usage);
         return b;
       };
-      const shellGeomBuf = buffer(shellGeom), shellStyleBuf = buffer(shellStyle), shellIndex = buffer(quadIndices(structure.segments.length), gl.ELEMENT_ARRAY_BUFFER);
       const linkGeomBuf = buffer(linkGeom, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW), linkStyleBuf = buffer(linkStyle, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW), linkIndex = buffer(quadIndices(quadCount), gl.ELEMENT_ARRAY_BUFFER);
-      const shellPointBuf = buffer(shellPoints), nodePointBuf = buffer(nodePoints, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+      const dustBuf = buffer(dustPoints), nodePointBuf = buffer(nodePoints, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
 
       const attr = (program: WebGLProgram, name: string, size: number, stride: number, offset: number) => {
         const loc = gl.getAttribLocation(program, name);
@@ -487,12 +433,9 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
         attr(lineProgram, "aColor", 4, STYLE, 0);
         attr(lineProgram, "aStyle", 2, STYLE, 4);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices);
-        // A wide faint pass under a thin bright one reads as the line glowing
-        for (const [width, strength] of [[5, 0.2], [1, 1]]) {
-          gl.uniform1f(gl.getUniformLocation(lineProgram, "uWidth"), width);
-          gl.uniform1f(gl.getUniformLocation(lineProgram, "uFade"), fade * strength);
-          gl.drawElements(gl.TRIANGLES, count * 6, gl.UNSIGNED_SHORT, 0);
-        }
+        gl.uniform1f(gl.getUniformLocation(lineProgram, "uWidth"), 1);
+        gl.uniform1f(gl.getUniformLocation(lineProgram, "uFade"), fade);
+        gl.drawElements(gl.TRIANGLES, count * 6, gl.UNSIGNED_SHORT, 0);
       };
       const drawPoints = (buf: WebGLBuffer | null, count: number, fade: number) => {
         gl.uniform1f(gl.getUniformLocation(pointProgram, "uFade"), fade);
@@ -512,7 +455,7 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
         const pulse = 1 + Math.sin(time * 3) * 0.05;
         nodes.forEach((n, i) => {
           const s = nodeState[i];
-          nodePoints.set([positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2], s.rgb[0], s.rgb[1], s.rgb[2], s.a, s.size * s.s * (s.ts > 1 ? pulse : 1)], i * 8);
+          nodePoints.set([positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2], s.rgb[0], s.rgb[1], s.rgb[2], n.kind === "root" ? 0 : s.a, s.size * s.s * (s.ts > 1 ? pulse : 1)], i * 8);
         });
         gl.bindBuffer(gl.ARRAY_BUFFER, nodePointBuf);
         gl.bufferSubData(gl.ARRAY_BUFFER, 0, nodePoints);
@@ -525,11 +468,11 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
         const dimmed = v.path || v.selected || hover || v.matches ? 0.22 : 1;
         gl.viewport(0, 0, canvas.width, canvas.height);
         gl.clear(gl.COLOR_BUFFER_BIT);
+        uniforms(pointProgram, time);
+        drawPoints(dustBuf, dustList.length, dimmed);
         uniforms(lineProgram, time);
-        drawLines(shellGeomBuf, shellStyleBuf, shellIndex, structure.segments.length, dimmed);
         drawLines(linkGeomBuf, linkStyleBuf, linkIndex, quadCount, 1);
         uniforms(pointProgram, time);
-        drawPoints(shellPointBuf, structure.points.length, dimmed);
         drawPoints(nodePointBuf, nodes.length, 1);
       };
     }
@@ -577,7 +520,7 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
 
       if (settling > 0) {
         settling--;
-        nodeState.forEach((s) => { s.a = ease(s.a, s.ta, k); s.s = ease(s.s, s.ts, k); });
+        nodeState.forEach((s) => { s.a = ease(s.a, s.ta, k); s.s = ease(s.s, s.ts, k); s.rgb = s.rgb.map((c, i) => ease(c, s.trgb[i], k)); });
         linkState.forEach((s) => {
           s.a = ease(s.a, s.t.a, k);
           s.w = ease(s.w, s.t.w, k);
@@ -589,8 +532,6 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
       project();
       placeLabels();
       if (labelTick++ % 8 === 0) declutter();
-      const silhouette = ((FOCAL * zoom * Math.min(w, h)) / 2) / Math.sqrt(CAMERA * CAMERA - 1);
-      stage.style.setProperty("--sphere-r", `${silhouette.toFixed(0)}px`);
       draw();
     };
 
@@ -640,10 +581,11 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
       let vx = sx * t, vy = sy * t, vz = CAMERA - t;
       const l = Math.hypot(vx, vy, vz);
       vx /= l; vy /= l; vz /= l;
-      // Back to sphere space with the transposed rotation
-      positions[i * 3] = rot[0] * vx + rot[1] * vy + rot[2] * vz;
-      positions[i * 3 + 1] = rot[3] * vx + rot[4] * vy + rot[5] * vz;
-      positions[i * 3 + 2] = rot[6] * vx + rot[7] * vy + rot[8] * vz;
+      // Back to sphere space with the transposed rotation, keeping the node at its own depth in the ball
+      const radius = Math.hypot(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]) || 0.8;
+      positions[i * 3] = (rot[0] * vx + rot[1] * vy + rot[2] * vz) * radius;
+      positions[i * 3 + 1] = (rot[3] * vx + rot[4] * vy + rot[5] * vz) * radius;
+      positions[i * 3 + 2] = (rot[6] * vx + rot[7] * vy + rot[8] * vz) * radius;
       links.forEach((link) => { if (link.ia === i || link.ib === i) writeLink(link); });
     };
     const onDown = (e: PointerEvent) => {
@@ -782,10 +724,18 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
       className="relative h-full w-full cursor-grab select-none overflow-hidden"
       style={{
         touchAction: "pan-y",
-        background: "radial-gradient(circle at center, color-mix(in srgb, var(--graph-companies) 16%, transparent) 0, color-mix(in srgb, var(--graph-tools) 13%, transparent) calc(var(--sphere-r, 240px) * 0.98), color-mix(in srgb, var(--graph-tools) 7%, transparent) calc(var(--sphere-r, 240px) * 1.1), transparent calc(var(--sphere-r, 240px) * 1.55)), var(--graph-canvas)",
+        background: "var(--graph-canvas)",
       }}
     >
       <canvas ref={canvasRef} aria-hidden className="absolute inset-0 block size-full" />
+      <div
+        data-root-photo
+        aria-hidden
+        className="pointer-events-none absolute left-0 top-0 overflow-hidden rounded-full border border-hairline bg-secondary opacity-0 data-[lit=true]:border-brand"
+        style={{ width: "var(--graph-photo-size)", height: "var(--graph-photo-size)" }}
+      >
+        <Image src="/images/profile-brand.png" alt="" width={192} height={192} className="size-full object-cover" style={{ objectPosition: "47% 50%", transform: "scale(1.45)", transformOrigin: "47% 43%" }} draggable={false} />
+      </div>
       {graphNodes.map((n) => (
         <button
           key={n.id}
@@ -794,7 +744,7 @@ export function GraphSphere({ view, onSelect, ref }: Props) {
           tabIndex={n.kind !== "leaf" || reachable.has(n.id) ? 0 : -1}
           onClick={() => onSelect(n.id)}
           aria-pressed={selected === n.id}
-          className={`pointer-events-none absolute left-0 top-0 whitespace-nowrap rounded-[var(--radius-sm)] px-1 opacity-0 transition-opacity duration-200 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-1 focus-visible:outline-ring [text-shadow:0_0_3px_var(--graph-canvas),0_0_3px_var(--graph-canvas),0_0_8px_var(--graph-canvas)] ${n.kind === "leaf" ? "micro text-muted-foreground" : "label text-foreground"}`}
+          className={`pointer-events-none absolute left-0 top-0 whitespace-nowrap rounded-[var(--radius-sm)] px-1 opacity-0 transition-opacity duration-200 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-1 focus-visible:outline-ring [text-shadow:0_0_3px_var(--graph-canvas),0_0_3px_var(--graph-canvas),0_0_8px_var(--graph-canvas)] ${n.kind === "leaf" ? "text-xs text-muted-foreground" : "text-sm font-medium text-foreground"}`}
           style={reachable.has(n.id) ? { color: "var(--foreground)" } : undefined}
         >
           {n.label}

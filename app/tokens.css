@@ -39,7 +39,7 @@
   --graph-projects: #e5ff5d;
   --graph-impact: #b69cff;
   --graph-certifications: #00e599;
-  --graph-canvas: #050608;       /* near-black behind the sphere */
+  --graph-canvas: #0a0a0a;       /* near-black behind the sphere */
 
   --font-sans: var(--font-satoshi), var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* body, nav, buttons */
   --font-heading: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* headings, display */
@@ -72,6 +72,8 @@
   --nav-link: #c7c7d0;
   --text-nav: 20px;
   --leading-nav: 28px;
+  --text-nav-float: 16px;        /* menu links in the floating bar (owner, 2026-10-31; surinder.design drops 15 to 14) */
+  --leading-nav-float: 24px;
   --leading-glow: 26px;
   --tracking-glow: 0.08px;
   --shadow-glow: 0 0 14px 0 color-mix(in srgb, var(--brand) 16%, transparent);
@@ -96,7 +98,10 @@
   --nav-gap: 36px;
   --nav-link-gap: 28px;          /* between hover pills: keeps the 52px text spacing from Figma (36 + 2 x 8) */
   --intro-w: 420px;
-  --works-rail-w: 395px;
+  --case-rail-w: 420px;
+  --case-subtitle-w: 640px;
+  --case-thumb-h-sm: 180px;
+  --case-thumb-h: 260px;
   --screen-h-sm: 220px;
   --screen-h: 440px;
   --visual-h: 232px;
@@ -105,6 +110,7 @@
   --graph-panel-w: 340px;
   --graph-stage-h: 680px;
   --graph-tour-w: 340px;
+  --graph-photo-size: 48px;
   --graph-timeline-label: 240px;
   --carousel-card-w: 300px;
   --pagination-active-w: 20px;
@@ -167,13 +173,12 @@
   --hero-vanish: 48px;           /* vanishing point below the rim, so the hero slips behind the globe */
   --works-heading-from: 0.4;     /* Selected works heading size when it starts to appear */
   --works-rise: 80px;            /* how far below its place the heading starts */
-  /* Selected works scroll behaviour (components/WorksShowcase.tsx, animations.md) */
-  --works-rail-top: 112px;       /* clears the floating bar */
-  --works-bar-top: 72px;         /* mobile project bar, under the floating bar */
-  --works-group-margin-sm: 128px;
+  /* Selected works project blocks (components/WorksList.tsx, owner 2026-11-01, layout after poulo.site) */
+  --works-media-col: 1.25fr;     /* media card : story card, about 55/45 */
+  --works-media-glow: 10%;       /* brand tint of the glow behind each preview */
+  --works-square-min-h: 240px;
+  --works-metric-size: 44px;     /* metric square at lg: display face, sized so "3 months" stays on one line */
   --works-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --works-expand: 550ms;
-  --works-colour: 350ms;
   --works-reveal: 1250ms;
   --works-reveal-fade: 800ms;
   --works-reveal-y: 56px;
@@ -257,6 +262,18 @@
   --iso-stagger: 0.14s;
   --iso-drop-y: -44px;
   --iso-lift-y: -12px;
+  /* Testimonial cards: motion from 21st.dev tilt-card "evade", colours ours (components/TiltCard.tsx, animations.md) */
+  --tilt-limit: 20deg;
+  --tilt-scale: 1.08;
+  --tilt-perspective: 1200px;
+  --tilt-duration: 200ms;
+  --tilt-fade: 300ms;
+  --tilt-spot: color-mix(in srgb, var(--foreground) 8%, transparent);
+  --lanyard-card-w: 260px;
+  --lanyard-card-h: 430px;
+  --lanyard-perspective: 900px;
+  --lanyard-stage-h: 600px;      /* rope, card and room to swing */
+  --shadow-tilt: 0 25px 50px -12px rgb(0 0 0 / 0.5);
 }
 
 .dark {
@@ -328,7 +345,6 @@
   --spacing-work-screen-sm: var(--screen-h-sm);
   --spacing-work-screen: var(--screen-h);
   --spacing-visual: var(--visual-h);
-  --spacing-works-rail: var(--works-rail-w);
   --spacing-graph-search: var(--graph-search-w);
   --spacing-graph-select: var(--graph-select-w);
   --spacing-graph-panel: var(--graph-panel-w);
@@ -354,15 +370,17 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .display { font-size: var(--text-display-sm); font-weight: 500; line-height: var(--leading-display-sm); letter-spacing: -0.04em; @variant md { font-size: var(--text-display); line-height: var(--leading-display); } }
 .title { font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; @variant lg { font-size: var(--text-title); line-height: 1.1; } }
 .subtitle { font-size: var(--text-subtitle-sm); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; @variant lg { font-size: var(--text-subtitle); } }
+.case-statement { font-family: var(--font-heading); font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; @variant lg { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: -0.04em; } } /* conclusion: title size on mobile (Figma 43:158), display on desktop (42:81) */
 .label { font-size: var(--text-label); font-weight: 500; line-height: 1.33; letter-spacing: -0.02em; text-transform: uppercase; }
 .micro { font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1.5; letter-spacing: 0.18em; text-transform: uppercase; }
 .nav-link {
   font-size: var(--text-nav); font-weight: 600; line-height: var(--leading-nav); letter-spacing: 0; color: var(--nav-link);
   transition: background-color var(--nav-pill-duration) ease, color var(--nav-pill-duration) ease;
-  &:focus-visible { background: var(--nav-pill-hover); color: var(--foreground); }
+  &:focus-visible, &[aria-current] { background: var(--nav-pill-hover); color: var(--foreground); } /* current section keeps the hover pill */
   @media (hover: hover) { &:hover { background: var(--nav-pill-hover); color: var(--foreground); } }
   @media (prefers-reduced-motion: reduce) { transition: none; }
 }
+.nav-link-compact { font-size: var(--text-nav-float); line-height: var(--leading-nav-float); }
 .glow-label { font-size: var(--text-body); line-height: var(--leading-glow); letter-spacing: var(--tracking-glow); }
 .frame { max-width: var(--frame-w); margin-inline: auto; @variant frame { border-inline: 1px solid var(--hairline); } } /* side borders drop below the frame width */
 .logo { position: relative; display: block; flex-shrink: 0; overflow: hidden; width: var(--logo-size-sm); height: var(--logo-size-sm); @variant md { width: var(--logo-size); height: var(--logo-size); } }
@@ -439,7 +457,8 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .hero-band { flex: 1 0 var(--horizon-gap-sm); @variant md { flex-basis: var(--horizon-gap); } }
 .hero-horizon-anchor { position: relative; z-index: 5; height: 0; } /* sits at the top of Works, so the rim rides the edge of the globe */
 .hero-horizon { --reach: var(--horizon-reach-sm); @variant md { --reach: var(--horizon-reach); } position: absolute; left: 0; bottom: 0; display: block; width: 100%; pointer-events: none; } /* height and offset from HeroHorizon */
-.works-card { position: relative; z-index: 10; }
+.works-card { position: relative; }
+.works-heading, .works-list { position: relative; z-index: 7; } /* above the cap, which is above the horizon canvas (z 5) */
 .works-heading { text-align: center; & span { display: block; } }
 @media (prefers-reduced-motion: no-preference) {
   .hero {
@@ -450,10 +469,12 @@ body { background: var(--background); color: var(--foreground); font-family: var
   .hero-horizon { opacity: calc(1 - var(--hero-p) * var(--hero-p) * var(--hero-p)); }
   .hero-stage[data-covered] .hero { visibility: hidden; }
   .hero-stage[data-covered] .hero-horizon { display: none; } /* takes it out of view, so it stops drawing */
-  .works-card {
-    --r: calc(var(--horizon-radius) * min(100vw, var(--frame-w))); /* replaced by HeroStage once it has measured */
-    background: var(--background);
-    clip-path: circle(var(--r) at 50% var(--r));
+  /* The globe's body. Only this short strip is clipped: a circle clip on the whole section stops rendering once
+     the section is thousands of pixels tall (the horizon turned into a straight line), so the cap carries it. */
+  .works-card { --r: calc(var(--horizon-radius) * min(100vw, var(--frame-w))); } /* replaced by HeroStage once it has measured */
+  .works-cap {
+    position: absolute; inset-inline: 0; top: 0; z-index: 6; aspect-ratio: 100 / 16; pointer-events: none;
+    background: var(--background); clip-path: circle(var(--r) at 50% var(--r));
   }
   .works-heading {
     opacity: var(--works-heading-in);
@@ -461,31 +482,17 @@ body { background: var(--background); color: var(--foreground); font-family: var
     transform: translateY(calc((1 - var(--works-heading-in)) * var(--works-rise))) scale(calc(var(--works-heading-from) + (1 - var(--works-heading-from)) * var(--works-heading-in)));
   }
   .works-list { opacity: var(--works-list-in); }
-  .hero-stage[data-covered] .works-card { clip-path: none; }
+  .hero-stage[data-covered] .works-cap { display: none; }
 }
-.works-rail {
-  position: sticky; top: var(--works-rail-top); align-self: start; max-height: calc(100vh - var(--works-rail-top) - 24px); overflow-y: auto; scrollbar-width: none;
-  & .works-rail-title { color: var(--muted-foreground); transition: color var(--works-colour) var(--works-ease); }
-  & li[data-on] .works-rail-title { color: var(--foreground); }
-}
-.works-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--works-expand) var(--works-ease); }
-.works-rail li[data-on] .works-more { grid-template-rows: 1fr; }
-.works-bar {
-  position: sticky; top: var(--works-bar-top); z-index: 8; display: flex; @variant lg { display: none; } gap: calc(var(--spacing) * 5); overflow-x: auto; scrollbar-width: none;
-  padding-inline: calc(var(--spacing) * 4); background: var(--background); border-bottom: 1px solid var(--hairline);
-  & button { flex: none; padding-block: calc(var(--spacing) * 3); white-space: nowrap; color: var(--muted-foreground); box-shadow: inset 0 -2px 0 transparent; transition: color var(--works-colour) var(--works-ease), box-shadow var(--works-colour) var(--works-ease); cursor: pointer; }
-  & button[aria-current] { color: var(--foreground); box-shadow: inset 0 -2px 0 var(--brand); }
-}
-.works-list :is(button, a):focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
-.works-phones { display: grid; grid-template-columns: repeat(2, 1fr); gap: calc(var(--spacing) * 4); width: 100%; @variant lg { grid-template-columns: repeat(5, 1fr); } }
-.works-flow { position: relative; min-width: 0; }
-.works-group { scroll-margin-top: var(--works-group-margin-sm); @variant lg { scroll-margin-top: var(--works-rail-top); } }
-.works-rule { position: absolute; inset-block: 0; left: 0; width: 1px; background: var(--hairline); &::after { content: ""; position: absolute; inset: 0; background: var(--brand); transform: scaleY(var(--works-p, 0)); transform-origin: 50% 0; } }
+.works-list a:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.works-media { background: radial-gradient(90% 70% at 50% 100%, color-mix(in srgb, var(--brand) var(--works-media-glow), transparent), transparent 70%), var(--card); }
+.works-demo { width: 100%; }
+.works-square { @variant lg { min-height: var(--works-square-min-h); } }
+.works-metric { white-space: nowrap; @variant lg { font-size: var(--works-metric-size); line-height: 1; } }
 @media (prefers-reduced-motion: no-preference) {
   .works-ix[data-ready] .works-fig { transition: opacity var(--works-reveal-fade) ease, translate var(--works-reveal) var(--works-ease), clip-path var(--works-reveal) var(--works-ease); }
   .works-ix[data-ready] .works-fig:not([data-in]) { opacity: 0; translate: 0 var(--works-reveal-y); clip-path: inset(var(--works-reveal-clip) 0 0); }
 }
-@media (prefers-reduced-motion: reduce) { .works-more, .works-rail-title, .works-bar button { transition: none; } }
 @property --brands-phase { syntax: "<number>"; inherits: true; initial-value: 0; }
 @property --brands-nudge { syntax: "<number>"; inherits: true; initial-value: 0; }
 @keyframes brands-spin { to { --brands-phase: 1; } } /* one full loop; --p multiplies it by the item count */
@@ -512,8 +519,6 @@ body { background: var(--background); color: var(--foreground); font-family: var
   .brands-list { position: static; display: flex; width: max-content; gap: var(--brands-gap); padding-inline: var(--brands-gap); }
   .brands-item { position: static; flex: none; margin: 0; width: var(--brands-strip-size); height: var(--brands-strip-size); transform: none; }
 }
-.service-bullets li { position: relative; padding-left: calc(var(--spacing) * 4); }
-.service-bullets li::before { content: ""; position: absolute; left: 1px; top: 8px; width: 6px; height: 6px; border-radius: 2px; background: var(--brand); }
 .iso-art { display: block; width: 100%; height: auto; max-height: 216px; overflow: visible; }
 .iso polygon { stroke: var(--iso-line); stroke-width: 1; stroke-linejoin: round; transition: stroke var(--iso-lit) ease, fill var(--iso-lit) ease; }
 .iso-top { fill: var(--iso-top); }
@@ -660,3 +665,47 @@ body { background: var(--background); color: var(--foreground); font-family: var
   .twin-glass, .twin-sheet, .twin-compose-card { background: var(--card); backdrop-filter: none; }
   .twin-scrim { backdrop-filter: none; }
 }
+.tilt-card {
+  position: relative; overflow: hidden;
+  transition: transform var(--tilt-duration) ease-out, box-shadow var(--tilt-fade) ease-out;
+  & > :not(.tilt-spot) { position: relative; } /* keeps the content above the spotlight */
+}
+.tilt-spot {
+  position: absolute; width: 200%; height: 200%; pointer-events: none;
+  left: calc((var(--tilt-px, 0) + 0.5) * 100%); top: calc((var(--tilt-py, 0) + 0.5) * 100%); translate: -50% -50%;
+  background: radial-gradient(circle, var(--tilt-spot) 0%, transparent 40%);
+  opacity: 0; transition: opacity var(--tilt-fade);
+}
+.tilt-stage[data-tilted] {
+  position: relative; z-index: 1;
+  .tilt-card {
+    will-change: transform; box-shadow: var(--shadow-tilt);
+    /* Evade: the card turns away from the pointer */
+    transform: perspective(var(--tilt-perspective)) rotateX(calc(var(--tilt-py) * var(--tilt-limit) * -2)) rotateY(calc(var(--tilt-px) * var(--tilt-limit) * 2)) scale3d(var(--tilt-scale), var(--tilt-scale), var(--tilt-scale));
+  }
+  .tilt-spot { opacity: 1; }
+}
+
+/* Contact lanyard (components/Lanyard.tsx, animations.md) */
+.lanyard-stage { position: relative; overflow: hidden; width: 100%; height: var(--lanyard-stage-h); }
+.lanyard-rope { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.lanyard-clip { position: absolute; top: 0; left: 50%; width: 28px; height: 6px; translate: -50% 0; border-radius: 0 0 var(--radius-btn) var(--radius-btn); background: var(--hairline); }
+.lanyard-card {
+  position: absolute; left: 0; top: 0; width: var(--lanyard-card-w); height: var(--lanyard-card-h); transform-origin: 50% 0;
+  perspective: var(--lanyard-perspective); filter: drop-shadow(0 18px 24px rgb(0 0 0 / 0.45)); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+  &[data-dragging] { cursor: grabbing; }
+  &:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; border-radius: var(--radius-xl); }
+}
+.lanyard-flipper { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; } /* no filter here: it would flatten the two faces */
+.lanyard-face {
+  position: absolute; inset: 0; display: flex; flex-direction: column; gap: calc(var(--spacing) * 3); overflow: hidden; padding: calc(var(--spacing) * 5);
+  padding-top: calc(var(--spacing) * 7); border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--card); backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.lanyard-back { transform: rotateY(180deg); }
+.lanyard-slot { position: absolute; top: calc(var(--spacing) * 2.5); left: 50%; width: 44px; height: 8px; translate: -50% 0; border: 1px solid var(--hairline); border-radius: 9999px; background: var(--background); }
+.lanyard-sheen { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--tilt-fade); background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), var(--tilt-spot) 0%, transparent 55%); }
+.lanyard-card[data-hover] .lanyard-sheen { opacity: 1; }
+.lanyard-photo { position: relative; overflow: hidden; height: 140px; flex: none; border: 1px solid var(--brand); border-radius: var(--radius-lg); background: var(--secondary); }
+.lanyard-stripe { position: absolute; inset-inline: 0; top: 0; height: 4px; background: var(--brand); }
+.lanyard-link { display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) { .lanyard-sheen { transition: none; } }

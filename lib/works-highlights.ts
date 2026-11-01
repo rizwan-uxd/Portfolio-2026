@@ -1,0 +1,29 @@
+// Three highlight squares, each with a line icon (components/WorkIcons.tsx), per project in Selected works, next to the metric square (owner, 2026-11-01).
+// Each label is the owner's own bold lead from the case study (lib/case-studies.ts, from the live /work/<slug> pages).
+// Bodies are the case study sentence, shortened where it ran long; the owner reviews the wording.
+import type { WorkIconName } from "@/components/WorkIcons";
+
+export type Highlight = { icon: WorkIconName; label: string; body: string };
+
+export const workHighlights: Record<string, Highlight[]> = {
+  "hajj-operations-platform": [
+    { icon: "git-branch", label: "Governance decision", body: "The validated model inverted the first assumption: the project manager reports reality, the Mecca team reviews, then approves or sends it back." },
+    { icon: "clipboard-list", label: "Data-entry platform", body: "A separate product surface, deliberately not part of the CEO portal: login, project list, add or update, approval, reporting." },
+    { icon: "layers", label: "States as reusable patterns", body: "On Track, Delayed, Completed Early, Completed Late and Not Started, authored as reusable patterns rather than one-off screens." },
+  ],
+  "dubainow-mobile-app": [
+    { icon: "component", label: "Design System Approach", body: "Reusable components to establish consistency in all services." },
+    { icon: "users", label: "Design Workshop", body: "A week-long collaborative design workshop and user testing established a unified visual style and brand identity for the app." },
+    { icon: "timer", label: "Reduced development and design effort", body: "The delivery cycle for a mid sized service went from an average of 1 month to 8 days." },
+  ],
+  "secure-communication-app": [
+    { icon: "search", label: "Competitor analysis", body: "Defined primary features to build through secondary research & competitor analysis." },
+    { icon: "layout-grid", label: "Design system", body: "Leveraging a design system framework and prioritizing frequently used components, able to meet deadlines." },
+    { icon: "user-check", label: "Iterative guerilla testing", body: "Conducted guerilla testing for validation to identify usability issues and test design assumptions." },
+  ],
+  "emirates-islamic-digital-ux": [
+    { icon: "compass", label: "Discovery in grooming", body: "Grooming sessions gave a deep understanding of user needs, business objectives and the validity of feedback before story points were assigned." },
+    { icon: "pencil", label: "Paper sketches", body: "To optimize ideation within tight deadlines, I used paper sketches to quickly ideate and brainstorm ideas with the team." },
+    { icon: "smartphone", label: "Increased digital adoption", body: "Digital adoption rose to 55% by the end of our squad’s tenure, 20% more than the success criteria of 35%." },
+  ],
+};

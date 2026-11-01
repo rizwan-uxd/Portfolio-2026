@@ -1,5 +1,6 @@
 import { hero, person } from "@/lib/content";
 import { HeroIntro } from "@/components/HeroIntro";
+import { DottedArrow } from "@/components/DottedArrow";
 
 export function Hero() {
   return (
@@ -12,8 +13,8 @@ export function Hero() {
           <span className="text-muted-foreground">{hero.headline[2]}</span>
         </h1>
         <p className="w-full max-w-hero-subline text-muted-foreground">{hero.subline}</p>
-        <a href={person.calendly} className="label flex w-full items-center justify-center rounded-btn bg-brand px-6 py-4 text-brand-foreground md:w-auto md:py-3">
-          {hero.cta} →
+        <a href={person.calendly} className="label flex w-full items-center justify-center gap-3 rounded-btn bg-brand py-2 pl-6 pr-2 text-brand-foreground md:w-auto">
+          {hero.cta} <DottedArrow direction="right" />
         </a>
       </div>
       <div className="hero-band" />

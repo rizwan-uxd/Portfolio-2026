@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Brands } from "@/components/Brands";
 import { Works } from "@/components/Works";
+import { AiProjects } from "@/components/AiProjects";
 import { Services } from "@/components/Services";
 import { Graph } from "@/components/Graph";
 import { Testimonials } from "@/components/Testimonials";
@@ -26,6 +27,7 @@ export default function Home() {
           </HeroStage>
           <div aria-hidden data-twin-reveal-after />
           <Brands />
+          <AiProjects />
           <Services />
           <Graph />
           <Testimonials />
