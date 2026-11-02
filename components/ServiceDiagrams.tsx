@@ -351,44 +351,112 @@ function Build() {
   );
 }
 
-// UX Research & Validation: a signal runs the loop between stations, each one lifting and lighting as it arrives.
+// Three research methods uncover a user problem, inform a design, and test it.
 function Loop() {
-  const stations: [number, number, number][] = [[2.5, 2.5, 0], [7.5, 2.5, 1], [2.5, 7.5, 3], [7.5, 7.5, 2]]; // back to front; the last number is the order round the loop
-  const [sx, sy] = at(2.5, 2.5, 0.3);
+  const lenses = [
+    { x: -15, y: -102, icon: <><circle cx="-4" cy="-3" r="2.5" /><circle cx="4" cy="-3" r="2.5" /><path d="M-9 5 C-9 0 -1 0 -1 5 M1 5 C1 0 9 0 9 5" /></> },
+    { x: 55, y: -113, icon: <><rect x="-7" y="-8" width="13" height="16" rx="1" /><path d="M-3 3 L0 0 L2 3 L5 5 M-4 -4 H3" /></> },
+    { x: 130, y: -90, icon: <><path d="M-8 7 H8 M-6 4 V0 M0 4 V-5 M6 4 V-9" /><circle cx="6" cy="-9" r="1" /></> },
+  ];
+  const boxes = [1.4, 4.5, 7.6];
+  const centers = boxes.map((y) => at(2.5, y + 1.15, 1.1));
   return (
-    <Art x={0} y={-100} cycle="--iso-cycle-loop">
-      <Box x={0} y={0} w={10} d={10} h={0.3} className="iso-plate" />
-      <Pads w={10} d={10} />
-      <path className="iso-wire" d={`${line([2.5, 2.5, 0.3], [7.5, 2.5, 0.3], [7.5, 7.5, 0.3], [2.5, 7.5, 0.3])} Z`} />
-      {stations.map(([x, y, step]) => (
-        <g key={`${x}-${y}`} className="iso-station" style={delay(step)}>
-          <Box x={x - 1} y={y - 1} z={0.3} w={2} d={2} h={0.9} className={step === 0 ? "iso-hot" : ""} />
-          <Led x={x} y={y} z={1.2} step={step} />
+    <Art x={0} y={0} cycle="--iso-cycle-research">
+      {lenses.map(({ x, y, icon }, i) => (
+        <g key={i} transform={`translate(${x} ${y})`}>
+          <g className="iso-research-lens" style={delay(i)}>
+            <circle className="iso-research-ring" r="17" />
+            <path className="iso-research-handle" d="M12 12 L19 19" />
+            <g className="iso-research-icon">{icon}</g>
+          </g>
         </g>
       ))}
-      {stations.map(([x, y, step]) => <Silk key={step} x={x + 1.5} y={y + 1.5} z={0.3}>{`T${step + 1}`}</Silk>)}
-      <circle className="iso-pulse" cx={sx.toFixed(1)} cy={sy.toFixed(1)} r="4" />
+      <g transform="translate(52 -78)">
+        <Box x={0} y={0} w={5} d={11} h={0.3} className="iso-plate" />
+        <Pads w={5} d={11} />
+        <path className="iso-wire" d={line([2.5, 3.7, 0.3], [2.5, 4.5, 0.3])} />
+        <path className="iso-wire" d={line([2.5, 6.8, 0.3], [2.5, 7.6, 0.3])} />
+        {boxes.map((y, i) => (
+          <g className={`iso-research-stage iso-research-stage-${i}`} key={y}>
+            <Box x={1.15} y={y} z={0.3} w={2.7} d={2.3} h={0.6} />
+          </g>
+        ))}
+        <g className="iso-research-stage iso-research-stage-0" transform={`translate(${centers[0][0]} ${centers[0][1] - 3})`}>
+          <g className="iso-research-icon"><circle cy="-5" r="3" /><path d="M-7 6 C-7 -1 7 -1 7 6" /></g>
+          <g className="iso-research-warning" transform="translate(9 -14)"><path d="M0 -6 L6 5 H-6 Z M0 -2 V1 M0 3 V3.1" /></g>
+        </g>
+        <g className="iso-research-stage iso-research-stage-1 iso-research-icon" transform={`translate(${centers[1][0]} ${centers[1][1] - 2})`}>
+          <path d="M-8 5 L-5 0 L4 -9 L8 -5 L-1 4 Z M-5 0 L-1 4 M3 -8 L7 -4 M-8 7 H8" />
+        </g>
+        <g className="iso-research-stage iso-research-stage-2 iso-research-icon" transform={`translate(${centers[2][0]} ${centers[2][1] - 2})`}>
+          <rect x="-10" y="-8" width="17" height="14" rx="1" /><path d="M-7 -4 H3 M-7 -1 H0 M-7 2 H-3" /><g className="iso-research-test"><circle cx="3" cy="1" r="4" /><path d="M6 4 L9 7" /></g>
+        </g>
+
+      </g>
+      <g className="iso-research-links"><path d="M-4 -90 L31 -67 M54 -96 L51 -70 M114 -83 L72 -58" /></g>
+      <text className="iso-silk" x="-25" y="78" textAnchor="start">VALIDATE</text>
+      <text className="iso-silk" x="27" y="48" textAnchor="start">DESIGN</text>
+      <text className="iso-silk" x="82" y="16" textAnchor="start">PROBLEM</text>
+      {[0, 1, 2].map((i) => <circle key={i} className={`iso-research-signal iso-research-input iso-research-input-${i}`} r="2.5" />)}
+      <circle className="iso-research-signal iso-research-to-design" r="2.5" />
+      <circle className="iso-research-signal iso-research-to-test" r="2.5" />
     </Art>
   );
 }
 
-// Product Strategy & Growth Alignment: bars rise one after the other towards the KPI, beside the roadmap.
+// Product Strategy & Growth Alignment: four roadmap stages connect the selected validation step to an outcome.
 function Growth() {
-  const [px, py] = at(4.5, 2, 3.1);
+  const stages = [
+    { label: "BUILD", x: 0.6, h: 2.8, i: 4.5 },
+    { label: "VALIDATE", x: 2.4, h: 2, i: 3 },
+    { label: "EXPLORE", x: 4.2, h: 1.3, i: 1.5 },
+    { label: "IDEA", x: 6, h: 0.7, i: 0 },
+  ];
+  const [vx, vy] = at(3.1, 4.5, 2.3);
+  const [kx, ky] = at(1.3, 4.5, 3.1);
   return (
     <Art x={-9} y={-68} cycle="--iso-cycle-drop">
-      <Box x={0} y={0} w={9} d={8} h={0.3} className="iso-plate" />
-      <Pads w={9} d={8} />
-      {[1.2, 2.4, 3.6, 4.8, 6].map((y, i) => <path key={y} className="iso-dim" d={line([0.8, y, 0.3], [2.6 - (i % 2) * 0.6, y, 0.3])} />)}
-      <Drop i={4.5} x={3.4} y={0.6} z={0.3} w={2.2} d={1.4} h={2.8} className="iso-hot">
-        <path className="iso-stem" d={`M${px.toFixed(1)} ${py.toFixed(1)} v-24`} />
-        <circle className="iso-tip" cx={px.toFixed(1)} cy={py.toFixed(1)} r="3" />
-      </Drop>
-      <Drop i={3} x={3.4} y={2.4} z={0.3} w={2.2} d={1.4} h={2} />
-      <Drop i={1.5} x={3.4} y={4.2} z={0.3} w={2.2} d={1.4} h={1.3} />
-      <Drop i={0} x={3.4} y={6} z={0.3} w={2.2} d={1.4} h={0.7} />
-      <Silk x={5.3} y={0.3} z={4.6} anchor="start">KPI</Silk>
-      <Silk x={2} y={10}>ROADMAP</Silk>
+      <g className="iso-growth">
+        <Box x={0} y={0} w={9} d={8} h={0.3} className="iso-plate" />
+        <Pads w={9} d={8} />
+        {[1.2, 2.4, 3.6, 4.8, 6].map((y, i) => <path key={y} className="iso-dim" d={line([0.8, y, 0.3], [2.6 - (i % 2) * 0.6, y, 0.3])} />)}
+        {stages.map(({ label, x, h, i }) => {
+          const [tx, ty] = at(x + 0.7, 9.6, 0.3);
+          const [iconX, iconY] = at(x + 0.7, 4.5, 0.3 + h);
+          return (
+            <g key={label}>
+              <polygon className="iso-cast" points={top({ x, y: 3.4, z: 0.3, w: 1.4, d: 2.2 })} />
+              <clipPath id={`iso-growth-clip-${i}`}>
+                <polygon points={`${pt(x, 3.4, 0.3 + h)} ${pt(x + 1.4, 3.4, 0.3 + h)} ${pt(x + 1.4, 3.4, 0.3)} ${pt(x + 1.4, 5.6, 0.3)} ${pt(x, 5.6, 0.3)} ${pt(x, 5.6, 0.3 + h)}`} />
+              </clipPath>
+              <g clipPath={`url(#iso-growth-clip-${i})`}>
+                <g className="iso-growth-rise" style={{ "--i": i, "--growth-rise": `${h * UNIT}px` } as CSSProperties}>
+                  <Box x={x} y={3.4} z={0.3} w={1.4} d={2.2} h={h} className={label === "VALIDATE" ? "iso-growth-selected" : ""} />
+                </g>
+              </g>
+              <defs>
+                <g id={`iso-growth-symbol-${i}`} transform={`matrix(${COS / UNIT} ${-SIN / UNIT} 0 1 ${iconX} ${iconY - 9})`}>
+                    {label === "IDEA" && <><path d="M-5 0 A6 6 0 1 1 5 0 C3 2 3 3 3 4 H-3 C-3 3 -3 2 -5 0 Z M-3 7 H3 M-2 9 H2" /></>}
+                    {label === "EXPLORE" && <><circle cx="-2" cy="-2" r="5.5" /><path d="M2 2 L7 7" /></>}
+                    {label === "VALIDATE" && <><circle r="8" /><path d="M-4 0 L-1 3 L5 -4" /></>}
+                    {label === "BUILD" && <><path d="M-7 -5 L0 -9 L7 -5 V4 L0 8 L-7 4 Z M-7 -5 L0 -1 L7 -5 M0 -1 V8" /></>}
+                </g>
+              </defs>
+              <g className="iso-growth-icon" style={delay(i)}>
+                <use href={`#iso-growth-symbol-${i}`} />
+              </g>
+              <text className={`iso-silk${label === "VALIDATE" ? " iso-growth-selected-label" : ""}`} x={tx} y={ty + 12} textAnchor="middle" dominantBaseline="central">{label}</text>
+            </g>
+          );
+        })}
+        <g className="iso-growth-outcome">
+          <path className="iso-growth-connection" d={`M${vx} ${vy} C${vx + 6} ${vy - 36}, ${kx - 25} ${ky - 12}, ${kx} ${ky}`} />
+          <circle cx={vx} cy={vy} r="2.5" />
+          <circle cx={kx} cy={ky} r="2.5" />
+          <path className="iso-growth-kpi-stem" d={`M${kx} ${ky} v-22`} />
+        </g>
+        <text className="iso-silk" x={kx} y={ky - 28} textAnchor="middle">GROWTH / KPI</text>
+      </g>
     </Art>
   );
 }

@@ -291,6 +291,7 @@
   --iso-gate-action: 500ms;
   --iso-gate-action-flat: 12px;  /* the box's height, so at rest only its top shows, flat on the plate */
   --iso-gate-undo: 200ms;
+  --iso-cycle-research: 9s;
   --iso-cycle-prototype: 6.5s;  /* in order: tools, prompt lines, token down the wire, then the laptop */
   --iso-prototype-write-at: 1.2s;
   --iso-prototype-token-at: 2.5s;
@@ -599,6 +600,27 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .iso-gate-action { transform: translateY(var(--iso-gate-action-flat)); }
 .iso-gate-tick { opacity: 0; }
 .iso-gate-mark { fill: none; stroke: var(--brand); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.iso-growth-rise { transform: translateY(var(--growth-rise)); }
+[data-lit] .iso-growth-rise { transform: translateY(0); }
+.iso-growth-icon { fill: none; stroke: var(--iso-line-lit); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+[data-lit] .iso-growth-icon { opacity: 1; transform: translateY(-6px); }
+.iso-growth-outcome { fill: var(--brand); opacity: 0; }
+.iso-growth-connection, .iso-growth-kpi-stem { fill: none; stroke: var(--brand); stroke-width: 1.2; stroke-linecap: round; }
+[data-lit] .iso-growth-selected .iso-left { fill: var(--brand); stroke: var(--brand); }
+[data-lit] .iso-growth-selected-label { fill: var(--brand); }
+[data-lit] .iso-growth-outcome { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  [data-playing] .iso-growth-icon { animation: iso-growth-icon var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
+  [data-playing] .iso-growth-rise { animation: iso-growth-rise var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
+  [data-playing] .iso-growth-selected .iso-left { animation: iso-growth-face var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-growth-selected-label { animation: iso-growth-label var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-growth-outcome { animation: iso-growth-outcome var(--iso-cycle) linear infinite; }
+}
+@keyframes iso-growth-icon { 0%, 30% { opacity: 0; transform: translateY(0); } 42%, 82% { opacity: 1; transform: translateY(-6px); } 92%, 100% { opacity: 0; transform: translateY(0); } }
+@keyframes iso-growth-rise { 0%, 8% { transform: translateY(var(--growth-rise)); } 34%, 86% { transform: translateY(0); } 100% { transform: translateY(var(--growth-rise)); } }
+@keyframes iso-growth-face { 0%, 43% { fill: var(--iso-left); stroke: var(--iso-line); } 53%, 88% { fill: var(--brand); stroke: var(--brand); } 100% { fill: var(--iso-left); stroke: var(--iso-line); } }
+@keyframes iso-growth-label { 0%, 43% { fill: var(--iso-silk); } 53%, 88% { fill: var(--brand); } 100% { fill: var(--iso-silk); } }
+@keyframes iso-growth-outcome { 0%, 48% { opacity: 0; } 60%, 88% { opacity: 1; } 100% { opacity: 0; } }
 .iso-tip { fill: var(--foreground); }
 .iso-pulse { fill: var(--brand); }
 .iso-led { fill: var(--brand); opacity: 0.28; }
@@ -899,3 +921,41 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .lanyard-stripe { position: absolute; inset-inline: 0; top: 0; height: 4px; background: var(--brand); }
 .lanyard-link { display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) { .lanyard-sheen { transition: none; } }
+
+/* The research illustration reveals a problem, a design, and a test in order. */
+.iso-research-links path { fill: none; stroke: var(--iso-line-lit); stroke-width: 1; stroke-dasharray: 2 4; }
+.iso-research-ring { fill: var(--iso-top); stroke: var(--iso-line-lit); stroke-width: 1.3; }
+.iso-research-handle, .iso-research-icon, .iso-research-warning { fill: none; stroke: var(--iso-line-lit); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.iso-research-handle { stroke-width: 2; }
+.iso-research-warning { fill: var(--iso-top); stroke: var(--brand); }
+.iso-research-test { fill: none; stroke: var(--brand); stroke-width: 1.5; }
+.iso-research-signal { fill: var(--brand); opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  [data-playing] .iso-research-lens { animation: research-search var(--iso-cycle) ease-in-out infinite; animation-delay: calc(var(--i) * .18s); }
+  [data-playing] .iso-research-input-0 { offset-path: path("M-4 -90 L31 -67"); animation: research-input var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-research-input-1 { offset-path: path("M54 -96 L51 -70"); animation: research-input var(--iso-cycle) linear infinite .2s; }
+  [data-playing] .iso-research-input-2 { offset-path: path("M114 -83 L72 -58"); animation: research-input var(--iso-cycle) linear infinite .4s; }
+  [data-playing] .iso-research-to-design { offset-path: path("M31.2 -22 L17.4 -14"); animation: research-design-signal var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-research-to-test { offset-path: path("M-22.5 9 L-36.3 17"); animation: research-test-signal var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-research-warning { animation: research-warning var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-test { animation: research-trial var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-0 { animation: research-lift-problem var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-1 { animation: research-lift-design var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-2 { animation: research-lift-validate var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-0 .iso-left { animation: research-light-problem var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-1 .iso-left { animation: research-light-design var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-2 .iso-left { animation: research-light-validate var(--iso-cycle) ease infinite; }
+}
+@keyframes research-search { 0%, 3%, 25%, 100% { transform: translate(0, 0); } 8% { transform: translate(-3px, 2px); } 14% { transform: translate(3px, -2px); } 20% { transform: translate(0, 0); } }
+@keyframes research-input { 0%, 21% { offset-distance: 0%; opacity: 0; } 24% { opacity: 1; } 33% { offset-distance: 100%; opacity: 1; } 36%, 100% { offset-distance: 100%; opacity: 0; } }
+@keyframes research-design-signal { 0%, 43% { offset-distance: 0%; opacity: 0; } 45% { opacity: 1; } 52% { offset-distance: 100%; opacity: 1; } 54%, 100% { offset-distance: 100%; opacity: 0; } }
+@keyframes research-test-signal { 0%, 61% { offset-distance: 0%; opacity: 0; } 63% { opacity: 1; } 70% { offset-distance: 100%; opacity: 1; } 72%, 100% { offset-distance: 100%; opacity: 0; } }
+@keyframes research-warning { 0%, 29%, 43%, 100% { transform: translate(9px, -14px); } 34%, 39% { transform: translate(9px, -19px); } }
+@keyframes research-trial { 0%, 70%, 100% { transform: translateX(0); } 75%, 85% { transform: translateX(-7px); } 80%, 90% { transform: translateX(0); } }
+
+@keyframes research-lift-problem { 0%, 32%, 94%, 100% { translate: 0 0; } 38%, 86% { translate: 0 -7px; } }
+@keyframes research-lift-design { 0%, 50%, 94%, 100% { translate: 0 0; } 56%, 86% { translate: 0 -7px; } }
+@keyframes research-lift-validate { 0%, 68%, 94%, 100% { translate: 0 0; } 74%, 86% { translate: 0 -7px; } }
+@keyframes research-light-problem { 0%, 32%, 94%, 100% { fill: var(--iso-left); } 38%, 86% { fill: var(--brand); } }
+@keyframes research-light-design { 0%, 50%, 94%, 100% { fill: var(--iso-left); } 56%, 86% { fill: var(--brand); } }
+@keyframes research-light-validate { 0%, 68%, 94%, 100% { fill: var(--iso-left); } 74%, 86% { fill: var(--brand); } }
