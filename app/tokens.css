@@ -531,7 +531,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .iso-cast { fill: var(--iso-cast); }
 .iso-dim, .iso-rule, .iso-wire, .iso-link, .iso-stem { fill: none; stroke: var(--iso-line); stroke-width: 1; stroke-linecap: round; transition: stroke var(--iso-lit) ease; }
 .iso-rule { stroke-width: 1.5; }
-.iso-link { stroke-dasharray: 2 4; }
+.iso-link { stroke-dasharray: 2 4; transform-box: fill-box; transform-origin: 50% 100%; }
 .iso-tip { fill: var(--foreground); }
 .iso-pulse { fill: var(--brand); }
 .iso-led { fill: var(--brand); opacity: 0.28; }
@@ -542,6 +542,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 [data-lit] .iso-hot .iso-left { stroke: var(--brand); }
 @media (prefers-reduced-motion: no-preference) {
   [data-playing] .iso-drop { animation: iso-drop var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
+  [data-playing] .iso-link { animation: iso-link var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
   [data-playing] .iso-rule { stroke-dasharray: 1 1; animation: iso-write var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
   [data-playing] .iso-token { animation: iso-token calc(var(--iso-cycle) / 2) linear infinite; }
   [data-playing] .iso-station { animation: iso-lift var(--iso-cycle) var(--iso-ease) infinite; animation-delay: calc(var(--i) * var(--iso-cycle) / 4); }
@@ -553,6 +554,11 @@ body { background: var(--background); color: var(--foreground); font-family: var
   0% { transform: translateY(0); opacity: 1; animation-timing-function: ease-in; }
   12% { transform: translateY(var(--iso-drop-y)); opacity: 0; animation-timing-function: var(--iso-ease); }
   34%, 100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes iso-link { /* same timing as iso-drop, so the line is gone while its layer is away */
+  0% { transform: scaleY(1); animation-timing-function: ease-in; }
+  12% { transform: scaleY(0); animation-timing-function: var(--iso-ease); }
+  34%, 100% { transform: scaleY(1); }
 }
 @keyframes iso-write {
   0% { stroke-dashoffset: 0; opacity: 1; }
