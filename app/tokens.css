@@ -262,6 +262,18 @@
   --iso-stagger: 0.14s;
   --iso-drop-y: -44px;
   --iso-lift-y: -12px;
+  --iso-label-size: 11px;
+  --iso-stack-end: translate(-10px, -51px) scale(0.85); /* where the folded slab sits, clear of the label and readers */
+  --iso-stack-fade: 300ms;
+  --iso-stack-fold: 800ms;
+  --iso-stack-fold-at: 300ms;
+  --iso-stack-label-at: 1100ms;
+  --iso-stack-reader-at: 1400ms;
+  --iso-stack-beam-at: 1700ms;
+  --iso-stack-read-at: 1900ms;
+  --iso-stack-back-fold-at: 300ms;  /* on leave: readers and label go first, then the fold, then the lines */
+  --iso-stack-back-note-at: 1000ms;
+  --iso-read: 1.5s;
   /* Testimonial cards: motion from 21st.dev tilt-card "evade", colours ours (components/TiltCard.tsx, animations.md) */
   --tilt-limit: 20deg;
   --tilt-scale: 1.08;
@@ -532,6 +544,11 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .iso-dim, .iso-rule, .iso-wire, .iso-link, .iso-stem { fill: none; stroke: var(--iso-line); stroke-width: 1; stroke-linecap: round; transition: stroke var(--iso-lit) ease; }
 .iso-rule { stroke-width: 1.5; }
 .iso-link { stroke-dasharray: 2 4; transform-box: fill-box; transform-origin: 50% 100%; }
+.iso-stack-label { fill: var(--foreground); font-family: var(--font-mono); font-size: var(--iso-label-size); letter-spacing: 0.08em; opacity: 0; transform: translateY(6px); }
+.iso-reader { opacity: 0; transform: translateX(var(--from)); }
+.iso-reader-icon { fill: var(--iso-line-lit); }
+.iso-beam { fill: none; stroke: var(--iso-line-lit); stroke-width: 1; stroke-dasharray: 2 4; opacity: 0; transform-box: fill-box; transform: scaleX(0); }
+.iso-read-pulse { fill: var(--brand); opacity: 0; }
 .iso-tip { fill: var(--foreground); }
 .iso-pulse { fill: var(--brand); }
 .iso-led { fill: var(--brand); opacity: 0.28; }
@@ -542,7 +559,19 @@ body { background: var(--background); color: var(--foreground); font-family: var
 [data-lit] .iso-hot .iso-left { stroke: var(--brand); }
 @media (prefers-reduced-motion: no-preference) {
   [data-playing] .iso-drop { animation: iso-drop var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
-  [data-playing] .iso-link { animation: iso-link var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
+  .iso-stack-body, .iso-stack-layer { transition: transform var(--iso-stack-fold) var(--iso-ease) var(--iso-stack-back-fold-at); }
+  .iso-link, .iso-stack-note { transition: transform var(--iso-stack-fade) ease var(--iso-stack-back-note-at), opacity var(--iso-stack-fade) ease var(--iso-stack-back-note-at), stroke var(--iso-lit) ease; }
+  .iso-slab .iso-left { transition: fill var(--iso-stack-fade) ease, stroke var(--iso-lit) ease; }
+  .iso-stack-label, .iso-reader, .iso-beam { transition: opacity var(--iso-stack-fade) ease, transform var(--iso-stack-fade) ease; }
+  [data-lit] .iso-stack-body { transform: var(--iso-stack-end); transition-delay: var(--iso-stack-fold-at); }
+  [data-lit] .iso-stack-layer { transform: translateY(var(--fold)); transition-delay: var(--iso-stack-fold-at); }
+  [data-lit] .iso-link { transform: scaleY(0); opacity: 0; transition-delay: 0ms; }
+  [data-lit] .iso-stack-note { opacity: 0; transition-delay: 0ms; }
+  [data-lit] .iso-slab .iso-left { fill: var(--brand); transition-delay: var(--iso-stack-label-at); }
+  [data-lit] .iso-stack-label { opacity: 1; transform: none; transition-delay: var(--iso-stack-label-at); }
+  [data-lit] .iso-reader { opacity: 1; transform: none; transition-delay: var(--iso-stack-reader-at); }
+  [data-lit] .iso-beam { opacity: 1; transform: none; transition-delay: var(--iso-stack-beam-at); }
+  [data-lit] .iso-read-pulse { animation: iso-read var(--iso-read) linear var(--iso-stack-read-at) infinite; }
   [data-playing] .iso-rule { stroke-dasharray: 1 1; animation: iso-write var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
   [data-playing] .iso-token { animation: iso-token calc(var(--iso-cycle) / 2) linear infinite; }
   [data-playing] .iso-station { animation: iso-lift var(--iso-cycle) var(--iso-ease) infinite; animation-delay: calc(var(--i) * var(--iso-cycle) / 4); }
@@ -555,10 +584,10 @@ body { background: var(--background); color: var(--foreground); font-family: var
   12% { transform: translateY(var(--iso-drop-y)); opacity: 0; animation-timing-function: var(--iso-ease); }
   34%, 100% { transform: translateY(0); opacity: 1; }
 }
-@keyframes iso-link { /* same timing as iso-drop, so the line is gone while its layer is away */
-  0% { transform: scaleY(1); animation-timing-function: ease-in; }
-  12% { transform: scaleY(0); animation-timing-function: var(--iso-ease); }
-  34%, 100% { transform: scaleY(1); }
+@keyframes iso-read { /* from the reader into the slab */
+  0% { transform: translateX(0); opacity: 0; }
+  15%, 85% { opacity: 1; }
+  100% { transform: translateX(var(--to)); opacity: 0; }
 }
 @keyframes iso-write {
   0% { stroke-dashoffset: 0; opacity: 1; }

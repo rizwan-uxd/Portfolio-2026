@@ -102,38 +102,68 @@ function Screen() {
   );
 }
 
-// Scalable Design Systems & Token Ops: tokens at the base, components on them, patterns on top. The layers land from the bottom up.
+// Phosphor icons, light weight
+const ROBOT = "M200,50H134V16a6,6,0,0,0-12,0V50H56A30,30,0,0,0,26,80V192a30,30,0,0,0,30,30H200a30,30,0,0,0,30-30V80A30,30,0,0,0,200,50Zm18,142a18,18,0,0,1-18,18H56a18,18,0,0,1-18-18V80A18,18,0,0,1,56,62H200a18,18,0,0,1,18,18ZM74,108a10,10,0,1,1,10,10A10,10,0,0,1,74,108Zm88,0a10,10,0,1,1,10,10A10,10,0,0,1,162,108Zm2,30H92a26,26,0,0,0,0,52h72a26,26,0,0,0,0-52Zm-22,12v28H114V150ZM78,164a14,14,0,0,1,14-14h10v28H92A14,14,0,0,1,78,164Zm86,14H154V150h10a14,14,0,0,1,0,28Z";
+const PERSON = "M229.19,213c-15.81-27.32-40.63-46.49-69.47-54.62a70,70,0,1,0-63.44,0C67.44,166.5,42.62,185.67,26.81,213a6,6,0,1,0,10.38,6C56.4,185.81,90.34,166,128,166s71.6,19.81,90.81,53a6,6,0,1,0,10.38-6ZM70,96a58,58,0,1,1,58,58A58.07,58.07,0,0,1,70,96Z";
+
+// One reader of the finished system, at either side of the slab. `side` is -1 for the left, 1 for the right.
+function Reader({ side, icon, label }: { side: -1 | 1; icon: string; label: string }) {
+  const y = -14;
+  return (
+    <>
+      <path className="iso-beam" style={{ transformOrigin: side < 0 ? "0 50%" : "100% 50%" }} d={`M${side * 143} ${y} L${side * 112} ${y}`} />
+      <circle className="iso-read-pulse" style={{ "--to": `${side * -31}px` } as CSSProperties} cx={side * 143} cy={y} r="3" />
+      <g className="iso-reader" style={{ "--from": `${side * 10}px` } as CSSProperties}>
+        <svg x={side * 160 - 15} y={y - 15} width="30" height="30" viewBox="0 0 256 256">
+          <path className="iso-reader-icon" d={icon} />
+        </svg>
+        <text className="iso-silk" x={side * 160} y={y + 29} textAnchor="middle">{label}</text>
+      </g>
+    </>
+  );
+}
+
+// Scalable Design Systems & Token Ops: tokens, components and pages fold into one slab that an agent and a person both read.
+// It runs on transitions rather than a loop, so it holds the ending while hovered and reverses from any point on leave.
 function Layers() {
   const size = 7.5;
   const gap = 2.6;
+  const plate = 0.2;
   const tiles = [1, 3, 5];
   const corners: [number, number][] = [[0, size], [size, size], [size, 0]];
-  // The dashed lines stand on the layer below and retract into it while the layer above is away, on that layer's timing.
-  const links = (z: number, i: number) => corners.map(([x, y]) => <path key={`${x}-${y}`} className="iso-link" style={delay(i)} d={line([x, y, z + 0.2], [x, y, z + gap])} />);
-  const label = (text: string, z: number) => <Silk x={-0.4} y={size} z={z + 0.1} anchor="end">{text}</Silk>;
+  const fold = (z: number, i: number) => ({ "--fold": `${(z - i * plate) * UNIT}px` }) as CSSProperties; // down onto the plates below
+  const links = (z: number) => corners.map(([x, y]) => <path key={`${x}-${y}`} className="iso-link" d={line([x, y, z + plate], [x, y, z + gap])} />);
+  const label = (text: string, z: number) => <g className="iso-stack-note"><Silk x={-0.4} y={size} z={z + 0.1} anchor="end">{text}</Silk></g>;
   return (
-    <Art x={10} y={-23} cycle="--iso-cycle-build">
-      <g className="iso-drop" style={delay(0)}>
-        <Box x={0} y={0} w={size} d={size} h={0.2} className="iso-plate" />
-        {label("TOKENS", 0)}
-        {tiles.flatMap((y) => tiles.map((x) => <Box key={`${x}-${y}`} x={x} y={y} z={0.2} w={1.5} d={1.5} h={0.15} className={x === 5 && y === 5 ? "iso-hot" : ""} />))}
-        {links(0, 1.6)}
+    <Art x={0} y={0} cycle="--iso-cycle-build">
+      <g transform="translate(10 -23)">
+        <g className="iso-stack-body">
+          <g>
+            <Box x={0} y={0} w={size} d={size} h={plate} className="iso-plate iso-slab" />
+            {label("TOKENS", 0)}
+            {tiles.flatMap((y) => tiles.map((x) => <Box key={`${x}-${y}`} x={x} y={y} z={plate} w={1.5} d={1.5} h={0.15} className={x === 5 && y === 5 ? "iso-hot" : ""} />))}
+            {links(0)}
+          </g>
+          <g className="iso-stack-layer" style={fold(gap, 1)}>
+            <Box x={0} y={0} z={gap} w={size} d={size} h={plate} className="iso-plate iso-slab" />
+            {label("COMPONENTS", gap)}
+            <Box x={1} y={1} z={gap + plate} w={2.5} d={2.5} h={0.5} />
+            <Box x={4} y={1} z={gap + plate} w={2.5} d={2.5} h={0.3} />
+            <Box x={1} y={4} z={gap + plate} w={2.5} d={2.5} h={0.3} />
+            <Box x={4} y={4} z={gap + plate} w={2.5} d={2.5} h={0.5} />
+            {links(gap)}
+          </g>
+          <g className="iso-stack-layer" style={fold(gap * 2, 2)}>
+            <Box x={0} y={0} z={gap * 2} w={size} d={size} h={plate} className="iso-plate iso-slab" />
+            {label("PAGES", gap * 2)}
+            <Box x={1} y={1} z={gap * 2 + plate} w={5.5} d={1.2} h={0.3} />
+            <Box x={1} y={2.8} z={gap * 2 + plate} w={5.5} d={3.7} h={0.6} />
+          </g>
+        </g>
       </g>
-      <g className="iso-drop" style={delay(1.6)}>
-        <Box x={0} y={0} z={gap} w={size} d={size} h={0.2} className="iso-plate" />
-        {label("COMPONENTS", gap)}
-        <Box x={1} y={1} z={gap + 0.2} w={2.5} d={2.5} h={0.5} />
-        <Box x={4} y={1} z={gap + 0.2} w={2.5} d={2.5} h={0.3} />
-        <Box x={1} y={4} z={gap + 0.2} w={2.5} d={2.5} h={0.3} />
-        <Box x={4} y={4} z={gap + 0.2} w={2.5} d={2.5} h={0.5} />
-        {links(gap, 3.2)}
-      </g>
-      <g className="iso-drop" style={delay(3.2)}>
-        <Box x={0} y={0} z={gap * 2} w={size} d={size} h={0.2} className="iso-plate" />
-        {label("PAGES", gap * 2)}
-        <Box x={1} y={1} z={gap * 2 + 0.2} w={5.5} d={1.2} h={0.3} />
-        <Box x={1} y={2.8} z={gap * 2 + 0.2} w={5.5} d={3.7} h={0.6} />
-      </g>
+      <Reader side={-1} icon={ROBOT} label="AGENT" />
+      <Reader side={1} icon={PERSON} label="HUMAN" />
+      <text className="iso-stack-label" x="0" y="92" textAnchor="middle">MACHINE-READABLE DESIGN SYSTEM</text>
     </Art>
   );
 }
