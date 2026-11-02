@@ -277,14 +277,17 @@
   --iso-stack-back-note-at: 1000ms;
   --iso-read: 1.5s;
   --iso-tool-stagger: 0.18s;
-  --iso-gate-run: 3s;           /* signal: reaches the gate at 0.7s, waits, passes at 1.8s */
-  --iso-gate-person-at: 0.7s;
+  --iso-gate-bubble: 450ms;      /* each chat bubble rises off the block in turn, before the signal starts */
+  --iso-gate-bubble-rise: 5px;   /* the bubbles' thickness, so at rest only their top faces show, flat on the block */
+  --iso-gate-lead: 0.9s;         /* the two bubbles go first, then the rest of the sequence runs as before */
+  --iso-gate-run: 3s;           /* signal: reaches the gate at 0.7s, waits, passes at 1.8s (after the lead) */
+  --iso-gate-person-at: calc(0.7s + var(--iso-gate-lead));
   --iso-gate-tap: 0.7s;
-  --iso-gate-tap-at: 0.95s;
-  --iso-gate-press-at: 1.7s;
+  --iso-gate-tap-at: calc(0.95s + var(--iso-gate-lead));
+  --iso-gate-press-at: calc(1.7s + var(--iso-gate-lead));
   --iso-gate-press: 300ms;
   --iso-gate-sink: 9px;
-  --iso-gate-action-at: 2.55s;
+  --iso-gate-action-at: calc(2.55s + var(--iso-gate-lead));
   --iso-gate-action: 500ms;
   --iso-gate-action-flat: 12px;  /* the box's height, so at rest only its top shows, flat on the plate */
   --iso-gate-undo: 200ms;
@@ -631,8 +634,11 @@ body { background: var(--background); color: var(--foreground); font-family: var
   .iso-gate-press, .iso-gate-action, .iso-gate-tick, .iso-gate-person { transition: transform var(--iso-gate-undo) ease, opacity var(--iso-gate-undo) ease, fill var(--iso-gate-undo) ease; }
   [data-lit] .iso-gate-person { fill: var(--foreground); transition-delay: var(--iso-gate-person-at); }
   [data-lit] .iso-gate-tick { opacity: 1; transition-delay: var(--iso-gate-action-at); transition-duration: var(--iso-gate-action); }
-  [data-lit] .iso-gate-line { stroke: var(--foreground); }
-  [data-lit] .iso-gate-pulse { animation: iso-gate-pulse var(--iso-gate-run) linear both; }
+  .iso-gate-bubble { transform: translateY(var(--iso-gate-bubble-rise)); transition: transform var(--iso-gate-undo) ease; }
+  .iso-gate-bubble .iso-left { transition: fill var(--iso-gate-undo) ease, stroke var(--iso-gate-undo) ease; }
+  [data-lit] .iso-gate-bubble .iso-left { fill: var(--brand); stroke: var(--brand); transition: fill var(--iso-gate-bubble) ease calc(var(--i) * var(--iso-gate-bubble)), stroke var(--iso-gate-bubble) ease calc(var(--i) * var(--iso-gate-bubble)); }
+  [data-lit] .iso-gate-bubble { transform: none; transition: transform var(--iso-gate-bubble) var(--iso-ease) calc(var(--i) * var(--iso-gate-bubble)); }
+  [data-lit] .iso-gate-pulse { animation: iso-gate-pulse var(--iso-gate-run) linear var(--iso-gate-lead) both; }
   [data-lit] .iso-gate-tap { animation: iso-gate-tap var(--iso-gate-tap) ease var(--iso-gate-tap-at) both; }
   [data-lit] .iso-gate-press { transform: translateY(var(--iso-gate-sink)); transition: transform var(--iso-gate-press) ease var(--iso-gate-press-at); }
   [data-lit] .iso-gate-action { transform: none; transition: transform var(--iso-gate-action) var(--iso-ease) var(--iso-gate-action-at); }

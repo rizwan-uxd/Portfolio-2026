@@ -109,9 +109,9 @@ function Screen() {
         <path className="iso-review-line" d={line([7.3, 5.5, 0.56], [8.9, 5.5, 0.56])} />
       </g>
       <circle className="iso-review-request" cx={at(1.85, 3.5, 0.6)[0]} cy={at(1.85, 3.5, 0.6)[1]} r="3" />
-      <text className="iso-silk" x="-75" y="202" textAnchor="middle">DATA</text>
-      <text className="iso-silk" x="0" y="202" textAnchor="middle">REVIEW</text>
-      <text className="iso-silk" x="75" y="202" textAnchor="middle">STATUS</text>
+      <Silk x={1.85} y={9.3}>DATA</Silk>
+      <Silk x={5} y={9.3}>REVIEW</Silk>
+      <Silk x={8.15} y={9.3}>STATUS</Silk>
     </Art>
   );
 }
@@ -291,6 +291,30 @@ function Tools() {
   });
 }
 
+// A raised chat bubble: a rounded slab with a tail on its front edge, extruded like the boxes. The tail leans out on the left or right.
+function Bubble({ x, y, z = 0, w, d, h, tail }: BoxProps & { tail: "left" | "right" }) {
+  const r = 0.35;
+  const arc = (cx: number, cy: number, from: number): [number, number][] => Array.from({ length: 4 }, (_, i) => {
+    const a = ((from + i * 30) * Math.PI) / 180;
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+  });
+  const outline: [number, number][] = [
+    ...arc(r, r, 180), ...arc(w - r, r, 270), ...arc(w - r, d - r, 0),
+    [w - 0.55, d], [w - 0.55, d + 0.45], [w - 1.05, d],
+    ...arc(r, d - r, 90),
+  ];
+  const pts = outline.map(([px, py]) => [x + (tail === "right" ? px : w - px), y + py] as [number, number]);
+  const faces = pts.map((a, i) => [a, pts[(i + 1) % pts.length]] as const).sort(([a, b], [c, e]) => a[0] + a[1] + b[0] + b[1] - (c[0] + c[1] + e[0] + e[1]));
+  return (
+    <g className="iso">
+      {faces.map(([a, b], i) => (
+        <polygon key={i} className={Math.abs(b[0] - a[0]) > Math.abs(b[1] - a[1]) ? "iso-left" : "iso-right"} points={`${pt(a[0], a[1], z)} ${pt(b[0], b[1], z)} ${pt(b[0], b[1], z + h)} ${pt(a[0], a[1], z + h)}`} />
+      ))}
+      <polygon className="iso-top" points={pts.map(([px, py]) => pt(px, py, z + h)).join(" ")} />
+    </g>
+  );
+}
+
 // Interactive Code Prototyping: lines of a prompt write themselves, tokens travel down the wire and the prototype builds.
 function Build() {
   const rows: [number, number][] = [[1.5, 3.2], [2.4, 2.2], [3.3, 3], [4.2, 1.5]];
@@ -378,6 +402,7 @@ function Gate() {
   const base = 0.3;
   const clip = `${pt(gate.x, gate.y + gate.d, base)} ${pt(gate.x + gate.w, gate.y + gate.d, base)} ${pt(gate.x + gate.w, gate.y, base)} ${pt(gate.x + gate.w, gate.y, 3)} ${pt(gate.x, gate.y + gate.d, 3)}`;
   const actionClip = `${pt(1.2, 11.4, base)} ${pt(4.8, 11.4, base)} ${pt(4.8, 8.6, base)} ${pt(4.8, 8.6, 3)} ${pt(1.2, 11.4, 3)}`;
+  const bubbleClip = `${pt(1, 4.7, 0.8)} ${pt(5, 4.7, 0.8)} ${pt(5, 0.7, 0.8)} ${pt(5, 0.7, 3)} ${pt(1, 4.7, 3)}`;
   const [pulseX, pulseY] = at(3, 4.7, base);
   const [ax, ay] = onScreen(at(7.6, 6.45));
   const [cx, cy] = onScreen(at(3, 6.45, 0.85));
@@ -388,8 +413,11 @@ function Gate() {
         <Box x={0} y={0} w={6} d={12} h={base} className="iso-plate" />
         <Pads w={6} d={12} />
         <Box x={1} y={0.7} z={base} w={4} d={4} h={0.5} />
-        <Rule x={1.5} y={1.4} z={0.8} w={1.8} />
-        {[[2.4, 3], [3, 2.4], [3.6, 2.8]].map(([y, w]) => <path key={y} className="iso-dim iso-gate-line" d={line([1.5, y, 0.8], [1.5 + w, y, 0.8])} />)}
+        <clipPath id="iso-gate-bubble-clip"><polygon points={bubbleClip} /></clipPath>
+        <g clipPath="url(#iso-gate-bubble-clip)">
+          <g className="iso-gate-bubble" style={delay(0)}><Bubble x={1.3} y={1} z={0.8} w={2.6} d={1.2} h={0.25} tail="left" /></g>
+          <g className="iso-gate-bubble" style={delay(1)}><Bubble x={2.1} y={2.8} z={0.8} w={2.6} d={1.2} h={0.25} tail="right" /></g>
+        </g>
         <path className="iso-wire" d={line([3, 4.7, base], [3, 6, base])} />
         <path className="iso-wire" d={line([3, 6.9, base], [3, 8.6, base])} />
         <clipPath id="iso-gate-clip"><polygon points={clip} /></clipPath>
@@ -412,6 +440,7 @@ function Gate() {
             </g>
           </g>
         </g>
+        <Silk x={-1} y={2.5} anchor="end">CONVERSATION</Silk>
         <Silk x={-1} y={8} anchor="end">CONFIRM</Silk>
       </g>
       <path className="iso-spoke" d={`M${hx} ${hy} L${cx} ${cy}`} />
