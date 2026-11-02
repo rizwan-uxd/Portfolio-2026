@@ -25,7 +25,7 @@ Rule: respect `prefers-reduced-motion` for everything below.
   - The page scrolls normally, so the horizon rises 1:1 with the scroll from the first pixel until it reaches the top of the screen. Everything below is a straight line against scroll position, as a share of that travel, with no easing.
   - Hero, eyebrow to CTA: scales from 100% to 10% towards a point 48px below the top of the rim over the whole travel, and fades out from 30% to 85%.
   - Selected works heading: from 33% to 80%, it goes from 40% size (owner, 2026-10-31), invisible and 80px below its place, to full size, opacity and position, riding up with the horizon.
-  - Project list: fades in from 80% to 100%, starting only once the heading is fully visible (owner, 2026-10-31).
+  - Project list: fades in from 40% to 70%, overlapping the heading, so no empty space sits below it (owner, 2026-11-02; supersedes 80% to 100%, which waited for the heading to be fully visible).
   - The globe's edge flattens evenly until it is a straight line at 100%, so Selected works arrives full width and square. The rim and beams ride that edge and fade out late in the move.
   - Reduced motion: plain scroll, no scaling, clipping or fades.
 - Hero intro line (owner, 2026-10-31, follows Magic UI "Typing Animation"; our own code). Replaces the "Senior UX/Product Designer · Dubai" eyebrow above the headline. `components/HeroIntro.tsx`, `.hero-intro`, `.hero-flag*` and `--intro-*` in `app/tokens.css`:
