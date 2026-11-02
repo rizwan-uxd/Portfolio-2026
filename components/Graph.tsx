@@ -3,14 +3,41 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
 import { cv, graphSection, worksSection } from "@/lib/content";
 import { categoryIds, graphLinks, graphNodes, graphStats, leafCount, neighbours, nodeById, shortestPath, type GraphNode } from "@/lib/graph";
+import { GraphSelect, type SelectOption } from "@/components/GraphSelect";
 import { GraphSphere, type SphereHandle, type SphereView } from "@/components/GraphSphere";
 import { DottedArrow } from "@/components/DottedArrow";
 import { Heading } from "@/components/SectionHeading";
 
 const catLabel = (cat: string) => graphSection.categories.find((c) => c.id === cat)?.label ?? "";
 const dot = (cat: string) => <span aria-hidden className="size-2 shrink-0 rounded-full" style={{ background: "var(--muted-foreground)" }} />;
-const field = "rounded-btn border border-input bg-background px-4 py-2";
-const traceable = graphNodes.filter((n) => n.kind === "leaf").sort((a, b) => a.label.localeCompare(b.label));
+// The trace dropdowns list every node under its category, in the order of the filter chips
+const traceOptions: SelectOption[] = graphSection.categories.flatMap((c) =>
+  graphNodes.filter((n) => n.kind === "leaf" && n.cat === c.id).sort((a, b) => a.title.localeCompare(b.title)).map((n) => ({ id: n.id, label: n.title, group: c.label })),
+);
+
+const allCount = categoryIds.reduce((total, c) => total + leafCount(c), 0);
+
+// A filter pill. Selected shows a check and a brand outline; the slot is the same size either way, so nothing shifts.
+function Pill({ on, label, count, onClick }: { on: boolean; label: string; count: number; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={on}
+      onClick={onClick}
+      className={`flex h-10 shrink-0 items-center gap-2 rounded-btn border pl-3 pr-3 transition-colors ${on ? "border-brand bg-secondary text-foreground" : "border-hairline text-muted-foreground hover:bg-secondary hover:text-foreground"}`}
+    >
+      <span aria-hidden className="flex size-3.5 items-center justify-center">
+        {on ? (
+          <svg viewBox="0 0 14 14" className="size-3.5 text-brand"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        ) : (
+          <span className="size-2 rounded-full bg-muted-foreground" />
+        )}
+      </span>
+      <span className="label">{label}</span>
+      <span className="micro text-muted-foreground">{count}</span>
+    </button>
+  );
+}
 
 function NodeChip({ id, onSelect }: { id: string; onSelect: (id: string) => void }) {
   const n = nodeById.get(id)!;
@@ -124,13 +151,15 @@ function Timeline({ selected, onSelect }: { selected: string | null; onSelect: (
 export function Graph() {
   const sphere = useRef<SphereHandle>(null);
   const [mode, setMode] = useState<"graph" | "timeline">("graph");
-  const [hidden, setHidden] = useState<Set<string>>(() => new Set());
+  const [filters, setFilters] = useState<Set<string>>(() => new Set()); // selected categories; none selected shows all
+  const hidden = useMemo(() => (filters.size ? new Set<string>(categoryIds.filter((c) => !filters.has(c))) : new Set<string>()), [filters]);
   const [selected, setSelected] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [from, setFrom] = useState(graphSection.traceFrom);
   const [to, setTo] = useState(graphSection.traceTo);
   const [path, setPath] = useState<string[] | null>(null);
   const [tourStep, setTourStep] = useState<number | null>(null);
+  const [hot, setHot] = useState(0); // highlighted search result
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -150,17 +179,15 @@ export function Graph() {
     setPath(null);
     setQuery("");
     setTourStep(null);
-    if (id) setHidden((h) => {
+    // Opening a node in a category that is filtered out adds that category to the filter
+    if (id) {
       const cat = nodeById.get(id)!.cat;
-      if (!h.has(cat)) return h;
-      const next = new Set(h);
-      next.delete(cat);
-      return next;
-    });
+      setFilters((f) => (f.size && cat !== "root" && !f.has(cat) ? new Set([...f, cat]) : f));
+    }
   }, []);
 
   const showPath = (ids: string[]) => {
-    setHidden(new Set());
+    setFilters(new Set());
     setPath(ids);
     setSelected(ids[ids.length - 1]);
     setQuery("");
@@ -173,19 +200,19 @@ export function Graph() {
   };
 
   const toggle = (cat: string) => {
-    setHidden((h) => {
-      const next = new Set(h);
-      if (!next.delete(cat)) next.add(cat);
-      return next;
-    });
+    const next = new Set(filters);
+    if (!next.delete(cat)) next.add(cat);
+    const applied = next.size === categoryIds.length ? new Set<string>() : next; // every category selected is the same as none
+    setFilters(applied);
     setPath(null);
-    if (selected && nodeById.get(selected)?.cat === cat) setSelected(null);
+    const open = selected ? nodeById.get(selected)!.cat : null;
+    if (open && open !== "root" && applied.size && !applied.has(open)) setSelected(null);
   };
 
   const goToStep = (i: number) => {
     const step = graphSection.tour[i];
     setMode("graph");
-    setHidden(new Set());
+    setFilters(new Set());
     setQuery("");
     setTourStep(i);
     if (step.path) {
@@ -199,7 +226,7 @@ export function Graph() {
 
   const reset = () => {
     setMode("graph");
-    setHidden(new Set());
+    setFilters(new Set());
     setSelected(null);
     setQuery("");
     setPath(null);
@@ -222,74 +249,77 @@ export function Graph() {
           <Heading lines={graphSection.heading} />
         </div>
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-          <div role="group" aria-label={graphSection.viewLabel} className="flex rounded-btn border border-hairline p-1">
+          <div role="group" aria-label={graphSection.viewLabel} className="flex h-12 rounded-btn border border-hairline p-1">
             <button type="button" aria-pressed={mode === "graph"} onClick={() => setMode("graph")} className={toggleClass(mode === "graph")}>Graph</button>
             <button type="button" aria-pressed={mode === "timeline"} onClick={() => { setMode("timeline"); setTourStep(null); }} className={toggleClass(mode === "timeline")}>Timeline</button>
           </div>
           <div className="flex gap-3">
-            <button type="button" onClick={() => goToStep(0)} className="label flex flex-1 items-center justify-center gap-3 rounded-btn bg-brand py-2 pl-6 pr-2 text-brand-foreground lg:flex-none">Take the tour <DottedArrow direction="right" /></button>
-            <button type="button" onClick={reset} className="label flex-1 rounded-btn border border-hairline px-6 py-3 lg:flex-none">Reset</button>
+            <button type="button" onClick={() => goToStep(0)} className="label flex h-12 flex-1 items-center justify-center gap-3 rounded-btn bg-brand pl-6 pr-2 text-brand-foreground lg:flex-none">Take the tour <DottedArrow direction="right" /></button>
+            <button type="button" onClick={reset} className="label h-12 flex-1 rounded-btn border border-hairline px-6 lg:flex-none">Reset</button>
           </div>
         </div>
       </div>
 
       {mode === "graph" && (
         <div className="flex flex-col gap-4 border-t border-hairline px-4 py-4 lg:px-8">
-          <div className="flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center">
-            <div className="relative lg:w-graph-search">
-              <input
-                type="search"
-                value={query}
-                aria-label={graphSection.searchLabel}
-                placeholder={graphSection.searchPlaceholder}
-                onChange={(e) => { setQuery(e.target.value); setPath(null); setSelected(null); setTourStep(null); }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && results?.[0]) select(results[0].id);
-                  if (e.key === "Escape") setQuery("");
-                }}
-                className={`${field} w-full text-foreground placeholder:text-muted-foreground`}
-              />
-              {results && (
-                <ul className="absolute inset-x-0 top-full z-10 mt-1 max-h-64 overflow-auto rounded-btn border border-hairline bg-popover">
-                  {results.length === 0 && <li className="px-4 py-2 text-muted-foreground">{graphSection.noMatches}</li>}
-                  {results.slice(0, 8).map((n) => (
-                    <li key={n.id}>
-                      <button type="button" onClick={() => select(n.id)} className="flex w-full items-center gap-2 px-4 py-2 text-left hover:bg-secondary">
-                        {dot(n.cat)}
-                        {n.title}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
-              {graphSection.categories.map((c) => {
-                const on = !hidden.has(c.id);
-                return (
-                  <button key={c.id} type="button" aria-pressed={on} onClick={() => toggle(c.id)} className={`flex shrink-0 items-center gap-2 rounded-btn border border-hairline px-3 py-2 ${on ? "" : "opacity-40"}`}>
-                    {dot(c.id)}
-                    <span className="label">{c.label}</span>
-                    <span className="micro text-muted-foreground">{leafCount(c.id)}</span>
-                  </button>
-                );
-              })}
-            </div>
+          {/* Search is the primary control: full width, first, and the tallest */}
+          <div className="relative">
+            <svg aria-hidden viewBox="0 0 16 16" className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground">
+              <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              <path d="m10.5 10.5 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            <input
+              type="search"
+              value={query}
+              aria-label={graphSection.searchLabel}
+              placeholder={graphSection.searchPlaceholder}
+              onChange={(e) => { setQuery(e.target.value); setHot(0); setPath(null); setSelected(null); setTourStep(null); }}
+              onKeyDown={(e) => {
+                const shown = Math.min(results?.length ?? 0, 8);
+                if (e.key === "ArrowDown" && shown) { e.preventDefault(); setHot((h) => Math.min(shown - 1, h + 1)); }
+                if (e.key === "ArrowUp" && shown) { e.preventDefault(); setHot((h) => Math.max(0, h - 1)); }
+                if (e.key === "Enter" && results?.[hot]) select(results[hot].id);
+                if (e.key === "Escape") setQuery("");
+              }}
+              className="h-12 w-full rounded-btn border border-input bg-background pl-11 pr-12 text-foreground placeholder:text-muted-foreground/60 [&::-webkit-search-cancel-button]:appearance-none"
+            />
+            {query && (
+              <button type="button" aria-label="Clear search" onClick={() => setQuery("")} className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-btn text-muted-foreground hover:bg-secondary hover:text-foreground">✕</button>
+            )}
+            {results && (
+              <ul className="absolute inset-x-0 top-full z-20 mt-1 max-h-72 overflow-auto rounded-btn border border-hairline bg-popover py-1 shadow-lg">
+                {results.length === 0 && <li className="px-4 py-2 text-muted-foreground">{graphSection.noMatches}</li>}
+                {results.slice(0, 8).map((n, i) => (
+                  <li key={n.id}>
+                    <button type="button" onClick={() => select(n.id)} onPointerEnter={() => setHot(i)} className={`flex w-full items-center justify-between gap-3 px-4 py-2 text-left ${i === hot ? "bg-secondary" : ""}`}>
+                      <span className="truncate">{n.title}</span>
+                      <span className="micro shrink-0 text-muted-foreground">{n.cat === "root" ? graphSection.rootTag : catLabel(n.cat)}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {/* Filters: a selected pill gets a check and a brand outline. None selected means everything shows. */}
+          <div role="group" aria-label="Filter by category" className="no-scrollbar -mx-4 flex items-center gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
+            <Pill on={filters.size === 0} label="All" count={allCount} onClick={() => setFilters(new Set())} />
+            {graphSection.categories.map((c) => (
+              <Pill key={c.id} on={filters.has(c.id)} label={c.label} count={leafCount(c.id)} onClick={() => toggle(c.id)} />
+            ))}
+            {filters.size > 0 && (
+              <button type="button" onClick={() => setFilters(new Set())} className="label h-10 shrink-0 rounded-btn px-3 text-muted-foreground hover:text-foreground">Clear {filters.size}</button>
+            )}
           </div>
           <form className="flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center lg:gap-x-3" onSubmit={(e) => { e.preventDefault(); trace(); }}>
-            <label className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3">
-              <span className="micro text-muted-foreground">Trace a path from</span>
-              <select value={from} onChange={(e) => setFrom(e.target.value)} className={`${field} w-full lg:w-graph-select`}>
-                {traceable.map((n) => <option key={n.id} value={n.id}>{n.title}</option>)}
-              </select>
-            </label>
-            <label className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3">
-              <span className="micro text-muted-foreground">to</span>
-              <select value={to} onChange={(e) => setTo(e.target.value)} className={`${field} w-full lg:w-graph-select`}>
-                {traceable.map((n) => <option key={n.id} value={n.id}>{n.title}</option>)}
-              </select>
-            </label>
-            <button type="submit" className="label rounded-btn border border-brand px-6 py-3 text-brand">Trace</button>
+            <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3">
+              <span className="label text-muted-foreground">Trace a path from</span>
+              <GraphSelect label="Trace from" value={from} onChange={setFrom} options={traceOptions} className="w-full lg:w-graph-select" />
+            </div>
+            <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3">
+              <span className="label text-muted-foreground">to</span>
+              <GraphSelect label="Trace to" value={to} onChange={setTo} options={traceOptions} className="w-full lg:w-graph-select" />
+            </div>
+            <button type="submit" className="label h-10 rounded-btn border border-brand px-6 text-brand">Trace</button>
           </form>
           {path && (
             <p className="flex flex-wrap items-center gap-x-2 gap-y-1" aria-live="polite">

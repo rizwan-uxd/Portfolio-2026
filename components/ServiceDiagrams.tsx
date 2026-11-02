@@ -108,26 +108,32 @@ function Layers() {
   const gap = 2.6;
   const tiles = [1, 3, 5];
   const corners: [number, number][] = [[0, size], [size, size], [size, 0]];
+  // The dashed lines hang under a layer and its label sits beside it, so both travel with the layer.
+  const links = (z: number) => corners.map(([x, y]) => <path key={`${x}-${y}`} className="iso-link" d={line([x, y, z - gap + 0.2], [x, y, z])} />);
+  const label = (text: string, z: number) => <Silk x={-0.4} y={size} z={z + 0.1} anchor="end">{text}</Silk>;
   return (
-    <Art x={0} y={-23} cycle="--iso-cycle-build">
+    <Art x={10} y={-23} cycle="--iso-cycle-build">
       <g className="iso-drop" style={delay(0)}>
         <Box x={0} y={0} w={size} d={size} h={0.2} className="iso-plate" />
+        {label("TOKENS", 0)}
         {tiles.flatMap((y) => tiles.map((x) => <Box key={`${x}-${y}`} x={x} y={y} z={0.2} w={1.5} d={1.5} h={0.15} className={x === 5 && y === 5 ? "iso-hot" : ""} />))}
       </g>
       <g className="iso-drop" style={delay(1.6)}>
+        {links(gap)}
         <Box x={0} y={0} z={gap} w={size} d={size} h={0.2} className="iso-plate" />
+        {label("COMPONENTS", gap)}
         <Box x={1} y={1} z={gap + 0.2} w={2.5} d={2.5} h={0.5} />
         <Box x={4} y={1} z={gap + 0.2} w={2.5} d={2.5} h={0.3} />
         <Box x={1} y={4} z={gap + 0.2} w={2.5} d={2.5} h={0.3} />
         <Box x={4} y={4} z={gap + 0.2} w={2.5} d={2.5} h={0.5} />
       </g>
       <g className="iso-drop" style={delay(3.2)}>
+        {links(gap * 2)}
         <Box x={0} y={0} z={gap * 2} w={size} d={size} h={0.2} className="iso-plate" />
+        {label("PAGES", gap * 2)}
         <Box x={1} y={1} z={gap * 2 + 0.2} w={5.5} d={1.2} h={0.3} />
         <Box x={1} y={2.8} z={gap * 2 + 0.2} w={5.5} d={3.7} h={0.6} />
       </g>
-      {corners.map(([x, y]) => <path key={`${x}-${y}`} className="iso-link" d={line([x, y, 0], [x, y, gap * 2])} />)}
-      {["TOKENS", "PARTS", "PAGES"].map((label, i) => <Silk key={label} x={-0.4} y={size} z={gap * i + 0.1} anchor="end">{label}</Silk>)}
     </Art>
   );
 }
