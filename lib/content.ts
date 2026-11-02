@@ -275,39 +275,39 @@ export const servicesSection = {
     "As a digital designer, with an empathetic, human-first mindset and a structured way of thinking, I translate real user needs and business goals into clear journeys and polished UI — reducing friction, making decisions easier, and helping teams ship with confidence.",
 };
 
-// Titles and descriptions from the owner (2026-11-01).
+// Titles from the owner (2026-11-01). Descriptions reworded 2026-11-02 (owner asked) to claims the case studies support.
 export const services = [
   {
     title: "Product Strategy & Growth Alignment",
-    description: "Aligning user journeys and drop-off data with core business KPIs to build a prioritized roadmap that turns product features into measurable revenue.",
+    description: "Aligning user journeys and product data with business KPIs to prioritise what gets designed and built first.",
   },
   {
     title: "UX Research & Validation",
-    description: "Uncovering real user friction through direct customer interviews and behavioral analytics to de-risk feature launches before developers write code.",
+    description: "Uncovering real user friction through stakeholder workshops, usability testing and analytics, so design decisions are tested before development starts.",
   },
   {
     title: "Complex Interaction Design",
-    description: "Untangling dense data tables, multi-tier permissions, and asynchronous edge cases into clear, intuitive mental models that users navigate effortlessly.",
+    description: "Turning dense data, multi-role approval workflows and edge-case states into clear, consistent patterns that people can work through with confidence.",
   },
   {
     title: "AI-Native & Conversational Experience",
-    description: "Designing natural conversational flows, dynamic canvas workspaces, and human-in-the-loop controls so users trust, inspect, and easily steer autonomous AI actions.",
+    description: "Designing intent-driven AI flows that understand a goal, explain their reasoning and ask the user to confirm before acting, so people stay in control.",
   },
   {
     title: "Interactive Code Prototyping",
-    description: "Building functional, web-connected prototypes with real APIs and live data to test actual behavior and get stakeholder sign-off before committing sprint hours.",
+    description: "Building working prototypes with AI-assisted tools like Claude Code and Cursor, so flows can be tried and tested before full engineering investment.",
   },
   {
     title: "Scalable Design Systems & Token Ops",
-    description: "Creating tokenized component foundations that keep layouts accessible, consistent across platforms, and structured for both human engineers and AI code agents.",
+    description: "Creating tokenised component libraries that keep products consistent across platforms and themes, and help design and engineering teams ship faster.",
   },
 ];
 
-// Copy from the live site's AI projects section (owner, 2026-10-31: two cards).
+// Copy from the live site's AI projects section (owner, 2026-10-31: two cards); intro note from the owner (2026-11-02).
 export const aiProjectsSection = {
   eyebrow: "AI projects",
   heading: ["AI projects", ""], // 2nd line muted, empty
-  note: "Vibe-coded and AI-assisted builds — intent-based flows, prototypes, and automation designed with Cursor and Claude.",
+  note: "I use AI-assisted tools to explore ideas and build working prototypes faster. The AI Banking Copilot shows how I moved from a banking concept to an interactive prototype.", // owner, 2026-11-02
   projects: [
     {
       tag: "Vibe coded",
@@ -495,8 +495,8 @@ export const testimonials = [
 
 export const contact = {
   label: "LET'S TALK",
-  heading: ["Start your new project", "in just a few clicks."], // 2nd half muted
-  cta: "Book a free call",
+  heading: ["Let’s build something", "meaningful together."], // 2nd half muted; owner, 2026-11-02
+  cta: "Let’s talk", // owner, 2026-11-02
   connectLabel: "Connect with me",
   copyright: "© Copyright 2026. Mohammed Rizwan",
 };
