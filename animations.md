@@ -112,6 +112,7 @@ Interactions from sankar.work, look from poulo.site's graph (owner's screenshot)
 - Cursor tilt (fine pointers): the row leans up to about 10deg toward the pointer, eased.
 - Hover (tap on touch, tap again to release): the coin under the pointer (raycast) turns to face the viewer, comes forward over its neighbours, grows 8%, and its logo fades to the tool's brand colours; its label brightens. Eases in and out in about 300ms (`--coins-hover`, exponential). Brand colours are the owner's exception to lime as the only accent.
 - Reduced motion: coins render at rest, no spin and no tilt; hover changes the colour only.
+- Drawing order: each coin is drawn whole, back to front by depth (one layer per coin, depth cleared between them), so coins that cross in 3D never show one coin's milled edge through another's face (owner reported it on Supabase, 2026-11-03). The hovered coin, moved forward, draws last.
 
 ## Not decided (ask before building)
 - Hero dot-matrix / ASCII background motion.

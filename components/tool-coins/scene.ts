@@ -7,22 +7,34 @@ import * as THREE from "three";
 
 export type CoinOptions = { names: readonly string[]; logos: Record<string, readonly string[]>; reduced: boolean };
 
-// Official multi-colour Figma mark (38x57 viewBox), drawn over the engraving on hover; Simple Icons only has the outline.
-const FIGMA_MARK: [string, string][] = [
-  ["--tool-figma-red", "M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"],
-  ["--tool-figma-coral", "M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"],
-  ["--tool-figma-purple", "M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"],
-  ["--tool-figma-blue", "M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"],
-  ["--tool-figma-green", "M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z"],
-];
+// Multi-colour marks, drawn over the engraving on hover: [colour token, path] in the mark's own viewBox.
+// Figma: the official five-colour mark (Simple Icons only has the outline). Slack: its eight subpaths in pairs.
+// ProtoPie: the three stacked shields of components/ToolLogos.tsx, back to front.
+const SLACK = (d: string) => d.split(/(?=M)/);
+const MULTI: Record<string, { box: [number, number]; parts: (logos: Record<string, readonly string[]>) => [string, string][] }> = {
+  Figma: { box: [38, 57], parts: () => [
+    ["--tool-figma-red", "M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"],
+    ["--tool-figma-coral", "M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"],
+    ["--tool-figma-purple", "M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"],
+    ["--tool-figma-blue", "M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"],
+    ["--tool-figma-green", "M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z"],
+  ] },
+  Slack: { box: [24, 24], parts: (l) => {
+    const p = SLACK(l.Slack[0]);
+    const tokens = ["--tool-slack-red", "--tool-slack-blue", "--tool-slack-green", "--tool-slack-yellow"];
+    return p.map((d, i) => [tokens[i >> 1], d] as [string, string]);
+  } },
+  ProtoPie: { box: [24, 24], parts: (l) => l.ProtoPie.map((d, i) => [["--tool-protopie-3", "--tool-protopie-2", "--tool-protopie-1"][i], d] as [string, string]) },
+};
 const BRAND_VAR: Record<string, string> = {
-  Claude: "--tool-claude", Supabase: "--tool-supabase", Tailwind: "--tool-tailwind",
-  Cursor: "--tool-mono", Vercel: "--tool-mono", OpenAI: "--tool-mono", GitHub: "--tool-mono",
+  Claude: "--tool-claude", Supabase: "--tool-supabase", Tailwind: "--tool-tailwind", Adobe: "--tool-adobe",
+  Miro: "--tool-miro", SurveyMonkey: "--tool-surveymonkey",
+  Cursor: "--tool-mono", Vercel: "--tool-mono", OpenAI: "--tool-mono", GitHub: "--tool-mono", Notion: "--tool-mono",
 };
 
 const R = 1, H = 0.085, FACE = 0.93, BEVEL = 0.022, REEDS = 160;
 const GAP = 1.32;
-const ANGLES = [0.5, -0.62, 0.36, -0.55, 0.55, -0.36, 0.62, -0.5]; // alternate so neighbours tuck behind each other
+const ANGLES = [0.5, -0.62, 0.36, -0.55, 0.55, -0.36, 0.62, -0.5]; // alternate so neighbours tuck behind each other; repeats
 const DEPTH = [0.2, -0.3, 0.4, -0.1, 0.0, 0.35, -0.25, 0.15];
 const TEX = 1024;
 const LOGO_SIZE = 0.48; // of the face texture
@@ -34,6 +46,7 @@ export function mountCoins(stage: HTMLElement, canvas: HTMLCanvasElement, labels
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.autoClear = false;
 
   // Studio: dark graphite room, a large softbox upper left, a dim rim strip right, a broad front fill.
   const scene = new THREE.Scene();
@@ -55,6 +68,7 @@ export function mountCoins(stage: HTMLElement, canvas: HTMLCanvasElement, labels
   scene.environment = envMap;
   const key = new THREE.DirectionalLight(0xffffff, 0.9);
   key.position.set(-5, 6, 7);
+  key.layers.enableAll();
   scene.add(key);
 
   // Narrow lens from far back: a wide lens on this wide canvas stretched the end coins into ovals.
@@ -105,6 +119,20 @@ export function mountCoins(stage: HTMLElement, canvas: HTMLCanvasElement, labels
     }
     ctx.putImageData(img, 0, 0);
   };
+  // Grain is generated once per base level and copied into every coin's maps.
+  const bases = new Map<string, HTMLCanvasElement>();
+  const grainBase = (ctx: CanvasRenderingContext2D, level: string) => {
+    let c = bases.get(level);
+    if (!c) {
+      c = document.createElement("canvas");
+      c.width = c.height = TEX;
+      const g = c.getContext("2d")!;
+      g.fillStyle = level; g.fillRect(0, 0, TEX, TEX);
+      grain(g);
+      bases.set(level, c);
+    }
+    ctx.drawImage(c, 0, 0);
+  };
   const drawLogo = (ctx: CanvasRenderingContext2D, paths: readonly string[]) => {
     const s = (TEX * LOGO_SIZE) / 24;
     ctx.save();
@@ -118,8 +146,7 @@ export function mountCoins(stage: HTMLElement, canvas: HTMLCanvasElement, labels
   const faceMaterial = (paths: readonly string[]) => new THREE.MeshPhysicalMaterial({
     // Height: grain, with the logo as a soft-walled recess.
     bumpMap: canvasTex((ctx) => {
-      ctx.fillStyle = "#808080"; ctx.fillRect(0, 0, TEX, TEX);
-      grain(ctx);
+      grainBase(ctx, "#808080");
       ctx.filter = "blur(1.5px)"; ctx.fillStyle = "#2a2a2a"; drawLogo(ctx, paths); ctx.filter = "none";
     }),
     bumpScale: 1.6,
@@ -130,8 +157,7 @@ export function mountCoins(stage: HTMLElement, canvas: HTMLCanvasElement, labels
     }, true),
     // Roughness: satin face, matte engraved floor.
     roughnessMap: canvasTex((ctx) => {
-      ctx.fillStyle = "#6b6b6b"; ctx.fillRect(0, 0, TEX, TEX);
-      grain(ctx);
+      grainBase(ctx, "#6b6b6b");
       ctx.fillStyle = "#c4c4c4"; drawLogo(ctx, paths);
     }),
     metalness: 1,
@@ -140,12 +166,13 @@ export function mountCoins(stage: HTMLElement, canvas: HTMLCanvasElement, labels
   // Brand colours, an inlay that fades in on hover (owner's exception to lime as the only accent).
   const brandMaterial = (name: string) => new THREE.MeshStandardMaterial({
     map: canvasTex((ctx) => {
-      if (name === "Figma") {
-        const s = (TEX * LOGO_SIZE) / 57; // the mark's 57-unit height fills the same box as the 24-unit icons
+      const multi = MULTI[name];
+      if (multi) {
+        const [w, h] = multi.box, s = (TEX * LOGO_SIZE) / Math.max(w, h); // same box as the 24-unit icons
         ctx.save();
-        ctx.translate(TEX / 2 - 19 * s, TEX / 2 - 28.5 * s);
+        ctx.translate(TEX / 2 - (w / 2) * s, TEX / 2 - (h / 2) * s);
         ctx.scale(s, s);
-        for (const [color, d] of FIGMA_MARK) { ctx.fillStyle = css(color); ctx.fill(new Path2D(d)); }
+        for (const [color, d] of multi.parts(logos)) { ctx.fillStyle = css(color); ctx.fill(new Path2D(d)); }
         ctx.restore();
       } else {
         ctx.fillStyle = css(BRAND_VAR[name] ?? "--tool-mono");
@@ -176,21 +203,24 @@ export function mountCoins(stage: HTMLElement, canvas: HTMLCanvasElement, labels
       add(ringGeo, ringMat, H + 0.0005);
       add(faceGeo, brand, H + 0.0008);
     }
-    coin.traverse((o) => (o.userData.coin = i));
+    coin.traverse((o) => { o.userData.coin = i; o.layers.set(i + 1); }); // one layer per coin, drawn back to front
     const holder = new THREE.Group();
     holder.add(coin);
-    holder.position.set((i - (names.length - 1) / 2) * GAP, 0.15, DEPTH[i]);
+    const z = DEPTH[i % DEPTH.length];
+    holder.position.set((i - (names.length - 1) / 2) * GAP, 0.15, z);
     scene.add(holder);
-    return { holder, coin, brand, base: ANGLES[i], z: DEPTH[i], h: 0 };
+    return { holder, coin, brand, base: ANGLES[i % ANGLES.length], z, h: 0 };
   });
 
+  // Coins are --coins-size across (per breakpoint, on .tools-stage); if the row is wider than the stage, it shrinks to fit.
   const resize = () => {
     const w = stage.clientWidth, h = stage.clientHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     const half = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
     const rowW = (names.length - 1) * GAP + 3.6; // room for an end coin to grow on hover inside the frame
-    camera.position.z = Math.max(rowW / 2 / (half * camera.aspect), 1.3 / half);
+    const viewH = (h * 2 * R) / num("--coins-size");
+    camera.position.z = Math.max(rowW / 2 / (half * camera.aspect), viewH / 2 / half);
     camera.updateProjectionMatrix();
   };
   const ro = new ResizeObserver(resize);
@@ -214,6 +244,7 @@ export function mountCoins(stage: HTMLElement, canvas: HTMLCanvasElement, labels
   const fine = matchMedia("(pointer: fine)").matches;
   // Hover (tap on touch): raycast to the coin under the pointer.
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  ray.layers.enableAll();
   let hover = -1;
   const pick = (e: PointerEvent) => {
     const r = stage.getBoundingClientRect();
@@ -264,13 +295,20 @@ export function mountCoins(stage: HTMLElement, canvas: HTMLCanvasElement, labels
       c.holder.updateMatrixWorld();
       const label = labels[i];
       if (label) {
-        v.set(0, -1.28, 0).applyMatrix4(c.holder.matrixWorld).project(camera);
+        v.set(0, i % 2 ? -1.62 : -1.28, 0).applyMatrix4(c.holder.matrixWorld).project(camera); // alternate rows so long names never collide
         label.style.translate = `${(v.x * 0.5 + 0.5) * stage.clientWidth}px ${(-v.y * 0.5 + 0.5) * stage.clientHeight}px`;
         label.toggleAttribute("data-on", t >= 0.7);
         label.toggleAttribute("data-hover", c.h > 0.5);
       }
     });
-    renderer.render(scene, camera);
+    // Painter's order: each coin draws whole over the ones behind it, so neighbours that cross in 3D never show
+    // one coin's edge through another's face.
+    renderer.clear();
+    for (const i of coins.map((c, i) => i).sort((a, b) => coins[a].holder.position.z - coins[b].holder.position.z)) {
+      camera.layers.set(i + 1);
+      renderer.clearDepth();
+      renderer.render(scene, camera);
+    }
     if (visible) raf = requestAnimationFrame(frame);
   }
   raf = requestAnimationFrame(frame);

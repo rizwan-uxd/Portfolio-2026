@@ -335,7 +335,7 @@ export const aiProjectsSection = {
 export const toolsSection = {
   heading: ["AI is part of how I", "design & build,", "every day."], // 2nd phrase muted
   intro: "Not a novelty — a daily practice. These are the tools I reach for to move from a rough idea to a shipped, working product.",
-  tools: ["Claude", "Figma", "Cursor", "Supabase", "Vercel", "OpenAI", "GitHub", "Tailwind"] as const,
+  tools: ["Claude", "Figma", "Cursor", "Supabase", "Vercel", "OpenAI", "GitHub", "Tailwind", "Adobe", "Notion", "Slack", "Miro", "SurveyMonkey", "ProtoPie"] as const, // last six added by the owner, 2026-11-03
 };
 
 export const testimonialsSection = {

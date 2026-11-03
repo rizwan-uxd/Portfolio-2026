@@ -45,7 +45,7 @@ export function ToolCoins() {
 
   return (
     <div ref={root} className="tools-coins pb-12 lg:pb-16">
-      <ul className="tools-fallback grid grid-cols-4 gap-x-2 gap-y-4 px-4 md:grid-cols-8 lg:gap-4 lg:px-12">
+      <ul className="tools-fallback grid grid-cols-4 gap-x-2 gap-y-4 px-4 md:grid-cols-7 lg:gap-4 lg:px-12">
         {toolsSection.tools.map((name) => (
           <li key={name} className="flex flex-col items-center gap-2">
             <span className="flex aspect-square w-full items-center justify-center rounded-lg border border-hairline bg-card text-foreground">

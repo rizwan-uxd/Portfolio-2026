@@ -186,10 +186,13 @@
   --tools-intro-w: 560px;        /* desktop: the intro wraps to two lines under the heading */
   /* Tools I build with: 3D coin row (components/ToolCoins.tsx, components/tool-coins/scene.ts; owner 2026-11-03, after Revolut) */
   --coins-load-margin: 600px;    /* three.js starts loading this far before the section reaches the viewport */
-  --coins-stage-h-sm: 260px;
-  --coins-stage-w-sm: 760px;     /* phone: the row keeps this width and scrolls sideways */
-  --coins-stage-h-md: 300px;     /* from md the row fits the width */
-  --coins-stage-h: 380px;
+  --coins-size-sm: 56px;         /* coin diameter: half the first build (owner, 2026-11-03) */
+  --coins-size-md: 64px;
+  --coins-size-lg: 88px;
+  --coins-stage-h-sm: 150px;
+  --coins-stage-w-sm: 600px;     /* phone: the row keeps this width and scrolls sideways */
+  --coins-stage-h-md: 160px;     /* from md the row fits the width */
+  --coins-stage-h: 200px;
   --coins-spin: 1100;            /* ms per coin, spin in from edge-on */
   --coins-stagger: 90;           /* ms between coins */
   --coins-hover: 70;             /* ms time constant of the hover ease, settles in about 300ms */
@@ -203,7 +206,17 @@
   --tool-claude: #d97757;
   --tool-supabase: #3ecf8e;
   --tool-tailwind: #38bdf8;
-  --tool-mono: #111111;          /* Cursor, Vercel, OpenAI, GitHub: black marks */
+  --tool-adobe: #ff0000;
+  --tool-miro: #ffd02f;          /* Miro's yellow, on its mark */
+  --tool-surveymonkey: #00bf6f;
+  --tool-slack-red: #e01e5a;
+  --tool-slack-blue: #36c5f0;
+  --tool-slack-green: #2eb67d;
+  --tool-slack-yellow: #ecb22e;
+  --tool-protopie-1: #fa5650;    /* front shield; colours sampled from ProtoPie's favicon */
+  --tool-protopie-2: #ff9a8a;
+  --tool-protopie-3: #ffd6cf;
+  --tool-mono: #111111;          /* Cursor, Vercel, OpenAI, GitHub, Notion: black marks */
   --tool-figma-red: #f24e1e;
   --tool-figma-coral: #ff7262;
   --tool-figma-purple: #a259ff;
@@ -1009,7 +1022,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 /* Coin row: the tile row shows until three.js has loaded (data-live); without JS or WebGL it stays. */
 .tools-coins:not([data-live]) .tools-stage-scroll, .tools-coins[data-live] .tools-fallback { display: none; }
 .tools-stage-scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
-.tools-stage { position: relative; width: var(--coins-stage-w-sm); height: var(--coins-stage-h-sm); touch-action: pan-x pan-y; @variant md { width: 100%; height: var(--coins-stage-h-md); } @variant lg { height: var(--coins-stage-h); } }
+.tools-stage { --coins-size: var(--coins-size-sm); position: relative; width: var(--coins-stage-w-sm); height: var(--coins-stage-h-sm); touch-action: pan-x pan-y; @variant md { --coins-size: var(--coins-size-md); width: 100%; height: var(--coins-stage-h-md); } @variant lg { --coins-size: var(--coins-size-lg); height: var(--coins-stage-h); } }
 .tools-coin-label { position: absolute; top: 0; left: 0; transform: translateX(-50%); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 300ms ease, color 300ms ease; }
 .tools-coin-label[data-on] { opacity: 1; }
 .tools-coin-label[data-hover] { color: var(--foreground); }
