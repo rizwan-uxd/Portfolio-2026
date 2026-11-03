@@ -33,7 +33,7 @@ const BRAND_VAR: Record<string, string> = {
 };
 
 const R = 1, H = 0.085, FACE = 0.93, BEVEL = 0.022, REEDS = 160;
-const GAP = 1.32;
+const GAP = 1.6; // coin centres, in coin radii: a light overlap (owner asked for more space, 2026-11-03)
 const ANGLES = [0.5, -0.62, 0.36, -0.55, 0.55, -0.36, 0.62, -0.5]; // alternate so neighbours tuck behind each other; repeats
 const DEPTH = [0.2, -0.3, 0.4, -0.1, 0.0, 0.35, -0.25, 0.15];
 const TEX = 1024;
@@ -218,10 +218,21 @@ export function mountCoins(stage: HTMLElement, canvas: HTMLCanvasElement, labels
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     const half = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
-    const rowW = (names.length - 1) * GAP + 3.6; // room for an end coin to grow on hover inside the frame
+    // The row starts at the content's left edge (--coins-pad, the section's side padding), left aligned with the heading.
+    const pad = num("--coins-pad");
+    const rowW = (names.length - 1) * GAP + 2 * R + 0.6; // 0.6: room for the last coin to grow on hover
     const viewH = (h * 2 * R) / num("--coins-size");
-    camera.position.z = Math.max(rowW / 2 / (half * camera.aspect), viewH / 2 / half);
+    const fitW = rowW / ((1 - (2 * pad) / w) * 2 * half * camera.aspect); // shrink if the row is wider than the content
+    camera.position.z = Math.max(fitW, viewH / 2 / half);
+    const halfW = half * camera.aspect * camera.position.z, unitsPerPx = (2 * halfW) / w;
+    camera.position.x = -((names.length - 1) / 2) * GAP - R + halfW - pad * unitsPerPx;
     camera.updateProjectionMatrix();
+    camera.updateMatrixWorld();
+    // Perspective pushes the first coin's rim a few px past that line (it is angled and nearer the camera); nudge it back.
+    const first = coins[0];
+    v.set(first.holder.position.x - R * Math.cos(first.base), 0.15, first.z + R * Math.sin(first.base)).project(camera);
+    camera.position.x += ((v.x * 0.5 + 0.5) * w - pad) * unitsPerPx;
+    camera.updateMatrixWorld();
   };
   const ro = new ResizeObserver(resize);
   ro.observe(stage);
