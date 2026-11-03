@@ -11,7 +11,7 @@ export function Tools() {
         </h2>
         <p className="text-muted-foreground lg:w-full lg:max-w-intro">{toolsSection.intro}</p>
       </div>
-      <ul className="grid grid-cols-5 gap-x-2 gap-y-4 px-4 md:grid-cols-10 pb-12 lg:grid-cols-10 lg:gap-4 lg:px-12 lg:pb-16">
+      <ul className="grid grid-cols-4 gap-x-2 gap-y-4 px-4 pb-12 md:grid-cols-8 lg:gap-4 lg:px-12 lg:pb-16">
         {toolsSection.tools.map((name) => (
           <li key={name} className="flex flex-col items-center gap-2">
             <span className="flex aspect-square w-full items-center justify-center rounded-lg border border-hairline bg-card text-foreground">
