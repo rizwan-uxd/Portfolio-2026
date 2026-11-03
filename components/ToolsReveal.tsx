@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 
-// Plays the Tools section's entrance once (animations.md). Each [data-reveal] group (heading, tile row) starts when it is itself in view,
-// so the tiles don't finish below the fold. The hidden start state only applies after data-ready, so without JS the section shows at rest.
+// Plays the Tools section's heading entrance once (animations.md); the coin row has its own spin-in (components/ToolCoins.tsx).
+// The hidden start state only applies after data-ready, so without JS the section shows at rest.
 export function ToolsReveal({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {

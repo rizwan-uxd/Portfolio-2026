@@ -182,12 +182,33 @@
   --tools-head-blur: 4px;
   --tools-intro: 300ms;
   --tools-intro-at: 120ms;
-  --tools-tile: 300ms;
-  --tools-tile-at: 100ms;
-  --tools-tile-stagger: 40ms;
-  --tools-tile-y: 8px;
-  --tools-tile-scale: 0.95;
   --tools-reduced: 200ms;        /* reduced motion: opacity only */
+  --tools-intro-w: 560px;        /* desktop: the intro wraps to two lines under the heading */
+  /* Tools I build with: 3D coin row (components/ToolCoins.tsx, components/tool-coins/scene.ts; owner 2026-11-03, after Revolut) */
+  --coins-load-margin: 600px;    /* three.js starts loading this far before the section reaches the viewport */
+  --coins-stage-h-sm: 260px;
+  --coins-stage-w-sm: 760px;     /* phone: the row keeps this width and scrolls sideways */
+  --coins-stage-h-md: 300px;     /* from md the row fits the width */
+  --coins-stage-h: 380px;
+  --coins-spin: 1100;            /* ms per coin, spin in from edge-on */
+  --coins-stagger: 90;           /* ms between coins */
+  --coins-hover: 70;             /* ms time constant of the hover ease, settles in about 300ms */
+  --coin-room: #2b2c2f;          /* studio walls the metal reflects */
+  --coin-silver: #d9dbde;        /* satin face */
+  --coin-engrave: #a4a7ac;       /* engraved logo floor */
+  --coin-reed: #c9ccd0;          /* milled edge */
+  --coin-bevel: #e4e6e9;         /* polished bevel */
+  --coin-ring: var(--brand);
+  /* Brand colours, shown only on a hovered coin (owner's exception to lime as the only accent, 2026-11-03) */
+  --tool-claude: #d97757;
+  --tool-supabase: #3ecf8e;
+  --tool-tailwind: #38bdf8;
+  --tool-mono: #111111;          /* Cursor, Vercel, OpenAI, GitHub: black marks */
+  --tool-figma-red: #f24e1e;
+  --tool-figma-coral: #ff7262;
+  --tool-figma-purple: #a259ff;
+  --tool-figma-blue: #1abcfe;
+  --tool-figma-green: #0acf83;
   /* Selected works project blocks (components/WorksList.tsx, owner 2026-11-01, layout after poulo.site) */
   --works-media-col: 1.25fr;     /* media card : story card, about 55/45 */
   --works-media-glow: 10%;       /* brand tint of the glow behind each preview */
@@ -391,6 +412,7 @@
   --spacing-nav: var(--nav-gap);
   --spacing-nav-link: var(--nav-link-gap);
   --container-intro: var(--intro-w);
+  --container-tools-intro: var(--tools-intro-w);
   --spacing-work-screen-sm: var(--screen-h-sm);
   --spacing-work-screen: var(--screen-h);
   --spacing-visual: var(--visual-h);
@@ -978,11 +1000,16 @@ body { background: var(--background); color: var(--foreground); font-family: var
 /* Tools I build with entrance (components/Tools.tsx, ToolsReveal.tsx; animations.md) */
 .tools[data-ready] .tools-head { transition: opacity var(--tools-head) var(--tools-ease), translate var(--tools-head) var(--tools-ease), filter var(--tools-head) var(--tools-ease); transition-delay: calc(var(--i) * var(--tools-head-stagger)); }
 .tools[data-ready] .tools-intro { transition: opacity var(--tools-intro) var(--tools-ease) var(--tools-intro-at); }
-.tools[data-ready] .tools-tile { transition: opacity var(--tools-tile) var(--tools-ease), translate var(--tools-tile) var(--tools-ease), scale var(--tools-tile) var(--tools-ease); transition-delay: calc(var(--tools-tile-at) + var(--i) * var(--tools-tile-stagger)); }
-.tools[data-ready] [data-reveal]:not([data-in]) :is(.tools-head, .tools-intro, .tools-tile) { opacity: 0; }
+.tools[data-ready] [data-reveal]:not([data-in]) :is(.tools-head, .tools-intro) { opacity: 0; }
 .tools[data-ready] [data-reveal]:not([data-in]) .tools-head { translate: 0 var(--tools-head-y); filter: blur(var(--tools-head-blur)); }
-.tools[data-ready] [data-reveal]:not([data-in]) .tools-tile { translate: 0 var(--tools-tile-y); scale: var(--tools-tile-scale); }
 @media (prefers-reduced-motion: reduce) {
-  .tools[data-ready] :is(.tools-head, .tools-intro, .tools-tile) { transition: opacity var(--tools-reduced) ease; transition-delay: 0ms; }
-  .tools[data-ready] [data-reveal]:not([data-in]) :is(.tools-head, .tools-tile) { translate: none; scale: none; filter: none; }
+  .tools[data-ready] :is(.tools-head, .tools-intro) { transition: opacity var(--tools-reduced) ease; transition-delay: 0ms; }
+  .tools[data-ready] [data-reveal]:not([data-in]) .tools-head { translate: none; filter: none; }
 }
+/* Coin row: the tile row shows until three.js has loaded (data-live); without JS or WebGL it stays. */
+.tools-coins:not([data-live]) .tools-stage-scroll, .tools-coins[data-live] .tools-fallback { display: none; }
+.tools-stage-scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+.tools-stage { position: relative; width: var(--coins-stage-w-sm); height: var(--coins-stage-h-sm); touch-action: pan-x pan-y; @variant md { width: 100%; height: var(--coins-stage-h-md); } @variant lg { height: var(--coins-stage-h); } }
+.tools-coin-label { position: absolute; top: 0; left: 0; transform: translateX(-50%); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 300ms ease, color 300ms ease; }
+.tools-coin-label[data-on] { opacity: 1; }
+.tools-coin-label[data-hover] { color: var(--foreground); }

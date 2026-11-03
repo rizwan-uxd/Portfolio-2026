@@ -103,17 +103,15 @@ Interactions from sankar.work, look from poulo.site's graph (owner's screenshot)
 - Rendering pauses off screen and in a hidden tab.
 - Replaces the glowing wire shell from the owner's two sphere images (2026-10-31), which the owner moved on from.
 
-## Tools I build with entrance (owner, 2026-11-03)
-Plan built with the emil-design-eng skill; HyperFrames is not installed and renders video, so it was not used. `components/Tools.tsx`, `components/ToolsReveal.tsx`, `--tools-*` and `.tools-*` in `app/tokens.css`.
-- Plays once per group: the heading block and the tile row each start when their top is 20% of the viewport inside the bottom (`--tools-reveal-margin`), so the tiles play where they can be seen (fixed 2026-11-03: a single trigger at the section top finished the tiles below the fold at 1440x900). No replay, no scroll scrubbing. CSS transitions started by one IntersectionObserver.
-- Heading: the three phrases each fade in, rise 12px and unblur from 4px over 400ms, 60ms apart.
-- Intro: opacity only, 300ms, starts at 120ms.
-- Tiles: fade in, rise 8px and scale from 95% over 300ms, 100ms after the row enters, 40ms apart in reading order. Labels move with their tile. Settled at about 0.8s.
-- Easing: `cubic-bezier(0.23, 1, 0.32, 1)`. Only opacity, translate, scale and a small blur animate.
-- Reduced motion: a 200ms opacity fade, no movement, scale or blur.
-- Without JS the section shows at rest: the hidden state needs `data-ready`, set by the script.
-- No hover (not designed).
-- Side effect: the heading phrases are inline blocks, so on phone "every day." now wraps as one unit onto its own line.
+## Tools I build with (owner, 2026-11-03)
+`components/Tools.tsx`, `components/ToolsReveal.tsx`, `components/ToolCoins.tsx`, `components/tool-coins/scene.ts`; `--tools-*`, `--coins-*` and `.tools-*` in `app/tokens.css`.
+- Heading entrance, unchanged from the first pass (emil-design-eng): plays once when the heading is 20% inside the viewport (`--tools-reveal-margin`). The three phrases each fade in, rise 12px and unblur from 4px over 400ms, 60ms apart; the intro fades in over 300ms from 120ms. `cubic-bezier(0.23, 1, 0.32, 1)`. Reduced motion: a 200ms opacity fade. Without JS it shows at rest.
+- The tile entrance is gone: the tiles were replaced by 3D coins (owner chose live three.js coins after a mockup, 2026-11-03).
+- Loading: three.js is imported only when the section is within `--coins-load-margin` (600px) of the viewport. Until then, and without JS or WebGL, the static tile row shows. The render loop runs only while the coin row is on screen.
+- Spin-in, once, when 40% of the row is visible: each coin turns from edge-on (270deg past its resting angle), rises 0.6 units and grows from 85%, over 1100ms (`--coins-spin`), 90ms apart (`--coins-stagger`), ease-out quart. Labels fade in at 70% of their coin's spin.
+- Cursor tilt (fine pointers): the row leans up to about 10deg toward the pointer, eased.
+- Hover (tap on touch, tap again to release): the coin under the pointer (raycast) turns to face the viewer, comes forward over its neighbours, grows 8%, and its logo fades to the tool's brand colours; its label brightens. Eases in and out in about 300ms (`--coins-hover`, exponential). Brand colours are the owner's exception to lime as the only accent.
+- Reduced motion: coins render at rest, no spin and no tilt; hover changes the colour only.
 
 ## Not decided (ask before building)
 - Hero dot-matrix / ASCII background motion.
