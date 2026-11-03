@@ -38,5 +38,7 @@ Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variab
 
 - CTA buttons (owner, 2026-11-01): every CTA ends in a round badge with a dotted arrow (`components/DottedArrow.tsx`, after the "Learn more" button on poulo.site), replacing the arrow glyph. Up-right opens a page or another site, right moves forward. Lime buttons get a dark badge with lime dots; hairline buttons a lime badge with dark dots. Buttons without an arrow (Reset, Done, Trace) stay as they are.
 
+- Tools I build with (owner, 2026-11-03): new section directly after AI projects and before What I can do. Supersedes the owner's earlier "Do not add a tool-logo section" (the AI projects entry in components.md says "no tool-logo row"); that rule no longer applies to this section. Copy from the owner's reference image; tiles use the site's own card treatment (hairline border, `bg-card`, radius lg) instead of the reference's cream tiles, logos monochrome in `--foreground`, so lime stays the only accent. One row of 10 from `md` (768) up, two rows of 5 below. No section fade-in (the site has none) and no hover state.
+
 ## Not designed (ask first)
 Hover/focus/pressed states, menu sheet (mobile nav), tablet layouts, light theme, AI projects section, About + stats, hero dot-matrix background.

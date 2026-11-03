@@ -331,6 +331,13 @@ export const aiProjectsSection = {
   ],
 };
 
+// Copy from the owner's reference image (2026-11-03). Logos are in components/ToolLogos.tsx, keyed by these names.
+export const toolsSection = {
+  heading: ["AI is part of how I", "design & build,", "every day."], // 2nd phrase muted
+  intro: "Not a novelty — a daily practice. These are the tools I reach for to move from a rough idea to a shipped, working product.",
+  tools: ["Claude", "Figma", "Cursor", "Supabase", "Vercel", "OpenAI", "Meta", "Grok", "GitHub", "Tailwind"] as const,
+};
+
 export const testimonialsSection = {
   eyebrow: "Testimonials",
   heading: ["What clients", "say about me."], // 2nd line muted

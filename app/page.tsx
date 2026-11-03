@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { Brands } from "@/components/Brands";
 import { Works } from "@/components/Works";
 import { AiProjects } from "@/components/AiProjects";
+import { Tools } from "@/components/Tools";
 import { Services } from "@/components/Services";
 import { Graph } from "@/components/Graph";
 import { Testimonials } from "@/components/Testimonials";
@@ -28,6 +29,7 @@ export default function Home() {
           <div aria-hidden data-twin-reveal-after />
           <Brands />
           <AiProjects />
+          <Tools />
           <Services />
           <Graph />
           <Testimonials />
