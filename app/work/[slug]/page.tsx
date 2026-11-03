@@ -4,6 +4,7 @@ import { CaseStudy } from "@/components/CaseStudy";
 import { Contact } from "@/components/Contact";
 import { Frame } from "@/components/Frame";
 import { Header } from "@/components/Header";
+import { ScrollTop } from "@/components/ScrollTop";
 import { caseStudies, getCaseStudy } from "@/lib/case-studies";
 import { person } from "@/lib/content";
 
@@ -33,6 +34,7 @@ export default async function CaseStudyPage({ params }: Props) {
           <Contact />
         </Frame>
       </main>
+      <ScrollTop bar={false} />
     </>
   );
 }

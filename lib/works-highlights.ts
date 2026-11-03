@@ -14,7 +14,7 @@ export const workHighlights: Record<string, Highlight[]> = {
   "dubainow-mobile-app": [
     { icon: "component", label: "Design System Approach", body: "Reusable components to establish consistency in all services." },
     { icon: "users", label: "Design Workshop", body: "A week-long collaborative design workshop and user testing established a unified visual style and brand identity for the app." },
-    { icon: "timer", label: "Reduced development and design effort", body: "The delivery cycle for a mid sized service went from an average of 1 month to 8 days." },
+    { icon: "timer", label: "57 services in a year", body: "28 new and 29 enhanced services shipped on the design system within a year, with CSAT at 70%." },
   ],
   "secure-communication-app": [
     { icon: "search", label: "Competitor analysis", body: "Defined primary features to build through secondary research & competitor analysis." },

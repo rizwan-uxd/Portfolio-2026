@@ -37,6 +37,7 @@ Rule: respect `prefers-reduced-motion` for everything below.
 - Selected works project blocks (owner, 2026-11-01, layout after poulo.site/#work; supersedes the 2026-10-31 pinned list after pleurat.com/work). `components/WorksList.tsx`, `.works-media`, `.works-square`, `.works-fig` in `app/tokens.css`:
   - No pinning, no project switching and no filters (owner, 2026-11-01): the four projects stack and scroll with the page.
   - Each card (media, story, the four squares) reveals once as it enters: fade over 800ms, rise 56px and unclip from 16% at the top over 1250ms.
+  - Hover (owner, 2026-11-03, values from poulo.site's work cards, pointer devices only): every tile lifts 4px, its border brightens to foreground at 36% and a soft shadow shows, 300ms `cubic-bezier(0, 0, 0.2, 1)`. The four squares also darken from card to page background, and their icon tilts -6deg, grows to 110% and turns white. Media and story cards don't change fill: it would wash out the preview glow and merge with the story card's inner panel. The lift uses `transform` because `translate` carries the reveal. Reduced motion: colours only.
   - Reduced motion: no reveal.
 - Logo R draw (owner, 2026-10-30, Figma `3:39` motion): plays once on load. The R channel starts filled by a thick lime stroke, which retracts along the letter from the stem foot to the leg tip, revealing the R as a drawn line. Figma timeline: 2s, stroke retracts 0.15s to 1.35s linear, then hidden. We play it once instead of looping. Only the full-bleed header animates; the floating bar shows the end state. Reduced motion: end state, no animation.
 - Linkedin button (owner, 2026-10-30):
@@ -114,9 +115,44 @@ Interactions from sankar.work, look from poulo.site's graph (owner's screenshot)
 - Reduced motion: coins render at rest, no spin and no tilt; hover changes the colour only.
 - Drawing order: each coin is drawn whole, back to front by depth (one layer per coin, depth cleared between them), so coins that cross in 3D never show one coin's milled edge through another's face (owner reported it on Supabase, 2026-11-03). The hovered coin, moved forward, draws last.
 
+## Section reveals (owner, 2026-11-03)
+From the "Scroll fade-in opportunities" review; the owner asked for every opportunity in it. `components/ScrollReveal.tsx` (mounted once in `app/page.tsx`), `--rise-*` and `.rise-*` in `app/tokens.css`.
+- One shared reveal instead of a different entrance per section. Hero, Selected works and Tools keep their own and are not touched.
+- Trigger: a `[data-rise]` group plays once when its top is 35% inside the viewport bottom (`--rise-margin`; owner, 2026-11-03: at 20% the reveals played unseen). The Selected works cards use the same point (was 8%). The observer is open at the top, so jumping past a group still plays it. Nothing animates below the fold. Without JS everything shows at rest.
+- Headings (`.rise-head`): fade, rise 28px and unblur from 8px over 700ms, 100ms apart, `cubic-bezier(0.23, 1, 0.32, 1)` (owner, 2026-11-03: the Tools heading values, 12px over 400ms, were too subtle here). Below `lg:` the heading lines stay inline so they wrap as before, so there they only fade and unblur.
+- Cards and blocks (`.rise-card`): fade over 800ms and rise 64px over 1000ms, 120ms apart.
+- `.rise-fade`: opacity over 900ms. `.rise-work`: the Works card reveal (fade 800ms, rise 56px, unclip from 16% over 1250ms).
+- Brands: title, then the panel fades (opacity only, so the arc doesn't move).
+- AI projects: eyebrow, heading, note; then the two cards with the Works card reveal, so both project lists arrive the same way.
+- What I can do: heading lines and intro; then each box reveals as it enters (title, description, diagram), the right box of a row 90ms after the left. The hairline grid stays put.
+- Knowledge graph: eyebrow, heading and buttons, then the search and filter block (240ms), then the stage (360ms). One group for the section, so switching to Timeline and back doesn't hide the controls.
+- Testimonials: eyebrow, heading, intro; then the three cards. The reveal moves the still tilt stage, because the tilt owns the card's `transform`.
+- Contact: label, heading, CTA and "Connect with me"; then the email and phone rows (from 240ms).
+- Reduced motion: a 200ms opacity fade only.
+
+## Lanyard drop (owner, 2026-11-03)
+The page's one focal reveal. `components/Lanyard.tsx` (`DROP_AT`, `DROP_PUSH`).
+- Until Contact is in view the card is pulled up to the clip with the rope gathered. When 35% of the card stage is in view it falls on the existing rope physics, with a small sideways push (3px per frame), swings and settles in about 1.5s. Grabbing the card before then drops it too.
+- Reduced motion: it already hangs at rest, unchanged.
+
 ## Not decided (ask before building)
 - Hero dot-matrix / ASCII background motion.
-- Scroll reveals and section entrance animations.
 - Hover/focus/pressed states for everything except the header Linkedin button and nav links.
 - Mobile menu sheet open/close.
 - Testimonials carousel motion on mobile.
+
+## Complex Interaction Design: request on wires (owner, 2026-11-03)
+- The request dot no longer jumps between planes. It travels along drawn wires at y 3.5, like the other service diagrams: out of the data plane, across to the reviewers' link, up and down that link to each reviewer, back to the link, then on to the status. Short base-plate wires bridge the gaps between planes. Timings and the plane lifts are unchanged; the keyframes are in `iso-review-request`.
+
+## Footer wordmark (owner, 2026-11-03)
+
+Approved compact “Rizwan” halftone treatment inspired by the 21st.dev Halftone Wordmark Footer. Original canvas implementation samples the site's Geist text into lime dots. Gentle local pointer displacement with damped spring return; no click ripple or continuous ambient animation. Reduced motion renders still dots, including live preference changes. Drawing stops when settled, offscreen or the tab is hidden; observers and events are cleaned up. CSS dotted-text fallback remains before fonts/canvas are ready and without JavaScript. Touch keeps the still wordmark and normal scrolling.
+
+- Footer refinement (owner, 2026-11-03): On touch devices, a gentle 1.8-second wave travels through the halftone dots when at least 35% of the wordmark enters view, then settles. Replays on re-entry; no touch handlers or scroll interception. Desktop retains pointer interaction. Reduced motion disables the wave; leaving view or hiding the tab cancels it.
+
+## CTA hover (owner, 2026-11-03)
+
+- Every link or button that holds a `DottedArrow`, on pointer hover and keyboard focus: the arrow's dots light up from tail to head in a loop (opacity 0.3 to 1, 900ms per loop, 90ms between dots) for as long as it is hovered, and the circle grows to 108% (300ms `cubic-bezier(0.22, 1, 0.36, 1)`). Lime buttons also get a soft lime glow (300ms). Owner's final pick: the dot wave with the glow, over a dot run, a circle fill, a nudge and a sheen sweep.
+- Only the shadow changes on the button itself, because its transform and opacity belong to the reveal animations.
+- Touch screens: nothing (hover only). Reduced motion: no wave; the circle grows instantly and the glow stays.
+- Code: `components/DottedArrow.tsx` gives each dot its place in the wave; the CSS is the CTA hover block in `app/globals.css`.

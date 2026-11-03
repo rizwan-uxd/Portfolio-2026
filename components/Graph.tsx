@@ -241,27 +241,24 @@ export function Graph() {
   const toggleClass = (on: boolean) => `label flex-1 rounded-[var(--radius-sm)] px-3 py-2 text-center lg:px-4 ${on ? "bg-secondary text-foreground" : "text-muted-foreground"}`;
 
   return (
-    <section id="graph" className="border-t border-hairline">
-      <div className="flex flex-col gap-4 px-4 pb-6 pt-12 lg:flex-row lg:items-end lg:justify-between lg:px-12 lg:pb-12 lg:pt-16">
-        <div className="flex flex-col gap-4">
-          <p className="micro text-brand lg:hidden">{graphSection.eyebrowMobile}</p>
-          <p className="micro hidden text-brand lg:block">{graphSection.eyebrow}</p>
-          <Heading lines={graphSection.heading} />
-        </div>
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+    // One reveal group: heading lines, then the controls, then the stage (animations.md, section reveals)
+    <section id="graph" data-rise className="border-t border-hairline">
+      <div className="flex flex-col gap-4 px-4 pb-8 pt-12 lg:flex-row lg:items-end lg:justify-between lg:px-12 lg:pb-12 lg:pt-16">
+        <Heading lines={graphSection.heading} />
+        <div className="rise-head flex flex-col gap-3 lg:flex-row lg:items-center" style={{ "--i": 2 } as React.CSSProperties}>
           <div role="group" aria-label={graphSection.viewLabel} className="flex h-12 rounded-btn border border-hairline p-1">
             <button type="button" aria-pressed={mode === "graph"} onClick={() => setMode("graph")} className={toggleClass(mode === "graph")}>Graph</button>
             <button type="button" aria-pressed={mode === "timeline"} onClick={() => { setMode("timeline"); setTourStep(null); }} className={toggleClass(mode === "timeline")}>Timeline</button>
           </div>
           <div className="flex gap-3">
-            <button type="button" onClick={() => goToStep(0)} className="label flex h-12 flex-1 items-center justify-center gap-3 rounded-btn bg-brand pl-6 pr-2 text-brand-foreground lg:flex-none">Take the tour <DottedArrow direction="right" /></button>
+            <button type="button" onClick={() => goToStep(0)} className="label label-cta flex h-12 flex-1 items-center justify-center gap-3 rounded-btn bg-brand pl-6 pr-2 text-brand-foreground lg:flex-none">Take the tour <DottedArrow direction="right" /></button>
             <button type="button" onClick={reset} className="label h-12 flex-1 rounded-btn border border-hairline px-6 lg:flex-none">Reset</button>
           </div>
         </div>
       </div>
 
       {mode === "graph" && (
-        <div className="flex flex-col gap-4 border-t border-hairline px-4 py-4 lg:px-8">
+        <div className="rise-fade flex flex-col gap-4 border-t border-hairline px-4 py-4 lg:px-8" style={{ "--rise-at": "240ms" } as React.CSSProperties}>
           {/* Search is the primary control: full width, first, and the tallest */}
           <div className="relative">
             <svg aria-hidden viewBox="0 0 16 16" className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground">
@@ -334,7 +331,7 @@ export function Graph() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 border-t border-hairline lg:grid-cols-[1fr_var(--graph-panel-w)]">
+      <div className="rise-fade grid grid-cols-1 border-t border-hairline lg:grid-cols-[1fr_var(--graph-panel-w)]" style={{ "--rise-at": "360ms" } as React.CSSProperties}>
         <div className="min-w-0">
           {mode === "timeline" && <Timeline selected={selected} onSelect={select} />}
           <div className={`relative aspect-square max-h-[var(--graph-stage-h)] w-full lg:aspect-auto lg:h-[var(--graph-stage-h)] ${mode === "graph" ? "" : "hidden"}`}>

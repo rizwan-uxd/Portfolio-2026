@@ -20,7 +20,7 @@ export type WorkIconName = keyof typeof icons;
 
 export function WorkIcon({ name }: { name: WorkIconName }) {
   return (
-    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="size-6 text-muted-foreground">
+    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="work-icon size-6 text-muted-foreground">
       {icons[name]}
     </svg>
   );

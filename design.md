@@ -1,5 +1,9 @@
 # Design decisions
 
+## Footer (owner, 2026-11-03)
+- Approved second visual: centered existing lime logo and Mohammed Rizwan, then LinkedIn / Behance / Dribbble with outlined circles and labels below, a quiet divider, compact lime halftone “Rizwan”, and small copyright at the bottom. No middle navigation links. Contact CTA and contact details above remain intact.
+- Social circles 56px desktop / 48px mobile, with 64px / 32px gaps. Wordmark capped at 700px, fully visible, scales to phone width. Existing Geist/Satoshi typography and charcoal/lime tokens. Profile URLs from `person`.
+
 Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variable_defs` if they differ). This file records how we use them.
 
 ## Tokens (summary, see tokens.css)
@@ -46,3 +50,13 @@ Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variab
 
 ## Not designed (ask first)
 Hover/focus/pressed states, menu sheet (mobile nav), tablet layouts, light theme, AI projects section, About + stats, hero dot-matrix background.
+
+## Type scale A and section headers (owner, 2026-11-03)
+- Scale A from the type audit: hero h1 64 / 40 (`.display .display-hero`), section h2 56 / 36 (`.display`), work titles 40 / 28 (`.headline`), title 32 / 24, subtitle 20 / 18, body 16, lime CTA text 14 (`.label .label-cta`), label 12, micro 11 with 0.12em tracking (was 9 and 0.18em). The works metric uses the headline size (was 44).
+- Section headers are one style: `.display`, no eyebrow, the same spacing (`pt-12 pb-8`, `lg:pt-16 lg:pb-12`, text at 16 / 48 from the frame edge). Applies to Selected works, Led impactful initiatives for, AI projects, What I can do for you, Career knowledge graph and Testimonials. The brands heading moved from `.subtitle` to `.display`, and its copy is now lower case after "Led", as the owner wrote it.
+- Work headers are one style, different from section headers: `.headline` on the Selected works titles and the AI project card titles (now h3).
+- Section descriptions sit under the heading, never beside it (owner, 2026-11-03): heading, then the intro at `--case-subtitle-w`, as in AI projects and Tools. Changed What I can do for you and Testimonials. What I can do for you widens to `--services-intro-w` (960) so its longer intro stays on two lines from lg. The graph keeps its controls on the right, since they are controls, not a description.
+- Both Calendly CTAs read "Book a meeting" (owner, 2026-11-03): the contact CTA (was "Let’s talk") and the hero CTA (was "Let's connect").
+- Not covered by this decision: the Tools and Contact headers keep their current treatment (Contact keeps its "Let's talk" eyebrow). Selected works stays centred for the globe transition.
+
+- Footer refinement (owner, 2026-11-03): Footer tightened after owner review: less vertical padding and smaller gaps; wordmark capped at 600px with a 4.3 aspect ratio. Mobile uses 32px top / 48px bottom padding; desktop 48px / 64px. Supersedes the earlier footer spacing.

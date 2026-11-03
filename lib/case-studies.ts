@@ -7,6 +7,8 @@ export type Figure = {
   src: string; w: number; h: number; alt: string; caption?: string;
   aspect?: string; // crops to this ratio; left out, the image shows whole
 };
+// A wireframe → UI pair, shown as a drag slider. Export both at the same frame size so they line up.
+export type Comparison = { title?: string; before: Figure; after: Figure; caption?: string; labels?: [string, string] }; // labels default to Wireframe / UI design
 export type Definition = {
   label?: string; body: string;
   highlight?: boolean; // brand label, foreground body (Figma's "Governance decision")
@@ -22,6 +24,7 @@ export type Section = {
   body?: Block[];
   steps?: { label: string; actor?: string; body: string }[];
   phones?: Figure[]; // a row of portrait screens
+  comparisons?: Comparison[]; // shown before figures
   figures?: Figure[];
 };
 export type CaseStudy = {
@@ -127,8 +130,20 @@ export const caseStudies: CaseStudy[] = [
             { label: "The Hajj operating cycle", body: "The same dashboard was designed to shift focus across pre, during and post Hajj: readiness before, live operations during, and learning after." },
           ],
         }],
+        comparisons: [
+          {
+            title: "New project entry",
+            before: { src: `${hajj}/compare/entry-wireframe.png`, w: 1241, h: 700, alt: "Wireframe of the data-entry platform's new project entry form, on the project info step." },
+            after: { src: `${hajj}/compare/entry-ui.png`, w: 1241, h: 700, alt: "Final UI of the new project entry form, on the project info step." },
+          },
+          {
+            title: "Mecca users review screen",
+            before: { src: `${hajj}/compare/review-wireframe.png`, w: 1194, h: 672, alt: "Wireframe of the Mecca review screen: the projects table with a project's details open in a side panel." },
+            after: { src: `${hajj}/compare/review-ui.png`, w: 1194, h: 672, alt: "Final UI of the Mecca review screen, with the project details panel and the approve and publish action." },
+            caption: "Data-entry platform: entry and review, wireframe to final UI.",
+          },
+        ],
         figures: [
-          { src: `${hajj}/states-board.png`, w: 2864, h: 1944, alt: "Data-entry platform wireframes for new project entry and the Mecca review screen, each next to the final UI design.", caption: "Data-entry platform: entry and review, wireframe to final UI." },
           { src: `${hajj}/phase-dashboards.png`, w: 2176, h: 816, alt: "The during-Hajj live operations dashboard next to the pre-Hajj readiness dashboard, showing the same surface with different priorities.", caption: "One dashboard, two phases of the cycle: live operations and readiness." },
         ],
       },
@@ -139,7 +154,19 @@ export const caseStudies: CaseStudy[] = [
           { type: "text", text: "The PowerPoint-and-meeting reporting process was replaced by a connected capture → validate → report → decide ecosystem, live for the 2026 Hajj season at MVP 3." },
           { type: "text", muted: true, text: "The change is qualitative and stated as such: leadership moved from periodic visibility that arrived with the next deck to continuous digital visibility of the same operation. No adoption, time-saving or performance figures were measured, so none are claimed." },
         ],
-        figures: [{ src: `${hajj}/delivered-ecosystem.png`, w: 3104, h: 1944, alt: "Wireframes for the CEO dashboard and the project-manager data-entry landing page, each alongside the delivered UI design.", caption: "Both surfaces, from wireframe to delivered interface." }],
+        comparisons: [
+          {
+            title: "CEO during dashboard",
+            before: { src: `${hajj}/compare/ceo-wireframe.png`, w: 1243, h: 779, alt: "Wireframe of the CEO dashboard: readiness index, project and maintenance summaries, site map, risks and safety reports." },
+            after: { src: `${hajj}/compare/ceo-ui.png`, w: 1243, h: 779, alt: "Delivered UI of the CEO dashboard, with the readiness index, projects at risk, site distribution and drill test countdown." },
+          },
+          {
+            title: "Data entry landing page, PM users",
+            before: { src: `${hajj}/compare/pm-wireframe.png`, w: 1261, h: 691, alt: "Wireframe of the project-manager data-entry landing page with the my projects table." },
+            after: { src: `${hajj}/compare/pm-ui.png`, w: 1261, h: 691, alt: "Delivered UI of the project-manager data-entry landing page with the my projects table." },
+            caption: "Both surfaces, from wireframe to delivered interface.",
+          },
+        ],
       },
     ],
     conclusion: { statement: ["The real transformation wasn’t the dashboard.", "It was changing how operational information moved through the organisation — from ground reality to leadership decision."] },
@@ -220,16 +247,19 @@ export const caseStudies: CaseStudy[] = [
     },
   },
   {
+    // Rebuilt 2026-11-03 from the owner's PDF portfolio (case study 03), the source of truth for every figure here, plus the
+    // owner's Behance projects "Dubainow Design system" and "Dubainow Report accident". The owner designed the system alone.
     slug: "dubainow-mobile-app",
     title: ["DubaiNow", "Mobile App"],
-    eyebrow: "Product design",
-    subtitle: "Redesigned a large-scale government mobile app, simplifying complex service journeys to improve usability and completion across key citizen interactions.",
-    summary: "Redesigned a large-scale government mobile app, simplifying complex service journeys to improve usability and completion across key citizen interactions.",
+    eyebrow: "Product design · Government sector",
+    subtitle: "A design system first, then 57 services built on it in a year",
+    summary: "Built the DubaiNow design system and used it to deliver 28 new and 29 enhanced government services in a year, lifting CSAT to 70%.",
+    tags: ["Government B2C", "115+ services", "Design system", "iOS + Android", "Paperless strategy"],
     meta: [
       { label: "Client", value: "Digital Dubai government" },
-      { label: "Year", value: "2019 – 2022" },
-      { label: "Role", value: "CX Designer" },
-      { label: "Services", value: "Mobile UX, Design system" },
+      { label: "Role", value: "Customer Experience Designer" },
+      { label: "Timeline", value: "Design system 4 months, services 8 months" },
+      { label: "Results", value: "57 services in a year, CSAT 70%" },
     ],
     // The artwork has far more empty margin above and below than at the sides, so the live site trims it to this ratio.
     hero: { src: `${dubai}/banner.png`, w: 2400, h: 1976, alt: "DubaiNow Mobile App", aspect: "2400 / 1300" },
@@ -237,60 +267,170 @@ export const caseStudies: CaseStudy[] = [
     sections: [
       {
         eyebrow: "Overview",
-        title: "Overview",
-        body: [{ type: "text", text: "DubaiNow app serves residents of Dubai with access to more than 120 government services. It’s a one stop shop for all government interactions. As a Customer Experience Designer, I optimize user experiences by analyzing app store feedback and designing innovative features for the DubaiNow app." }],
-        figures: [{ src: `${dubai}/detail-1.png`, w: 1600, h: 1200, alt: "DubaiNow Mobile App — process detail 1" }],
+        title: "One app for 115+ government services",
+        body: [
+          { type: "text", text: "DubaiNow is the only Dubai Government app for city services, giving residents access to 115+ government services, from bills and residency to police and driving. It is part of Dubai’s paperless strategy, which moves every government service into the app." },
+          { type: "text", muted: true, text: "As Customer Experience Designer I created the app’s design system, then designed services on it from concept to release and tracked how they performed." },
+        ],
+        figures: [{ src: `${dubai}/services-home.png`, w: 1792, h: 1146, alt: "The DubaiNow home screen with its service categories, next to the Police category with the Report Accident service.", caption: "115+ services, grouped by category." }],
       },
       {
         eyebrow: "The problem",
-        title: "The problem",
+        title: "Inconsistent services, and a paperless deadline",
         body: [
-          { type: "text", text: "DubaiNow, a flagship government initiative, was mandated by the Ruler of Dubai to eliminate paper processes (Paperless strategy). This involves digitizing all government services. As a result there was an added pressure to deliver services." },
+          { type: "text", text: "Users found the services inconsistent and confusing. Page flows changed from one service to the next, which frustrated people, raised drop-off and lowered satisfaction scores." },
           {
             type: "list",
             items: [
-              "Limited time: Identified 40 essential services for integration into the DubaiNow app within a demanding 6-month timeframe.",
-              "Branding change: This project encompassed not only the integration and enhancement of services, but also a complete branding and visual identity overhaul – all within a tight deadline.",
-              "Inconsistent experience: User feedback from app store reviews and usability studies, corroborated by Firebase analytics, indicated a high level of inconsistency within the DubaiNow app experience.",
+              "Components were only partly reusable, and developers working in silos gave them their own behaviours.",
+              "Developers had limited time to build reusable components, so new services kept reusing legacy designs.",
+              "The paperless strategy needed new services in the app within months, leaving little time for research.",
+            ],
+          },
+          {
+            type: "definitions",
+            items: [
+              { label: "Objective 1", body: "Reduce the drop-off rate by at least 30% within 6 months." },
+              { label: "Objective 2", body: "Redesign all 22 existing services on the new design system, to fix inconsistency and improve CSAT within 6 months." },
+              { label: "Objective 3", body: "Bring at least 20 new services into the app within 8 months, as part of the paperless strategy." },
             ],
           },
         ],
       },
       {
-        eyebrow: "Approach",
-        title: "Approach",
+        eyebrow: "Research",
+        title: "Analytics, app store feedback and personas",
+        body: [{
+          type: "definitions",
+          items: [
+            { label: "Stakeholder workshops", body: "To understand the requirements of the new services." },
+            { label: "Data analysis", body: "Firebase analytics on the previous app, to see how people used it and where they dropped off." },
+            { label: "Secondary research", body: "App store feedback, and CSAT scores with feedback from the customer experience team." },
+            { label: "Personas", body: "Built from the analytics and app store reviews, segmented by usage, to keep the target users in view." },
+            { label: "Competitor analysis", body: "Popular design systems, Apple’s Human Interface Guidelines and Material Design, since the app is native." },
+          ],
+        }],
+        figures: [{ src: `${dubai}/detail-1.png`, w: 1600, h: 1200, alt: "Persona profiling: a table of users segmented by usage, the Emirati father persona card, and his service usage from analytics.", caption: "Personas segmented by real usage data." }],
+      },
+      {
+        eyebrow: "Part 1 · The design system",
+        title: "A shared system before more services",
         body: [
-          { type: "text", text: "The approach strategized to tackle the above problems is below:" },
+          { type: "text", text: "A reusable design system gives every squad the same components, so users get one consistent experience across services. Designers spend less time per service, and developers reuse most of what they build." },
+          { type: "text", muted: true, text: "Brand workshops with stakeholders set the style as elegant, classy and modern. Typography is native, SF Pro on iOS and Roboto on Android, on an 8pt grid, with four icon families: category, microapp, microapp badge and contextual." },
+        ],
+        steps: [
+          { label: "Research & audit", body: "An inventory of existing components, reusable and not, and of the best design systems." },
+          { label: "Foundations", body: "Colour, type, scale, grid, icons and voice, defined from the new brand identity." },
+          { label: "Components", body: "Built the 20% of components that cover 80% of the UI first, then the rest." },
+          { label: "Documentation", body: "Behaviour, specs and Zeplin links in Confluence for the whole team." },
+        ],
+        figures: [{ src: `${dubai}/foundations.png`, w: 1400, h: 1090, alt: "The DubaiNow foundations: primary blue and greys, native iOS and Android type scales, and the 8pt grid.", caption: "Foundations: colour, native type and an 8pt grid." }],
+      },
+      {
+        eyebrow: "Testing the system",
+        title: "Paper cut-outs to learn how users group components",
+        body: [{
+          type: "list",
+          items: [
+            "Analysed the old app’s components to find which were used most, which set the system’s priorities.",
+            "Tested the designed components with users as paper cut-outs. They thought aloud as they sorted and used them.",
+            "Refactored the components on that feedback, then released them. Duplicates were removed and broken components fixed.",
+          ],
+        }],
+        figures: [{ src: `${dubai}/paper-testing.png`, w: 2960, h: 888, alt: "The first components in Figma, users sorting printed paper cut-outs of them, and the refactored component library.", caption: "From first components, to paper testing, to the released library." }],
+      },
+      {
+        eyebrow: "Adoption",
+        title: "A system the whole team uses",
+        body: [{
+          type: "definitions",
+          items: [
+            { label: "Education", body: "Weekly presentations to the whole team with success stories and challenges, followed by brainstorming. Team members helped name and explain components." },
+            { label: "Documentation", body: "An internal site in Confluence, where anyone can look up a component’s behaviour, specs, Zeplin links, constraints and best practice." },
+            { label: "Testing", body: "When developers finished a component, I ran an expert review of the built UI, then tested it again with users." },
+          ],
+        }],
+        figures: [
+          { src: `${dubai}/components.png`, w: 840, h: 788, alt: "Isometric view of the DubaiNow component library: inputs, alerts, cells, steppers and payment totals." },
+          { src: `${dubai}/documentation.png`, w: 700, h: 788, alt: "The design system documentation site showing a profile card component with its variants and code.", caption: "The component library, and its documentation." },
+        ],
+      },
+      {
+        eyebrow: "Part 2 · Services",
+        title: "Every service: requirement, service diagram, UI",
+        body: [{ type: "text", text: "Each service started with the government entity that owns it, and its requirement was sometimes a single line. I turned it into a service diagram, then designed the UI from system components. When a component was missing, I created it with its use cases and added it to the system through governance." }],
+        steps: [
+          { label: "Understand", actor: "Entity stakeholders", body: "Gather the requirement in a meeting with the government entity." },
+          { label: "Service diagram", body: "A flow diagram, as detailed as the service’s complexity needs." },
+          { label: "UI design", body: "Screens built from design system components, with new ones governed into the system." },
+        ],
+        figures: [{ src: `${dubai}/service-diagrams.png`, w: 2938, h: 900, alt: "Service diagrams: the full residency service flow by stage, the GDRFA reports flow, and the mobile contracts flow from sketch to wireframes.", caption: "Service diagrams for residency, GDRFA reports and mobile contracts." }],
+      },
+      {
+        eyebrow: "Service redesign",
+        title: "Get Residency, rebuilt on the system",
+        body: [{ type: "text", text: "The same steps, costs and fields, moved onto system components: step cards with a status and a start action, grouped form fields, and the standard header, Continue button and tab bar." }],
+        comparisons: [{
+          title: "Get Residency, before and after",
+          labels: ["Before", "After"],
+          before: { src: `${dubai}/residency-before.png`, w: 1600, h: 1040, alt: "The old Get Residency service: an orange-headed steps list, a sponsor form and a passport details form." },
+          after: { src: `${dubai}/residency-after.png`, w: 1600, h: 1040, alt: "The redesigned Get Residency service on the design system: step cards with cost and duration, application details and passport details." },
+          caption: "Residency category: the Get Residency service redesigned on the design system.",
+        }],
+      },
+      {
+        eyebrow: "Service in focus",
+        title: "Report Accident: a collision report without a station visit",
+        body: [
           {
             type: "definitions",
             items: [
-              { label: "Design System Approach", body: "The primary reason for adopting this approach was to leverage reusable components and establish consistency in all services." },
-              { label: "Design Workshop", body: "Through a week-long collaborative design workshop and subsequent user testing, we successfully established a unified visual style and brand identity for the app." },
-              { label: "Prioritization of components", body: "To accelerate service releases, we collaborated with developers in a workshop to identify and prioritize essential components. By pinpointing commonly used components and recognizing those missing from our library, we could expedite the design process and streamline future development efforts." },
+              { label: "Project goal", body: "A DubaiNow service to report a collision between vehicles." },
+              { label: "User goal", body: "Get an accident report to repair the car and claim the cost from insurance." },
+              { label: "Prerequisite", body: "Dubai residents and expats with UAE Pass access." },
             ],
           },
+          {
+            type: "list",
+            items: [
+              "The location is picked on the map first, so nobody types an address at the roadside.",
+              "At least two vehicles are involved, so the vehicle count starts at 2 and can’t go lower.",
+              "Saved vehicles and drivers come first, with manual entry and plate scan as fallbacks.",
+              "Each vehicle gets its own plate, driver and up to four damage photos.",
+              "Anyone unsure who is liable is sent to the nearest police station, not forced to guess.",
+            ],
+          },
+        ],
+        steps: [
+          { label: "Location & vehicles", body: "Pin the accident on the map and set the number of vehicles." },
+          { label: "Accident details", body: "Plate, driver and damage pictures for each vehicle." },
+          { label: "Liability", body: "Select who is liable, or go to the nearest police station." },
+          { label: "Report history", body: "Submit, then see the issued report from the report history." },
+        ],
+        figures: [
+          { src: `${dubai}/accident-location.png`, w: 1792, h: 640, alt: "The first step: the accident pinned on the map, and a stepper for the number of vehicles that starts at two." },
+          { src: `${dubai}/accident-details.png`, w: 1792, h: 1215, alt: "Accident details for each vehicle: plate from the user’s vehicle list, driver from their drivers list, and damage pictures." },
+          { src: `${dubai}/accident-liability.png`, w: 1792, h: 700, alt: "Selecting who is liable for the accident, then the submitted report in the report history.", caption: "Location, accident details, then liability and the report." },
         ],
       },
       {
         eyebrow: "Results",
-        title: "Results",
-        body: [
-          { type: "text", text: "The DubaiNow project yielded several positive results:" },
-          {
-            type: "definitions",
-            items: [
-              { label: "Consistent experience", body: "Implementing a design system with a unified visual identity resolved service inconsistencies, resulting in a decreased monthly churn rate for new services, as tracked by Firebase analytics." },
-              { label: "Reduced development and design effort", body: "Typical service delivery cycle with design and development for a mid sized service was significantly reduced from an average of 1 month to 8 days." },
-              { label: "Increased customer adoption", body: "New services and a refreshed brand identity combined to boost customer adoption, resulting in a 30% increase in conversion rate post-launch, according to analytics data." },
-            ],
-          },
-        ],
-        figures: [{ src: `${dubai}/detail-2.png`, w: 1200, h: 675, alt: "DubaiNow Mobile App — process detail 2" }],
+        title: "57 services in a year, and CSAT at 70%",
+        body: [{
+          type: "definitions",
+          items: [
+            { label: "New services", body: "28 new services delivered within a year, against a target of 20." },
+            { label: "Enhanced services", body: "29 existing services redesigned on the design system in the same year." },
+            { label: "Satisfaction", body: "The redesigned services reached a CSAT score of 70%, above the 60% target." },
+          ],
+        }],
+        figures: [{ src: `${dubai}/accident-screens.png`, w: 1792, h: 1008, alt: "Report Accident screens on angled phones: the Police category, vehicle count, vehicle plates and liability." }],
       },
     ],
     conclusion: {
-      statement: ["The DubaiNow app, featuring a new brand identity and expanded services, achieved remarkable success,", "winning ICXA’s Gold Award in 2020 for “Customer at the heart of everything.”"],
-      rest: "This success was largely due to a well-executed design system strategy that prioritized essential components and aligned them with high-usage services.",
+      statement: ["The DubaiNow app, with its new brand identity and services built on one system,", "won ICXA’s Gold Award in 2020 for “Customer at heart of everything.”"],
+      rest: "The design system came first, and it is why 57 services could ship in a year and still feel like one app.",
     },
   },
   {

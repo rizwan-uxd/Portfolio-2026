@@ -15,16 +15,15 @@ function Quote({ text, highlights }: { text: string; highlights: string[] }) {
 export function Testimonials() {
   return (
     <section id="testimonials" className="border-t border-hairline">
-      <div className="flex flex-col gap-4 px-4 pb-6 pt-12 lg:flex-row lg:items-end lg:justify-between lg:px-12 lg:pb-12 lg:pt-16">
-        <div className="flex flex-col gap-4">
-          <p className="micro text-brand">{testimonialsSection.eyebrow}</p>
-          <Heading lines={testimonialsSection.heading} />
-        </div>
-        <p className="text-muted-foreground lg:w-full lg:max-w-intro">{testimonialsSection.intro}</p>
+      {/* Stacked like every section header: heading, then the description under it (owner, 2026-11-03) */}
+      <div data-rise className="flex flex-col gap-4 px-4 pb-8 pt-12 lg:px-12 lg:pb-12 lg:pt-16">
+        <Heading lines={testimonialsSection.heading} />
+        <p className="rise-head max-w-[var(--case-subtitle-w)] text-muted-foreground" style={{ "--i": 2 } as React.CSSProperties}>{testimonialsSection.intro}</p>
       </div>
-      <div className="no-scrollbar flex gap-3 overflow-x-auto border-t border-hairline px-4 pb-4 pt-2 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:p-8">
-        {testimonials.map((t) => (
-          <TiltCard key={t.name} stageClassName="w-carousel-card shrink-0 lg:w-auto" className="flex h-full flex-col gap-4 rounded-lg border border-border bg-card p-6 lg:p-8">
+      <div data-rise className="no-scrollbar flex gap-3 overflow-x-auto border-t border-hairline px-4 pb-4 pt-2 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:p-8">
+        {testimonials.map((t, i) => (
+          // The reveal moves the still stage; the tilt owns the card's transform (animations.md)
+          <TiltCard key={t.name} stageClassName="rise-card w-carousel-card shrink-0 lg:w-auto" stageStyle={{ "--i": i } as React.CSSProperties} className="flex h-full flex-col gap-4 rounded-lg border border-border bg-card p-6 lg:p-8">
             <span aria-hidden className="title text-brand">“</span>
             <div className="flex flex-col gap-1">
               <p className="title">{t.headline}</p>

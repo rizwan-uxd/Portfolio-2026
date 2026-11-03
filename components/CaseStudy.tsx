@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { CompareSlider } from "@/components/CompareSlider";
 import { DottedArrow } from "@/components/DottedArrow";
 import { caseStudySection, nextCaseStudies, type Block, type CaseStudy as Study, type Figure, type Section } from "@/lib/case-studies";
 
@@ -104,6 +105,12 @@ function SectionView({ section, index }: { section: Section; index: number }) {
           <Phones phones={section.phones} />
         </div>
       )}
+      {section.comparisons?.map((comparison) => (
+        <figure key={comparison.after.src} className="flex flex-col gap-4 lg:gap-3 lg:px-12 lg:pb-8 lg:pt-4">
+          <CompareSlider comparison={comparison} />
+          {comparison.caption && <figcaption><Caption>{comparison.caption}</Caption></figcaption>}
+        </figure>
+      ))}
       {section.figures?.map((figure) => (
         <figure key={figure.src} className="flex flex-col gap-4 lg:gap-3 lg:px-12 lg:pb-8 lg:pt-4">
           <Picture figure={figure} />
@@ -157,7 +164,7 @@ export function CaseStudy({ study }: { study: Study }) {
         {study.links && (
           <div className="flex flex-wrap gap-2">
             {study.links.map((link, i) => (
-              <a key={link.href} href={link.href} target="_blank" rel="noreferrer" className={`label flex items-center gap-3 rounded-btn py-2 pl-6 pr-2 ${i === 0 ? "bg-brand text-brand-foreground" : "border border-hairline"}`}>
+              <a key={link.href} href={link.href} target="_blank" rel="noreferrer" className={`label ${i === 0 ? "label-cta " : ""}flex items-center gap-3 rounded-btn py-2 pl-6 pr-2 ${i === 0 ? "bg-brand text-brand-foreground" : "border border-hairline"}`}>
                 {link.label} <DottedArrow tone={i === 0 ? "brand" : "outline"} />
               </a>
             ))}

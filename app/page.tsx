@@ -12,6 +12,8 @@ import { Frame } from "@/components/Frame";
 import { HeroHorizon } from "@/components/HeroHorizon";
 import { HeroStage } from "@/components/HeroStage";
 import { AiTwinBar } from "@/components/AiTwinBar";
+import { ScrollReveal } from "@/components/ScrollReveal";
+import { ScrollTop } from "@/components/ScrollTop";
 
 export default function Home() {
   return (
@@ -37,6 +39,8 @@ export default function Home() {
         </Frame>
       </main>
       <AiTwinBar />
+      <ScrollTop />
+      <ScrollReveal />
     </>
   );
 }

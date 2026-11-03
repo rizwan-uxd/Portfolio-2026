@@ -15,6 +15,8 @@ const STEP = 1000 / 60;     // physics runs at 60Hz whatever the screen
 const CLICK = 6;            // px of movement that still counts as a click
 const THROW = 22;          // px per frame, the fastest a card can be let go
 const TILT = 9;             // deg, towards the pointer
+const DROP_AT = 0.35;       // share of the stage in view when the card drops in (animations.md)
+const DROP_PUSH = 3;        // px per frame sideways as it drops, so it swings a little as it settles
 
 const links = [
   { label: "LinkedIn", href: person.linkedin },
@@ -50,10 +52,15 @@ export function Lanyard() {
     let hover = { x: -9999, y: -9999 };
     let spin = 0, spinTo = 0;                    // flip angle, eased
     const tilt = { x: 0, y: 0 }, tiltTo = { x: 0, y: 0 };
+    // Until Contact is in view the card is pulled up to the clip, with the rope gathered behind it. Reduced motion: it already hangs.
+    let dropped = reduced;
 
     const place = () => {
       pts.length = 0;
-      for (let i = 0; i < POINTS; i++) pts.push({ x: anchor.x, y: anchor.y + i * seg, oldx: anchor.x, oldy: anchor.y + i * seg });
+      for (let i = 0; i < POINTS; i++) {
+        const x = anchor.x, y = dropped ? anchor.y + i * seg : anchor.y + i * 0.5;
+        pts.push({ x, y, oldx: x, oldy: y });
+      }
     };
     const resize = () => {
       const r = el.getBoundingClientRect();
@@ -159,11 +166,20 @@ export function Lanyard() {
       render();
       if (visible && !document.hidden) frame = requestAnimationFrame(loop);
     };
-    const start = () => { if (!frame && !reduced) { prev = performance.now(); acc = 0; frame = requestAnimationFrame(loop); } };
+    const start = () => { if (!frame && !reduced && dropped) { prev = performance.now(); acc = 0; frame = requestAnimationFrame(loop); } };
+
+    // Lets the raised card fall from rest; gravity and the rope do the rest.
+    const drop = () => {
+      if (dropped) return;
+      dropped = true;
+      end().oldx = end().x - DROP_PUSH;
+      start();
+    };
 
     const onDown = (e: PointerEvent) => {
       if ((e.target as HTMLElement).closest("a") || reduced) return;
       e.preventDefault();
+      drop();
       dragging = true;
       try { cardEl.setPointerCapture(e.pointerId); } catch { /* a pointer that is already gone */ }
       down = last = local(e);
@@ -206,6 +222,8 @@ export function Lanyard() {
     sizes.observe(el);
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) start(); });
     io.observe(el);
+    const dropIn = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { drop(); dropIn.disconnect(); } }, { threshold: DROP_AT });
+    if (!dropped) dropIn.observe(el);
     const onVisibility = () => { if (!document.hidden) start(); };
     document.addEventListener("visibilitychange", onVisibility);
     cardEl.addEventListener("pointerdown", onDown);
@@ -219,7 +237,7 @@ export function Lanyard() {
 
     return () => {
       cancelAnimationFrame(frame);
-      sizes.disconnect(); io.disconnect();
+      sizes.disconnect(); io.disconnect(); dropIn.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
       cardEl.removeEventListener("pointerdown", onDown);
       cardEl.removeEventListener("keydown", onKey);

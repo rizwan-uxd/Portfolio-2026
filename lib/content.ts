@@ -19,10 +19,10 @@ export const hero = {
   headline: ["Designing enterprise products ", "that ", "create measurable business impact."], // last part is muted; "that " is muted only on mobile (frame 27:5)
   subline:
     "15+ years designing banking, government and enterprise platforms. AI accelerates my design process — enabling faster delivery, broader exploration and uncompromising quality.",
-  cta: "Let's connect",
+  cta: "Book a meeting", // owner, 2026-11-03 (was "Let's connect"), same as the contact CTA
 };
 
-export const brandsTitle = "Led Impactful initiatives for";
+export const brandsTitle = "Led impactful initiatives for";
 // Names and logos from the live site, in its order
 export const brands = [
   { name: "Horizontal Digital", logo: "/images/brands/6_Horizontal.svg", width: 75, height: 53 },
@@ -130,12 +130,12 @@ export const works: Work[] = [
   {
     slug: "dubainow-mobile-app",
     title: "DubaiNow Mobile App",
-    metric: "+30%",
-    metricLabel: "Service completion rate",
-    chip: "Product design",
-    summary: "Redesigned a large-scale government mobile app, simplifying complex service journeys to improve usability and completion across key citizen interactions.",
+    metric: "70%",
+    metricLabel: "CSAT score",
+    chip: "Product design · Government sector",
+    summary: "Built the DubaiNow design system and used it to deliver 28 new and 29 enhanced government services in a year, lifting CSAT to 70%.",
     overview: [
-      "DubaiNow app serves residents of Dubai with access to more than 120 government services. It's a one stop shop for all government interactions. As a Customer Experience Designer, I optimize user experiences by analyzing app store feedback and designing innovative features for the DubaiNow app."
+      "DubaiNow app serves residents of Dubai with access to more than 115 government services. It's a one stop shop for all government interactions. As a Customer Experience Designer, I optimize user experiences by analyzing app store feedback and designing innovative features for the DubaiNow app."
     ],
     facts: [
       {
@@ -305,7 +305,6 @@ export const services = [
 
 // Copy from the live site's AI projects section (owner, 2026-10-31: two cards); intro note from the owner (2026-11-02).
 export const aiProjectsSection = {
-  eyebrow: "AI projects",
   heading: ["AI projects", ""], // 2nd line muted, empty
   note: "I use AI-assisted tools to explore ideas and build working prototypes faster. The AI Banking Copilot shows how I moved from a banking concept to an interactive prototype.", // owner, 2026-11-02
   projects: [
@@ -339,7 +338,6 @@ export const toolsSection = {
 };
 
 export const testimonialsSection = {
-  eyebrow: "Testimonials",
   heading: ["What clients", "say about me."], // 2nd line muted
   intro:
     "Here's what my clients have shared about their experiences working with me. Their trust and satisfaction motivate me to continue delivering designs that make an impact.",
@@ -397,7 +395,7 @@ export const cv = {
       place: "Dubai",
       dates: "May 2019 - Sep 2022",
       highlights: [
-        "Led the UX redesign of DubaiNow services, increasing conversion by 30% through user-centered design and journey optimization.",
+        "Built the DubaiNow design system and delivered 28 new and 29 enhanced services on it within a year, reaching a 70% CSAT score.",
         "Redesigned signup and verification flows for Invest in Dubai, increasing new-user onboarding by 20%.",
       ],
     },
@@ -457,8 +455,6 @@ export const aiTwin = {
 };
 
 export const graphSection = {
-  eyebrow: "Click any node to see how it connects",
-  eyebrowMobile: "Tap any node to see how it connects",
   heading: ["Career", "knowledge graph"], // 2nd line muted
   intro: ["Click any node to see what it is, what it delivered, and everything it connects to. Try ", "Hajj platform", " or ", "AI Banking Copilot", "."],
   hint: "Drag to rotate · Drag a node to move it · Pinch, or click then scroll, to zoom · Click a node for details",
@@ -482,7 +478,7 @@ export const graphSection = {
     { node: "rizwan", title: "Everything connects to one career", body: "15+ years across fintech, enterprise and government. Each point on the sphere is a company, project, skill, tool or result from it." },
     { node: "hajj-platform", title: "Hajj operations platform", body: "A PowerPoint- and meeting-driven reporting process became a connected enterprise platform, with a 25% efficiency gain." },
     { node: "ai-copilot", title: "AI Banking Copilot", body: "An intent-driven banking copilot, from concept to a working React Native prototype in 3 days with Claude Code and Cursor." },
-    { node: "dubainow", title: "DubaiNow", body: "A redesign of a large-scale government app raised service completion by 30% and won an ICXA award in 2020." },
+    { node: "dubainow", title: "DubaiNow", body: "A design system for a large-scale government app carried 57 services in a year to a 70% CSAT score, and won an ICXA award in 2020." },
     { node: "secure-comms", title: "Secure Communication App", body: "A scalable design system and reusable React components saved 3 months of development time." },
     { node: "ai-copilot", path: ["bny", "ai-copilot"], title: "Trace any path", body: "From usability analyst at BNY Mellon in 2008 to an AI copilot for ADCB in 2025, connected through banking. Pick any two points above to trace your own." },
   ] as { node: string; path?: [string, string]; title: string; body: string }[],
@@ -503,7 +499,8 @@ export const testimonials = [
 export const contact = {
   label: "LET'S TALK",
   heading: ["Let’s build something", "meaningful together."], // 2nd half muted; owner, 2026-11-02
-  cta: "Let’s talk", // owner, 2026-11-02
+  cta: "Book a meeting", // owner, 2026-11-03 (was "Let’s talk")
   connectLabel: "Connect with me",
+  toTop: "Scroll to top",
   copyright: "© Copyright 2026. Mohammed Rizwan",
 };

@@ -54,7 +54,7 @@ export function ServiceBox({ className, children }: { className: string; childre
   }, []);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} data-rise className={className}>
       {children}
     </div>
   );

@@ -39,7 +39,7 @@ function StoryCard({ work }: { work: Work }) {
           </div>
         ))}
       </dl>
-      <Link href={`/work/${work.slug}`} className="label mx-4 inline-flex items-center gap-3 self-start rounded-btn bg-brand py-2 pl-6 pr-2 text-brand-foreground lg:mx-5">
+      <Link href={`/work/${work.slug}`} className="label label-cta mx-4 inline-flex items-center gap-3 self-start rounded-btn bg-brand py-2 pl-6 pr-2 text-brand-foreground lg:mx-5">
         {/* the dotted arrow replaces the ↗ glyph here */}
         {worksSection.readCase.replace(/\s*↗$/, "")}
         <DottedArrow />
@@ -56,7 +56,7 @@ function Squares({ work }: { work: Work }) {
         <WorkIcon name="trending-up" />
         <p className="subtitle mt-auto pt-6">{worksSection.metricLabel}</p>
         <div className="flex flex-col gap-1">
-          <p className="display works-metric text-brand">{work.metric}</p>
+          <p className="headline works-metric text-brand">{work.metric}</p>
           <p className="text-muted-foreground">{work.metricLabel}</p>
         </div>
       </div>
@@ -85,7 +85,7 @@ export function WorksList() {
         entry.target.setAttribute("data-in", "");
         reveal.unobserve(entry.target);
       });
-    }, { rootMargin: "0px 0px -8% 0px" });
+    }, { rootMargin: `0px 0px ${getComputedStyle(root).getPropertyValue("--rise-margin").trim() || "-35%"} 0px` }); // same point as the section reveals
     root.querySelectorAll(".works-fig").forEach((fig) => reveal.observe(fig));
     return () => reveal.disconnect();
   }, []);
@@ -95,7 +95,7 @@ export function WorksList() {
       {works.map((work) => (
         <article key={work.slug} className="flex flex-col gap-3 border-b border-hairline px-4 py-12 last:border-b-0 lg:px-12 lg:py-20">
           <header className="mb-5 flex flex-col gap-3 lg:mb-9">
-            <h3 className="display">{work.title}</h3>
+            <h3 className="headline">{work.title}</h3>
             <p className="micro text-brand">{work.chip}</p>
           </header>
           <div className="grid grid-cols-1 gap-3 lg:grid-cols-[var(--works-media-col)_1fr]">

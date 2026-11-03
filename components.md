@@ -55,3 +55,15 @@ Open:
   - The Copilot page turns the live site's interactive parts into static template blocks: phones for the carousel, text for the transformation diagram, all four workflows in a row for the tabs. The live site's commit list and tool icons are left out.
 
 - AI projects section (owner, 2026-10-31): two cards in a hairline grid, AI Banking Copilot (links to its case study) and AI Banking App (coming soon, not linked), each ending in a lime pixel chevron. Copy and the tile image are from the live site. `components/AiProjects.tsx`. Intro sentence replaced by the owner's (2026-11-02); no tool-logo row inside this section. The separate Tools I build with section follows it (owner, 2026-11-03).
+
+- Wireframe → UI comparisons (owner, 2026-11-03): a section's `comparisons` render as `components/CompareSlider.tsx`, a drag slider after 21st.dev's "Before after comparison" (ibrandify): wireframe on the left, UI on the right, Wireframe / Split / UI design tabs, arrow keys on the handle. On the Hajj page it replaces `states-board.png` and `delivered-ecosystem.png`. The images in `public/images/work/hajj-operations-platform/compare/` are stand-ins cropped from those composites, with the wireframe padded to the UI's frame size; replace them with same-size Figma exports.
+- DubaiNow (owner, 2026-11-03): the owner's PDF portfolio (case study 03) is the source of truth for DubaiNow figures: 115+ services, 28 new + 29 enhanced services within a year, CSAT 70% (target 60%). The live site's "+30% conversion", "1 month to 8 days" and "40 services in 6 months" are dropped everywhere (works card, CV line, graph tour, highlights, AI twin via the card). The 30% survives only as Objective 1 (cut drop-off by 30%). The owner designed the system alone: no co-designer credit. The page is rebuilt in two parts (design system, then services incl. Get Residency before/after and Report Accident) with stand-in images cropped from the PDF and the owner's Behance projects.
+
+## Scroll to top (owner, 2026-11-03)
+- `components/ScrollTop.tsx`, on the homepage and every case study page. A 56px glass circle (the floating nav's border, card glass and pill shadow) holding the CTA dotted arrow pointing up (`DottedArrow direction="up"`, new), labelled "Scroll to top" for screen readers and as a tooltip.
+- Appears with the floating nav, once the hero CTA has scrolled out above, and slides in from below with the nav's timing. Click scrolls smoothly to the top, instantly with reduced motion.
+- Bottom right: from lg it is centred on the AI twin bar's height, beside the bar; below lg it sits 12px above the full-width bar. While the bar is hidden (before Selected works ends, at Contact, and on case study pages) it drops into the bar's place in the corner. Values are `--to-top-*` and `--twin-bar-h` in tokens.css.
+
+## Footer (owner, 2026-11-03)
+
+`Footer.tsx` replaces the old bottom strip inside Contact. Uses the existing logo and `person` social URLs, labeled LinkedIn, Behance, Dribbble icons, a divider, `FooterWordmark`, and bottom copyright. Semantic social navigation; external links open a new tab. Exact logo asset reused; generated mockup logo is not shipped.

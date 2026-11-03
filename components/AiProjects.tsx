@@ -16,6 +16,7 @@ function Chevron({ dim = false }: { dim?: boolean }) {
 }
 
 type Project = (typeof aiProjectsSection.projects)[number];
+const step = (i: number) => ({ "--i": i }) as React.CSSProperties;
 
 function Card({ project }: { project: Project }) {
   const href = "href" in project ? project.href : undefined;
@@ -25,7 +26,7 @@ function Card({ project }: { project: Project }) {
         <Image src={project.image} alt={project.alt} fill sizes="(min-width: 1024px) 560px, 100vw" className={`object-cover ${href ? "" : "opacity-80"}`} />
       </span>
       <span className="micro text-brand">{project.tag}</span>
-      <span className="title">{project.title}</span>
+      <h3 className="headline">{project.title}</h3>
       <span className="text-muted-foreground">{project.summary}</span>
       <span className="mt-auto flex items-center justify-between gap-4 border-t border-hairline pt-4">
         <span className="flex flex-col gap-1">
@@ -47,15 +48,17 @@ function Card({ project }: { project: Project }) {
 export function AiProjects() {
   return (
     <section id="ai-projects" className="border-t border-hairline">
-      <div className="flex flex-col gap-4 px-4 pb-8 pt-12 lg:px-12 lg:pb-12 lg:pt-16">
-        <p className="micro text-brand">{aiProjectsSection.eyebrow}</p>
-        <h2 className="display">{aiProjectsSection.heading[0]}</h2>
-        <p className="max-w-[var(--case-subtitle-w)] text-muted-foreground">{aiProjectsSection.note}</p>
+      <div data-rise className="flex flex-col gap-4 px-4 pb-8 pt-12 lg:px-12 lg:pb-12 lg:pt-16">
+        <h2 className="rise-head display" style={step(0)}>{aiProjectsSection.heading[0]}</h2>
+        <p className="rise-head max-w-[var(--case-subtitle-w)] text-muted-foreground" style={step(1)}>{aiProjectsSection.note}</p>
       </div>
-      <div className="grid grid-cols-1 border-t border-hairline lg:grid-cols-2">
-        {aiProjectsSection.projects.map((project) => (
+      <div data-rise className="grid grid-cols-1 border-t border-hairline lg:grid-cols-2">
+        {aiProjectsSection.projects.map((project, i) => (
           <div key={project.title} className="border-hairline not-first:border-t lg:not-first:border-l lg:not-first:border-t-0">
-            <Card project={project} />
+            {/* The Works card reveal, so the two project lists arrive the same way (animations.md) */}
+            <div className="rise-work h-full" style={step(i)}>
+              <Card project={project} />
+            </div>
           </div>
         ))}
       </div>

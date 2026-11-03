@@ -3,6 +3,17 @@
    is the Figma space/N scale, so it is not repeated here. */
 
 :root {
+  /* Approved compact footer (owner, 2026-11-03). */
+  --footer-name-size: 26px;
+  --footer-name-size-sm: 20px;
+  --footer-social-size: 15px;
+  --footer-copyright-size: 12px;
+  --footer-divider-width: 800px;
+  --footer-wordmark-width: 600px;
+  --footer-wordmark-ratio: 4.3;
+  --footer-wordmark-fallback-size: 25cqi;
+  --footer-dot-step: 4px;
+  --footer-dot-radius: 1.3px;
   /* Light theme */
   --background: #fff;
   --foreground: #181818;
@@ -52,7 +63,13 @@
   --text-title: 32px;            /* weight 500, lh 1.10, tracking -0.03em */
   --text-subtitle: 20px;         /* weight 500, lh 1.20, tracking -0.02em */
   --text-intro: 12px;            /* typed line above the hero headline */
-  --text-micro: 9px;             /* mono tags: uppercase, tracking 0.18em (1.6px) */
+  --text-micro: 11px;            /* mono tags: uppercase, tracking 0.12em; 9px before (owner, scale A, 2026-11-03) */
+  --tracking-micro: 0.12em;
+  /* Scale A (owner, 2026-11-03): the hero leads, section headings stay at display, work titles step down */
+  --text-hero: 64px;             /* hero h1 from md */
+  --text-headline: 40px;         /* work titles (Selected works, AI projects) and works metrics, from lg */
+  --leading-headline: 1;
+  --text-cta: 14px;              /* lime CTA button text */
 
   /* Shape */
   --radius-btn: 4px;
@@ -67,6 +84,9 @@
   --text-title-sm: 24px;
   --leading-title-sm: 1.12;
   --text-subtitle-sm: 18px;
+  --text-hero-sm: 40px;
+  --text-headline-sm: 28px;
+  --leading-headline-sm: 1.04;
 
   /* Header nav and glow button (sizes from Figma heading-sm, body-md) */
   --nav-link: #c7c7d0;
@@ -100,6 +120,7 @@
   --intro-w: 420px;
   --case-rail-w: 420px;
   --case-subtitle-w: 640px;
+  --services-intro-w: 960px;     /* What I can do: the longer intro wraps to two lines at lg (owner, 2026-11-03) */
   --case-thumb-h-sm: 180px;
   --case-thumb-h: 260px;
   --screen-h-sm: 220px;
@@ -184,6 +205,19 @@
   --tools-intro-at: 120ms;
   --tools-reduced: 200ms;        /* reduced motion: opacity only */
   --tools-intro-w: 560px;        /* desktop: the intro wraps to two lines under the heading */
+  /* Section reveals (owner, 2026-11-03; components/ScrollReveal.tsx). Headings reuse the Tools heading entrance. */
+  --rise-margin: -35%;           /* a group plays once its top is this far inside the viewport bottom (owner: 20% played unseen) */
+  --rise-ease: var(--tools-ease);
+  --rise-head: 700ms;            /* owner, 2026-11-03: the Tools heading values (400ms, 12px) were too subtle here */
+  --rise-head-stagger: 100ms;
+  --rise-head-y: 28px;
+  --rise-head-blur: 8px;
+  --rise-card-fade: 800ms;
+  --rise-card: 1000ms;
+  --rise-card-y: 64px;
+  --rise-card-stagger: 120ms;
+  --rise-fade: 900ms;            /* opacity only: brands panel, graph stage */
+  --rise-reduced: var(--tools-reduced);
   /* Tools I build with: 3D coin row (components/ToolCoins.tsx, components/tool-coins/scene.ts; owner 2026-11-03, after Revolut) */
   --coins-load-margin: 600px;    /* three.js starts loading this far before the section reaches the viewport */
   --coins-size-sm: 56px;         /* coin diameter: half the first build (owner, 2026-11-03) */
@@ -228,12 +262,20 @@
   --works-media-col: 1.25fr;     /* media card : story card, about 55/45 */
   --works-media-glow: 10%;       /* brand tint of the glow behind each preview */
   --works-square-min-h: 240px;
-  --works-metric-size: 44px;     /* metric square at lg: display face, sized so "3 months" stays on one line */
+  --works-metric-size: var(--text-headline); /* metric square at lg: the work title size (scale A); 44px before */
   --works-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --works-reveal: 1250ms;
   --works-reveal-fade: 800ms;
   --works-reveal-y: 56px;
   --works-reveal-clip: 16%;
+  /* Tile hover, values from poulo.site's work cards (owner, 2026-11-03) */
+  --works-hover: 300ms;
+  --works-hover-ease: cubic-bezier(0, 0, 0.2, 1);
+  --works-hover-lift: -4px;
+  --works-hover-border: color-mix(in srgb, var(--foreground) 36%, transparent); /* poulo doubles its border; our hairline is already brighter, so this is about 1.5x it */
+  --works-hover-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.35);
+  --works-hover-icon-tilt: -6deg;
+  --works-hover-icon-scale: 1.1;
   /* Brands carousel: motion measured from poulo.site, positions in units of the circle size */
   --brands-size-ratio-sm: 0.21;  /* circle size / panel width, larger below lg: so wordmarks stay legible */
   --brands-size-ratio: 0.1335;
@@ -261,6 +303,12 @@
   --twin-panel-h: 80dvh;
   --twin-column-w: 880px;
   --twin-field-h: 52px;
+  --twin-bar-h: calc(var(--twin-field-h) + 22px); /* field + 10px padding and 1px border, top and bottom */
+  /* Scroll-to-top button (owner, 2026-11-03; components/ScrollTop.tsx) */
+  --to-top-size: 56px;
+  --to-top-inset: 16px;          /* from the right edge below lg */
+  --to-top-inset-lg: 24px;
+  --to-top-gap: 12px;            /* above the twin bar below lg */
   --twin-send-size: 40px;
   --twin-radius-shell: 26px;
   --twin-radius-field: 16px;
@@ -452,13 +500,16 @@
 
 /* Base type rules. Display is 36 on mobile and 56 from md, per frames 27:5 and 2:2. */
 body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); font-size: var(--text-body); line-height: 1.4; letter-spacing: -0.02em; }
-.display, .title, .subtitle { font-family: var(--font-heading); }
+.display, .headline, .title, .subtitle { font-family: var(--font-heading); }
 .display { font-size: var(--text-display-sm); font-weight: 500; line-height: var(--leading-display-sm); letter-spacing: -0.04em; @variant md { font-size: var(--text-display); line-height: var(--leading-display); } }
+.display-hero { font-size: var(--text-hero-sm); @variant md { font-size: var(--text-hero); } } /* with .display, on the hero h1 only */
+.headline { font-size: var(--text-headline-sm); font-weight: 500; line-height: var(--leading-headline-sm); letter-spacing: -0.035em; @variant lg { font-size: var(--text-headline); line-height: var(--leading-headline); } }
 .title { font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; @variant lg { font-size: var(--text-title); line-height: 1.1; } }
 .subtitle { font-size: var(--text-subtitle-sm); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; @variant lg { font-size: var(--text-subtitle); } }
 .case-statement { font-family: var(--font-heading); font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; @variant lg { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: -0.04em; } } /* conclusion: title size on mobile (Figma 43:158), display on desktop (42:81) */
 .label { font-size: var(--text-label); font-weight: 500; line-height: 1.33; letter-spacing: -0.02em; text-transform: uppercase; }
-.micro { font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1.5; letter-spacing: 0.18em; text-transform: uppercase; }
+.label-cta { font-size: var(--text-cta); } /* with .label, on lime CTA buttons */
+.micro { font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1.5; letter-spacing: var(--tracking-micro); text-transform: uppercase; }
 .nav-link {
   font-size: var(--text-nav); font-weight: 600; line-height: var(--leading-nav); letter-spacing: 0; color: var(--nav-link);
   transition: background-color var(--nav-pill-duration) ease, color var(--nav-pill-duration) ease;
@@ -575,8 +626,21 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .works-demo { width: 100%; }
 .works-square { @variant lg { min-height: var(--works-square-min-h); } }
 .works-metric { white-space: nowrap; @variant lg { font-size: var(--works-metric-size); line-height: 1; } }
+/* Tile hover (owner, 2026-11-03, after poulo.site): every tile lifts with a brighter border and a shadow; the squares
+   also darken and their icon tilts. The lift uses transform, because translate carries the scroll reveal and its 1.25s. */
+.works-fig { --works-hover-t: transform var(--works-hover) var(--works-hover-ease), border-color var(--works-hover) var(--works-hover-ease), background-color var(--works-hover) var(--works-hover-ease), box-shadow var(--works-hover) var(--works-hover-ease); transition: var(--works-hover-t); }
+.work-icon { transition: rotate var(--works-hover) var(--works-hover-ease), scale var(--works-hover) var(--works-hover-ease), color var(--works-hover) var(--works-hover-ease); }
+@media (hover: hover) {
+  .works-fig:hover { border-color: var(--works-hover-border); box-shadow: var(--works-hover-shadow); }
+  .works-square:hover { background-color: var(--background); }
+  .works-square:hover .work-icon { color: var(--foreground); }
+  @media (prefers-reduced-motion: no-preference) {
+    .works-fig:hover { transform: translateY(var(--works-hover-lift)); }
+    .works-square:hover .work-icon { rotate: var(--works-hover-icon-tilt); scale: var(--works-hover-icon-scale); }
+  }
+}
 @media (prefers-reduced-motion: no-preference) {
-  .works-ix[data-ready] .works-fig { transition: opacity var(--works-reveal-fade) ease, translate var(--works-reveal) var(--works-ease), clip-path var(--works-reveal) var(--works-ease); }
+  .works-ix[data-ready] .works-fig { transition: opacity var(--works-reveal-fade) ease, translate var(--works-reveal) var(--works-ease), clip-path var(--works-reveal) var(--works-ease), var(--works-hover-t); }
   .works-ix[data-ready] .works-fig:not([data-in]) { opacity: 0; translate: 0 var(--works-reveal-y); clip-path: inset(var(--works-reveal-clip) 0 0); }
 }
 @property --brands-phase { syntax: "<number>"; inherits: true; initial-value: 0; }
@@ -728,13 +792,15 @@ body { background: var(--background); color: var(--foreground); font-family: var
   [data-playing] .iso-pulse { animation: iso-ring var(--iso-cycle) linear infinite; }
 }
 /* Every loop starts and ends with the part in its resting place, so it can start or stop on any box state */
-@keyframes iso-review-request {
+@keyframes iso-review-request { /* along the wire: out of the data, to the reviewers' link, each reviewer, back to the link, on to the status */
   0%, 14% { transform: translate(0, -6px); opacity: 0; }
-  18% { opacity: 1; }
-  34%, 39% { transform: translate(76.2px, 13px); }
-  50%, 55% { transform: translate(33.8px, 37.5px); }
-  69% { transform: translate(109.1px, 44px); opacity: 1; }
-  73%, 100% { transform: translate(109.1px, 44px); opacity: 0; }
+  18% { transform: translate(0, 0); opacity: 1; }
+  26% { transform: translate(35.5px, 20.5px); }
+  34%, 39% { transform: translate(57.2px, 2px); }
+  50%, 55% { transform: translate(14.7px, 26.5px); }
+  60% { transform: translate(35.5px, 14.5px); }
+  69% { transform: translate(90.1px, 45px); opacity: 1; }
+  73%, 100% { transform: translate(90.1px, 45px); opacity: 0; }
 }
 @keyframes iso-review-data {
   0%, 3%, 28%, 100% { transform: translateY(0); }
@@ -1021,6 +1087,23 @@ body { background: var(--background); color: var(--foreground); font-family: var
   .tools[data-ready] :is(.tools-head, .tools-intro) { transition: opacity var(--tools-reduced) ease; transition-delay: 0ms; }
   .tools[data-ready] [data-reveal]:not([data-in]) .tools-head { translate: none; filter: none; }
 }
+
+/* Section reveals (components/ScrollReveal.tsx, animations.md). Steps are ordered by --i within a group, offset by --rise-at.
+   .rise-work is the Works card reveal. Movement uses `translate`, so it never fights a hover `transform`. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-rise-ready] [data-rise] .rise-head { transition: opacity var(--rise-head) var(--rise-ease), translate var(--rise-head) var(--rise-ease), filter var(--rise-head) var(--rise-ease); transition-delay: calc(var(--rise-at, 0ms) + var(--i, 0) * var(--rise-head-stagger)); }
+  [data-rise-ready] [data-rise] .rise-card { transition: opacity var(--rise-card-fade) var(--rise-ease), translate var(--rise-card) var(--rise-ease); transition-delay: calc(var(--rise-at, 0ms) + var(--i, 0) * var(--rise-card-stagger)); }
+  [data-rise-ready] [data-rise] .rise-fade { transition: opacity var(--rise-fade) var(--rise-ease); transition-delay: var(--rise-at, 0ms); }
+  [data-rise-ready] [data-rise] .rise-work { transition: opacity var(--works-reveal-fade) ease, translate var(--works-reveal) var(--works-ease), clip-path var(--works-reveal) var(--works-ease); transition-delay: calc(var(--rise-at, 0ms) + var(--i, 0) * var(--rise-card-stagger)); }
+  [data-rise-ready] [data-rise]:not([data-in]) .rise-head { opacity: 0; translate: 0 var(--rise-head-y); filter: blur(var(--rise-head-blur)); }
+  [data-rise-ready] [data-rise]:not([data-in]) .rise-card { opacity: 0; translate: 0 var(--rise-card-y); }
+  [data-rise-ready] [data-rise]:not([data-in]) .rise-fade { opacity: 0; }
+  [data-rise-ready] [data-rise]:not([data-in]) .rise-work { opacity: 0; translate: 0 var(--works-reveal-y); clip-path: inset(var(--works-reveal-clip) 0 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-rise-ready] [data-rise] :is(.rise-head, .rise-card, .rise-fade, .rise-work) { transition: opacity var(--rise-reduced) ease; }
+  [data-rise-ready] [data-rise]:not([data-in]) :is(.rise-head, .rise-card, .rise-fade, .rise-work) { opacity: 0; }
+}
 /* Coin row: the tile row shows until three.js has loaded (data-live); without JS or WebGL it stays. */
 .tools-coins:not([data-live]) .tools-stage-scroll, .tools-coins[data-live] .tools-fallback { display: none; }
 .tools-stage-scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
@@ -1028,3 +1111,21 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .tools-coin-label { position: absolute; top: 0; left: 0; transform: translateX(-50%); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 300ms ease, color 300ms ease; }
 .tools-coin-label[data-on] { opacity: 1; }
 .tools-coin-label[data-hover] { color: var(--foreground); }
+
+/* Scroll-to-top: the floating nav's glass, the CTA dotted arrow. Below lg it sits above the full-width twin bar; from lg it is
+   centred on the bar's height, beside it. It slides in from below with the floating nav's timing. */
+.to-top {
+  position: fixed; right: var(--to-top-inset); z-index: 50; display: flex; align-items: center; justify-content: center;
+  bottom: calc(var(--twin-bar-bottom-sm) + var(--twin-bar-h) + var(--to-top-gap) + env(safe-area-inset-bottom));
+  width: var(--to-top-size); height: var(--to-top-size); border-radius: 9999px; cursor: pointer;
+  border: 1px solid var(--hairline); background: color-mix(in srgb, var(--card) 70%, transparent); box-shadow: var(--shadow-pill);
+  backdrop-filter: blur(12px) saturate(1.5);
+  opacity: 0; transform: translateY(140%); pointer-events: none;
+  transition: transform var(--nav-float-duration) var(--nav-float-ease), opacity var(--nav-float-duration) ease, bottom var(--twin-bar-in) var(--twin-ease), border-color 200ms ease;
+  &[data-shown="true"] { opacity: 1; transform: none; pointer-events: auto; }
+  &:hover { border-color: var(--ring); }
+  &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  @variant lg { right: var(--to-top-inset-lg); bottom: calc(var(--twin-bar-bottom) + (var(--twin-bar-h) - var(--to-top-size)) / 2); }
+  &[data-bar="false"] { bottom: calc(var(--twin-bar-bottom-sm) + env(safe-area-inset-bottom)); @variant lg { bottom: var(--twin-bar-bottom); } }
+  @media (prefers-reduced-motion: reduce) { transform: none; transition: opacity var(--nav-float-fade) ease; }
+}

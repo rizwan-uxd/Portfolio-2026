@@ -75,7 +75,8 @@ function Art({ x, y, cycle, children }: { x: number; y: number; cycle: string; c
   );
 }
 
-// Complex Interaction Design: data, human approvals, then a resolved exception.
+// Complex Interaction Design: data, human approvals, then a resolved exception. The request travels along a wire at y 3.5:
+// across the data and people planes to the reviewers' link, up and down that link to each reviewer, then on to the status (owner, 2026-11-03).
 function Screen() {
   const reviewers = [2.25, 4.7].map((y) => at(5, y, 0.6));
   const [statusX, statusY] = at(8.1, 3.45, 0.6);
@@ -83,8 +84,11 @@ function Screen() {
     <Art x={-18} y={-90} cycle="--iso-cycle-review">
       <Box x={0} y={0} w={10} d={8} h={0.3} className="iso-plate" />
       <Pads w={10} d={8} />
+      <path className="iso-wire" d={line([3.15, 3.5, 0.3], [3.7, 3.5, 0.3])} />
+      <path className="iso-wire" d={line([6.3, 3.5, 0.3], [6.85, 3.5, 0.3])} />
       <g className="iso-review-plane iso-review-data">
         <Box x={0.55} y={1.1} z={0.3} w={2.6} d={5.6} h={0.25} />
+        <path className="iso-wire" d={line([2.95, 3.5, 0.56], [3.15, 3.5, 0.56])} />
         <path className="iso-review-line" d={line([0.9, 1.7, 0.56], [2.8, 1.7, 0.56])} />
         {[2.3, 2.95, 3.6, 4.25, 4.9, 5.55].map((y, i) => (
           <path key={y} className={i % 2 ? "iso-review-line iso-review-detail" : "iso-review-line"} d={line([0.9, y, 0.56], [i % 2 ? 2.25 : 2.8, y, 0.56])} />
@@ -92,6 +96,7 @@ function Screen() {
       </g>
       <g className="iso-review-plane iso-review-people">
         <Box x={3.7} y={1.1} z={0.3} w={2.6} d={5.6} h={0.25} />
+        <path className="iso-wire" d={line([3.7, 3.5, 0.56], [6.3, 3.5, 0.56])} />
         <path className="iso-review-link" d={line([5, 2.25, 0.6], [5, 4.7, 0.6])} />
         {reviewers.map(([x, y], i) => (
           <g key={i} className={`iso-review-person iso-review-person-${i}`} transform={`translate(${x} ${y})`}>
@@ -102,13 +107,14 @@ function Screen() {
       </g>
       <g className="iso-review-plane iso-review-status">
         <Box x={6.85} y={1.1} z={0.3} w={2.6} d={5.6} h={0.25} />
+        <path className="iso-wire" d={line([6.85, 3.5, 0.56], [7.55, 3.5, 0.56])} />
         <g transform={`translate(${statusX} ${statusY})`}>
           <g className="iso-review-alert"><circle r="10" /><path d="M0 -5 V2 M0 5 V5.1" /></g>
           <g className="iso-review-approved"><circle r="10" /><path d="M-5 0 L-1.5 3.5 L5 -4" /></g>
         </g>
         <path className="iso-review-line" d={line([7.3, 5.5, 0.56], [8.9, 5.5, 0.56])} />
       </g>
-      <circle className="iso-review-request" cx={at(1.85, 3.5, 0.6)[0]} cy={at(1.85, 3.5, 0.6)[1]} r="3" />
+      <circle className="iso-review-request" cx={at(2.95, 3.5, 0.6)[0]} cy={at(2.95, 3.5, 0.6)[1]} r="3" />
       <Silk x={1.85} y={9.3}>DATA</Silk>
       <Silk x={5} y={9.3}>REVIEW</Silk>
       <Silk x={8.15} y={9.3}>STATUS</Silk>

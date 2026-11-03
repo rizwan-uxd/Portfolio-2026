@@ -1,13 +1,13 @@
 "use client";
 
-import type { PointerEvent, ReactNode } from "react";
+import type { CSSProperties, PointerEvent, ReactNode } from "react";
 
 // Same condition as the 3 column layout: below lg the cards sit in a swipe row that would clip them.
 const canTilt = () => matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px) and (prefers-reduced-motion: no-preference)").matches;
 
 // The pointer is read on the stage, which stays still. Reading it on the moving card makes the edges flicker,
 // because the card tilts away from the pointer and out from under it.
-export function TiltCard({ stageClassName, className, children }: { stageClassName: string; className: string; children: ReactNode }) {
+export function TiltCard({ stageClassName, stageStyle, className, children }: { stageClassName: string; stageStyle?: CSSProperties; className: string; children: ReactNode }) {
   const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
     if (!canTilt()) return;
     const stage = e.currentTarget;
@@ -22,7 +22,7 @@ export function TiltCard({ stageClassName, className, children }: { stageClassNa
   };
 
   return (
-    <div className={`tilt-stage ${stageClassName}`} onPointerMove={onPointerMove} onPointerLeave={onPointerLeave}>
+    <div className={`tilt-stage ${stageClassName}`} style={stageStyle} onPointerMove={onPointerMove} onPointerLeave={onPointerLeave}>
       <figure className={`tilt-card ${className}`}>
         <span aria-hidden className="tilt-spot" />
         {children}
