@@ -105,10 +105,10 @@ Interactions from sankar.work, look from poulo.site's graph (owner's screenshot)
 
 ## Tools I build with entrance (owner, 2026-11-03)
 Plan built with the emil-design-eng skill; HyperFrames is not installed and renders video, so it was not used. `components/Tools.tsx`, `components/ToolsReveal.tsx`, `--tools-*` and `.tools-*` in `app/tokens.css`.
-- Plays once, when the section top is 100px inside the viewport bottom (`--tools-reveal-margin`). No replay, no scroll scrubbing. CSS transitions started by one IntersectionObserver.
+- Plays once per group: the heading block and the tile row each start when their top is 20% of the viewport inside the bottom (`--tools-reveal-margin`), so the tiles play where they can be seen (fixed 2026-11-03: a single trigger at the section top finished the tiles below the fold at 1440x900). No replay, no scroll scrubbing. CSS transitions started by one IntersectionObserver.
 - Heading: the three phrases each fade in, rise 12px and unblur from 4px over 400ms, 60ms apart.
 - Intro: opacity only, 300ms, starts at 120ms.
-- Tiles: fade in, rise 8px and scale from 95% over 300ms, from 200ms, 40ms apart in reading order. Labels move with their tile. Settled at about 0.8s.
+- Tiles: fade in, rise 8px and scale from 95% over 300ms, 100ms after the row enters, 40ms apart in reading order. Labels move with their tile. Settled at about 0.8s.
 - Easing: `cubic-bezier(0.23, 1, 0.32, 1)`. Only opacity, translate, scale and a small blur animate.
 - Reduced motion: a 200ms opacity fade, no movement, scale or blur.
 - Without JS the section shows at rest: the hidden state needs `data-ready`, set by the script.

@@ -174,7 +174,7 @@
   --works-heading-from: 0.4;     /* Selected works heading size when it starts to appear */
   --works-rise: 80px;            /* how far below its place the heading starts */
   /* Tools I build with entrance (owner, 2026-11-03, after emil-design-eng) */
-  --tools-reveal-margin: -100px; /* plays once the section top is this far inside the viewport bottom */
+  --tools-reveal-margin: -20%;   /* each group plays once its top is this far inside the viewport bottom */
   --tools-ease: cubic-bezier(0.23, 1, 0.32, 1);
   --tools-head: 400ms;
   --tools-head-stagger: 60ms;
@@ -183,7 +183,7 @@
   --tools-intro: 300ms;
   --tools-intro-at: 120ms;
   --tools-tile: 300ms;
-  --tools-tile-at: 200ms;
+  --tools-tile-at: 100ms;
   --tools-tile-stagger: 40ms;
   --tools-tile-y: 8px;
   --tools-tile-scale: 0.95;
@@ -979,10 +979,10 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .tools[data-ready] .tools-head { transition: opacity var(--tools-head) var(--tools-ease), translate var(--tools-head) var(--tools-ease), filter var(--tools-head) var(--tools-ease); transition-delay: calc(var(--i) * var(--tools-head-stagger)); }
 .tools[data-ready] .tools-intro { transition: opacity var(--tools-intro) var(--tools-ease) var(--tools-intro-at); }
 .tools[data-ready] .tools-tile { transition: opacity var(--tools-tile) var(--tools-ease), translate var(--tools-tile) var(--tools-ease), scale var(--tools-tile) var(--tools-ease); transition-delay: calc(var(--tools-tile-at) + var(--i) * var(--tools-tile-stagger)); }
-.tools[data-ready]:not([data-in]) :is(.tools-head, .tools-intro, .tools-tile) { opacity: 0; }
-.tools[data-ready]:not([data-in]) .tools-head { translate: 0 var(--tools-head-y); filter: blur(var(--tools-head-blur)); }
-.tools[data-ready]:not([data-in]) .tools-tile { translate: 0 var(--tools-tile-y); scale: var(--tools-tile-scale); }
+.tools[data-ready] [data-reveal]:not([data-in]) :is(.tools-head, .tools-intro, .tools-tile) { opacity: 0; }
+.tools[data-ready] [data-reveal]:not([data-in]) .tools-head { translate: 0 var(--tools-head-y); filter: blur(var(--tools-head-blur)); }
+.tools[data-ready] [data-reveal]:not([data-in]) .tools-tile { translate: 0 var(--tools-tile-y); scale: var(--tools-tile-scale); }
 @media (prefers-reduced-motion: reduce) {
   .tools[data-ready] :is(.tools-head, .tools-intro, .tools-tile) { transition: opacity var(--tools-reduced) ease; transition-delay: 0ms; }
-  .tools[data-ready]:not([data-in]) :is(.tools-head, .tools-tile) { translate: none; scale: none; filter: none; }
+  .tools[data-ready] [data-reveal]:not([data-in]) :is(.tools-head, .tools-tile) { translate: none; scale: none; filter: none; }
 }
