@@ -103,6 +103,18 @@ Interactions from sankar.work, look from poulo.site's graph (owner's screenshot)
 - Rendering pauses off screen and in a hidden tab.
 - Replaces the glowing wire shell from the owner's two sphere images (2026-10-31), which the owner moved on from.
 
+## Tools I build with entrance (owner, 2026-11-03)
+Plan built with the emil-design-eng skill; HyperFrames is not installed and renders video, so it was not used. `components/Tools.tsx`, `components/ToolsReveal.tsx`, `--tools-*` and `.tools-*` in `app/tokens.css`.
+- Plays once, when the section top is 100px inside the viewport bottom (`--tools-reveal-margin`). No replay, no scroll scrubbing. CSS transitions started by one IntersectionObserver.
+- Heading: the three phrases each fade in, rise 12px and unblur from 4px over 400ms, 60ms apart.
+- Intro: opacity only, 300ms, starts at 120ms.
+- Tiles: fade in, rise 8px and scale from 95% over 300ms, from 200ms, 40ms apart in reading order. Labels move with their tile. Settled at about 0.8s.
+- Easing: `cubic-bezier(0.23, 1, 0.32, 1)`. Only opacity, translate, scale and a small blur animate.
+- Reduced motion: a 200ms opacity fade, no movement, scale or blur.
+- Without JS the section shows at rest: the hidden state needs `data-ready`, set by the script.
+- No hover (not designed).
+- Side effect: the heading phrases are inline blocks, so on phone "every day." now wraps as one unit onto its own line.
+
 ## Not decided (ask before building)
 - Hero dot-matrix / ASCII background motion.
 - Scroll reveals and section entrance animations.

@@ -173,6 +173,21 @@
   --hero-vanish: 48px;           /* vanishing point below the rim, so the hero slips behind the globe */
   --works-heading-from: 0.4;     /* Selected works heading size when it starts to appear */
   --works-rise: 80px;            /* how far below its place the heading starts */
+  /* Tools I build with entrance (owner, 2026-11-03, after emil-design-eng) */
+  --tools-reveal-margin: -100px; /* plays once the section top is this far inside the viewport bottom */
+  --tools-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --tools-head: 400ms;
+  --tools-head-stagger: 60ms;
+  --tools-head-y: 12px;
+  --tools-head-blur: 4px;
+  --tools-intro: 300ms;
+  --tools-intro-at: 120ms;
+  --tools-tile: 300ms;
+  --tools-tile-at: 200ms;
+  --tools-tile-stagger: 40ms;
+  --tools-tile-y: 8px;
+  --tools-tile-scale: 0.95;
+  --tools-reduced: 200ms;        /* reduced motion: opacity only */
   /* Selected works project blocks (components/WorksList.tsx, owner 2026-11-01, layout after poulo.site) */
   --works-media-col: 1.25fr;     /* media card : story card, about 55/45 */
   --works-media-glow: 10%;       /* brand tint of the glow behind each preview */
@@ -959,3 +974,15 @@ body { background: var(--background); color: var(--foreground); font-family: var
 @keyframes research-light-problem { 0%, 32%, 94%, 100% { fill: var(--iso-left); } 38%, 86% { fill: var(--brand); } }
 @keyframes research-light-design { 0%, 50%, 94%, 100% { fill: var(--iso-left); } 56%, 86% { fill: var(--brand); } }
 @keyframes research-light-validate { 0%, 68%, 94%, 100% { fill: var(--iso-left); } 74%, 86% { fill: var(--brand); } }
+
+/* Tools I build with entrance (components/Tools.tsx, ToolsReveal.tsx; animations.md) */
+.tools[data-ready] .tools-head { transition: opacity var(--tools-head) var(--tools-ease), translate var(--tools-head) var(--tools-ease), filter var(--tools-head) var(--tools-ease); transition-delay: calc(var(--i) * var(--tools-head-stagger)); }
+.tools[data-ready] .tools-intro { transition: opacity var(--tools-intro) var(--tools-ease) var(--tools-intro-at); }
+.tools[data-ready] .tools-tile { transition: opacity var(--tools-tile) var(--tools-ease), translate var(--tools-tile) var(--tools-ease), scale var(--tools-tile) var(--tools-ease); transition-delay: calc(var(--tools-tile-at) + var(--i) * var(--tools-tile-stagger)); }
+.tools[data-ready]:not([data-in]) :is(.tools-head, .tools-intro, .tools-tile) { opacity: 0; }
+.tools[data-ready]:not([data-in]) .tools-head { translate: 0 var(--tools-head-y); filter: blur(var(--tools-head-blur)); }
+.tools[data-ready]:not([data-in]) .tools-tile { translate: 0 var(--tools-tile-y); scale: var(--tools-tile-scale); }
+@media (prefers-reduced-motion: reduce) {
+  .tools[data-ready] :is(.tools-head, .tools-intro, .tools-tile) { transition: opacity var(--tools-reduced) ease; transition-delay: 0ms; }
+  .tools[data-ready]:not([data-in]) :is(.tools-head, .tools-tile) { translate: none; scale: none; filter: none; }
+}
