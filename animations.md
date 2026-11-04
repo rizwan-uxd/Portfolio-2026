@@ -165,3 +165,4 @@ Approved compact “Rizwan” halftone treatment inspired by the 21st.dev Halfto
 
 ## Service diagrams as 3D scenes (owner, 2026-11-04)
 - Each "What I can do for you" box renders its diagram as a three.js scene (`components/ServiceAnimation.tsx`, `lib/service-diagrams/`), mounted when the box comes near the viewport, played on hover and reset on leave, with the SVG diagram as the fallback. Paused for `prefers-reduced-motion`. Brought over from the owner's local copy.
+- UX Research scene re-spaced (owner, 2026-11-04: "very crowded, spread apart and make premium"): three inputs in one back row, Findings centred, Validate and Design in a front row, laid out square to the camera so rows read straight; the Validate to Design link dips in front of the Findings label.
