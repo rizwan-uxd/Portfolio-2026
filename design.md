@@ -1,10 +1,14 @@
 # Design decisions
 
+## Footer (owner, 2026-11-03)
+- Approved second visual: centered existing lime logo and Mohammed Rizwan, then LinkedIn / Behance / Dribbble with outlined circles and labels below, a quiet divider, compact lime halftone “Rizwan”, and small copyright at the bottom. No middle navigation links. Contact CTA and contact details above remain intact.
+- Social circles 56px desktop / 48px mobile, with 64px / 32px gaps. Wordmark capped at 700px, fully visible, scales to phone width. Existing Geist/Satoshi typography and charcoal/lime tokens. Profile URLs from `person`.
+
 Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variable_defs` if they differ). This file records how we use them.
 
 ## Tokens (summary, see tokens.css)
 - Dark: bg `#181818`, fg `#e8e8e8`, card `#1f1f1f`, secondary `#292929`, muted-fg `#b4b4b4`, border `#2c2c2c`, hairline `#3d4045`, brand `#e5ff5d` (text on brand `#111`), pos `#00e599`, neg `#fd607f`.
-- Graph categories: companies `#6cb6ff`, industries `#ffa24d`, skills `#ff7ab6`, tools `#4fd8eb`, projects `#e5ff5d`, certifications `#00e599`, impact `#b69cff`. Sphere canvas `--graph-canvas` `#050608`. The wire shell uses the tools and companies colours, inner chords the impact violet, and a traced path the brand lime.
+- Knowledge graph (owner, 2026-11-01): monochrome, like poulo.site. Nodes, links and labels are `--foreground` and `--muted-foreground`, fading with depth, on `--graph-canvas` `#0a0a0a`. Highlights are `--brand` only. The `--graph-*` category colours are unused there.
 - Radius: btn 4, sm 3.2, md 6, lg 8 (cards), xl 12 (prompt shell), full (avatars, pills).
 - Spacing scale 4 8 12 16 24 32 48 64 96. Section padding mostly 64 vertical, 48 horizontal on desktop; 48 vertical, 24 horizontal on mobile.
 - Text styles: Display 56/0.92/-0.04em/500, Title 32/1.10/-0.03em/500, Subtitle 20/1.20/-0.02em/500, Body 16/1.40/-0.02em/400, Label 12 uppercase 500, Micro 9 mono uppercase tracking 0.18em.
@@ -36,5 +40,31 @@ Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variab
 - Build order (owner, 2026-10-30): lay out all sections from Figma in one pass with no per-section approval; behaviour and animation follow, one section at a time.
 - Sections keep the mobile frame up to 1023px and use the desktop frame from `lg` (1024); header and hero switch at `md` (768). Interim until the owner decides tablet.
 
+- CTA buttons (owner, 2026-11-01): every CTA ends in a round badge with a dotted arrow (`components/DottedArrow.tsx`, after the "Learn more" button on poulo.site), replacing the arrow glyph. Up-right opens a page or another site, right moves forward. Lime buttons get a dark badge with lime dots; hairline buttons a lime badge with dark dots. Buttons without an arrow (Reset, Done, Trace) stay as they are.
+
+- Tools I build with (owner, 2026-11-03): new section directly after AI projects and before What I can do. Supersedes the owner's earlier "Do not add a tool-logo section" (the AI projects entry in components.md says "no tool-logo row"); that rule no longer applies to this section. Copy from the owner's reference image; tiles use the site's own card treatment (hairline border, `bg-card`, radius lg) instead of the reference's cream tiles, logos monochrome in `--foreground`, so lime stays the only accent. One row of 8 from `md` (768) up, two rows of 4 below. Meta and Grok removed (owner, 2026-11-03), leaving 8 tiles. No section fade-in (the site has none) and no hover state.
+- Tools coins (owner, 2026-11-03, after Revolut's coin row; supersedes the tiles, card treatment and "no hover state" above): the logos are 3D silver coins in an overlapping row, satin-brushed faces with the logo engraved, a milled (reeded) edge, a polished bevel and a thin, dim lime ring inside the rim, lit like a studio (soft key upper left, graphite surroundings). Mono label under each coin. Values in `--coin-*` and `--coins-*` in `app/tokens.css`. The heading is two lines on desktop ("AI is part of how I design & build," / "every day.") with the intro under it in two lines (`--tools-intro-w`). The old tile row stays as the fallback without JS or WebGL and until three.js has loaded.
+- Brand colours on hover (owner, 2026-11-03): the hovered coin's logo shows the tool's own colours (`--tool-*`; Figma as its official five-colour mark). This is an exception to lime as the only accent (the footer social icons are the other); Cursor, Vercel, OpenAI, GitHub and Notion are black marks and turn near-black.
+- Tools coins, second pass (owner, 2026-11-03): half the size (88px across on desktop, 64px tablet, 56px phone; `--coins-size-*`) and six more tools, Adobe, Notion, Slack, Miro, SurveyMonkey and ProtoPie, for 14. Labels alternate between two rows so long names don't collide. Hover colours: Adobe red, Slack's four colours, Miro yellow (`#ffd02f`, its brand yellow rather than the navy mark), SurveyMonkey green, ProtoPie's three corals. ProtoPie is not in Simple Icons and has no public vector mark, so its mark is approximated from its favicon (three stacked shields); replace it if the owner has the official SVG.
+- Tools coins, third pass (owner, 2026-11-03): more space between coins (centres 1.6 radii apart, a light overlap) and the row left aligned with the heading and intro: the first coin's rim sits on the section's side padding (`--coins-pad-*`). Where 14 coins don't fit (tablet), the row shrinks to fit rather than wrapping.
+
 ## Not designed (ask first)
-Hover/focus/pressed states, menu sheet (mobile nav), tablet layouts, light theme, AI projects section, About + stats, case-study pages, hero dot-matrix background.
+Hover/focus/pressed states, menu sheet (mobile nav), tablet layouts, light theme, AI projects section, About + stats, hero dot-matrix background.
+
+## Type scale A and section headers (owner, 2026-11-03)
+- Scale A from the type audit: hero h1 64 / 40 (`.display .display-hero`), section h2 56 / 36 (`.display`), work titles 40 / 28 (`.headline`), title 32 / 24, subtitle 20 / 18, body 16, lime CTA text 14 (`.label .label-cta`), label 12, micro 11 with 0.12em tracking (was 9 and 0.18em). The works metric uses the headline size (was 44).
+- Section headers are one style: `.display`, no eyebrow, the same spacing (`pt-12 pb-8`, `lg:pt-16 lg:pb-12`, text at 16 / 48 from the frame edge). Applies to Selected works, Led impactful initiatives for, AI projects, What I can do for you, Career knowledge graph and Testimonials. The brands heading moved from `.subtitle` to `.display`, and its copy is now lower case after "Led", as the owner wrote it.
+- Work headers are one style, different from section headers: `.headline` on the Selected works titles and the AI project card titles (now h3).
+- Section descriptions sit under the heading, never beside it (owner, 2026-11-03): heading, then the intro at `--case-subtitle-w`, as in AI projects and Tools. Changed What I can do for you and Testimonials. What I can do for you widens to `--services-intro-w` (960) so its longer intro stays on two lines from lg. The graph keeps its controls on the right, since they are controls, not a description.
+- Both Calendly CTAs read "Book a meeting" (owner, 2026-11-03): the contact CTA (was "Let’s talk") and the hero CTA (was "Let's connect").
+- Not covered by this decision: the Tools and Contact headers keep their current treatment (Contact keeps its "Let's talk" eyebrow). Selected works stays centred for the globe transition.
+
+- Footer refinement (owner, 2026-11-03): Footer tightened after owner review: less vertical padding and smaller gaps; wordmark capped at 600px with a 4.3 aspect ratio. Mobile uses 32px top / 48px bottom padding; desktop 48px / 64px. Supersedes the earlier footer spacing.
+
+- Footer social icons (owner, 2026-11-03): on hover and keyboard focus, the LinkedIn, Behance and Dribbble icons and their circle borders turn the brand colour (`--social-*`: #0A66C2, #1769FF, #EA4C89) over 150ms; instant with reduced motion. Same brand-colour exception as the coins.
+- Copy (owner, 2026-11-03): no em dashes, en dashes or spaced hyphens as dashes in visible copy; they read as AI-written. Use two sentences, a comma or "and/so". Date ranges keep their hyphen.
+
+- Off the clock (owner, 2026-11-04): The reverse of the contact badge is “Off the clock”: owner-supplied mountain travel photo above the agreed Guy Ritchie / next trip / restaurant cooking sentence. Replaces repeated email, phone and social details. Existing card dimensions and flip/swing behavior retained.
+
+- Off the clock copy (owner, 2026-11-04): “Usually watching a Guy Ritchie film, planning my next trip, or chasing an adrenaline rush.” Supersedes the cooking reference to match the supplied adventure photo.
+- Case study conclusion (owner, 2026-11-04): too big to read quickly at display size, so it uses the section heading (.title) size, 32px at lg (line-height 1.1), with an 880px measure and balanced wrapping, on every case study. Mobile stays at the 24px title size. Supersedes Figma 42:81's display size.

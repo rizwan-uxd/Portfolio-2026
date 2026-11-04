@@ -37,9 +37,10 @@ export function Brands() {
   };
 
   return (
-    <section aria-labelledby="brands-title" className="border-t border-hairline p-4 lg:p-6">
-      <h2 id="brands-title" className="subtitle pb-4">{brandsTitle}</h2>
-      <div className="brands-panel rounded-xl bg-card py-6">
+    <section data-rise aria-labelledby="brands-title" className="border-t border-hairline px-4 pb-4 lg:px-6 lg:pb-6">
+      {/* Same header as the other sections (owner, 2026-11-03): display size and section-head spacing */}
+      <h2 id="brands-title" className="rise-head display pb-8 pt-12 lg:px-6 lg:pb-12 lg:pt-16">{brandsTitle}</h2>
+      <div className="brands-panel rise-fade rounded-xl bg-card py-6" style={{ "--rise-at": "120ms" } as React.CSSProperties}>
         <div
           ref={track}
           role="group"

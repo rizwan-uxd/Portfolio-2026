@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { person } from "@/lib/content";
 
 const links = [
-  { href: "#works", label: "Works" },
-  { href: "#ai-projects", label: "AI projects" },
-  { href: "#about", label: "About" },
+  { href: "/#works", label: "Works" },
+  { href: "/#ai-projects", label: "AI projects" },
+  { href: "/#services", label: "About" }, // About runs from "What I can do for you" to the end of the page
 ];
 
 // The R channel is filled by a thick stroke at first; on load the stroke retracts along the letter
@@ -66,11 +66,11 @@ function MenuButton() {
   );
 }
 
-function Nav() {
+function Nav({ compact = false, active }: { compact?: boolean; active: string }) {
   return (
     <nav aria-label="Primary" className="hidden items-center gap-nav-link md:-mr-1 md:flex">
       {links.map((l) => (
-        <a key={l.href} href={l.href} className="nav-link rounded-full px-3 py-1">
+        <a key={l.href} href={l.href} aria-current={active === l.href ? "location" : undefined} className={`nav-link rounded-full px-3 py-1${compact ? " nav-link-compact" : ""}`}>
           {l.label}
         </a>
       ))}
@@ -78,7 +78,28 @@ function Nav() {
   );
 }
 
+// The link whose section holds the line 30% down the screen. Brands belongs to Works. Nothing is active above Works.
+function useActiveSection() {
+  const [active, setActive] = useState("");
+  useEffect(() => {
+    const tops = () => links.map((l) => document.querySelector(l.href.slice(1))?.getBoundingClientRect().top ?? Infinity);
+    const update = () => {
+      const line = innerHeight * 0.3;
+      const t = tops();
+      let current = "";
+      t.forEach((top, i) => { if (top <= line) current = links[i].href; });
+      setActive(current);
+    };
+    update();
+    addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update);
+    return () => { removeEventListener("scroll", update); removeEventListener("resize", update); };
+  }, []);
+  return active;
+}
+
 export function Header() {
+  const active = useActiveSection();
   // Full-bleed header at the top; the floating bar takes over once the hero CTA has scrolled out above.
   const [floating, setFloating] = useState(false);
 
@@ -94,11 +115,11 @@ export function Header() {
     <>
       <header className="absolute inset-x-0 top-0 z-50 md:pt-6">
         <div className="mx-auto flex max-w-header items-center justify-between p-4 md:px-8 md:pb-6 md:pt-2">
-          <a href="#top" aria-label={person.name}>
+          <a href="/#top" aria-label={person.name}>
             <Logo draw />
           </a>
           <div className="flex items-center gap-2 md:gap-nav">
-            <Nav />
+            <Nav active={active} />
             <GlowButton href={person.linkedin}>Linkedin</GlowButton>
             <MenuButton />
           </div>
@@ -108,11 +129,11 @@ export function Header() {
       <div aria-hidden data-shown={floating} className="nav-veil" />
       <div data-shown={floating} inert={!floating} className="nav-float">
         <div className="flex w-full items-center justify-between gap-4 rounded-full border border-hairline bg-card/70 p-2 pl-3 shadow-pill backdrop-blur-md backdrop-saturate-150 md:w-auto md:gap-10 md:pl-4">
-          <a href="#top" aria-label={person.name}>
+          <a href="/#top" aria-label={person.name}>
             <Logo compact />
           </a>
           <div className="flex items-center gap-2 md:gap-nav">
-            <Nav />
+            <Nav compact active={active} />
             <GlowButton href={person.linkedin}>Linkedin</GlowButton>
             <MenuButton />
           </div>

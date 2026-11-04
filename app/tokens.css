@@ -3,6 +3,19 @@
    is the Figma space/N scale, so it is not repeated here. */
 
 :root {
+  /* Approved compact footer (owner, 2026-11-03). */
+  --footer-name-size: 26px;
+  --footer-name-size-sm: 20px;
+  --footer-social-size: 15px;
+  /* Footer social icons turn lime on hover and focus (owner, 2026-11-03: the site's brand, not each network's) */
+  --social-hover: 150ms;
+  --footer-copyright-size: 12px;
+  --footer-divider-width: 800px;
+  --footer-wordmark-width: 600px;
+  --footer-wordmark-ratio: 4.3;
+  --footer-wordmark-fallback-size: 25cqi;
+  --footer-dot-step: 4px;
+  --footer-dot-radius: 1.3px;
   /* Light theme */
   --background: #fff;
   --foreground: #181818;
@@ -39,7 +52,7 @@
   --graph-projects: #e5ff5d;
   --graph-impact: #b69cff;
   --graph-certifications: #00e599;
-  --graph-canvas: #050608;       /* near-black behind the sphere */
+  --graph-canvas: #0a0a0a;       /* near-black behind the sphere */
 
   --font-sans: var(--font-satoshi), var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* body, nav, buttons */
   --font-heading: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* headings, display */
@@ -52,7 +65,13 @@
   --text-title: 32px;            /* weight 500, lh 1.10, tracking -0.03em */
   --text-subtitle: 20px;         /* weight 500, lh 1.20, tracking -0.02em */
   --text-intro: 12px;            /* typed line above the hero headline */
-  --text-micro: 9px;             /* mono tags: uppercase, tracking 0.18em (1.6px) */
+  --text-micro: 11px;            /* mono tags: uppercase, tracking 0.12em; 9px before (owner, scale A, 2026-11-03) */
+  --tracking-micro: 0.12em;
+  /* Scale A (owner, 2026-11-03): the hero leads, section headings stay at display, work titles step down */
+  --text-hero: 64px;             /* hero h1 from md */
+  --text-headline: 40px;         /* work titles (Selected works, AI projects) and works metrics, from lg */
+  --leading-headline: 1;
+  --text-cta: 14px;              /* lime CTA button text */
 
   /* Shape */
   --radius-btn: 4px;
@@ -67,14 +86,20 @@
   --text-title-sm: 24px;
   --leading-title-sm: 1.12;
   --text-subtitle-sm: 18px;
+  --text-hero-sm: 40px;
+  --text-headline-sm: 28px;
+  --leading-headline-sm: 1.04;
 
   /* Header nav and glow button (sizes from Figma heading-sm, body-md) */
   --nav-link: #c7c7d0;
   --text-nav: 20px;
   --leading-nav: 28px;
+  --text-nav-float: 16px;        /* menu links in the floating bar (owner, 2026-10-31; surinder.design drops 15 to 14) */
+  --leading-nav-float: 24px;
   --leading-glow: 26px;
   --tracking-glow: 0.08px;
   --shadow-glow: 0 0 14px 0 color-mix(in srgb, var(--brand) 16%, transparent);
+  --delta-bg: color-mix(in srgb, var(--brand) 12%, transparent); /* works metric change pill, tinted like the Searchable/Mobbin growth pills (owner, 2026-11-04) */
   --glow-w: 72px;
   --glow-h: 44px;
   --glow-br-x: 41px;
@@ -96,7 +121,39 @@
   --nav-gap: 36px;
   --nav-link-gap: 28px;          /* between hover pills: keeps the 52px text spacing from Figma (36 + 2 x 8) */
   --intro-w: 420px;
-  --works-rail-w: 395px;
+  --case-rail-w: 420px;
+  --case-proto-w: 390px;         /* embedded prototype: the reference phone width */
+  --case-proto-h: min(844px, 80svh); /* the reference phone height, kept inside a short screen */
+  --case-proto-radius: 28px;
+  --case-showcase-phone-w: 320px; /* SecureLine rotating key screens (owner, 2026-11-04) */
+  /* SecureLine overview cards and approach list (owner, 2026-11-04) */
+  --case-feature-art-h: 160px;
+  --case-feature-visual-h: 360px;
+  --case-feature-panel-w: 320px;
+  --case-feature-phone-w: 200px;
+  --case-loop-size: 224px;
+  --ease-feature: cubic-bezier(0.22, 1, 0.36, 1);
+  --case-showcase-phone-w-sm: 240px; /* below lg, so the description stays near the screen */
+  /* Showcase theme switch, after 21st.dev's Cinematic Theme Switcher (owner, 2026-11-04) */
+  --theme-switch-w: 76px;
+  --theme-switch-h: 40px;
+  --theme-switch-pad: 4px;
+  --theme-switch-knob: 30px;
+  --theme-switch-travel: 36px;   /* w - knob - 2 * pad - 2px border */
+  --theme-switch-icon: 16px;
+  --theme-switch-icon-inset: 11px;
+  --theme-switch-duration: 500ms;
+  --theme-switch-ease: cubic-bezier(0.34, 1.56, 0.64, 1); /* spring with a little overshoot */
+  --theme-switch-inset: inset 0 2px 6px rgb(0 0 0 / 0.6), inset 0 -1px 2px rgb(255 255 255 / 0.06);
+  --theme-switch-knob-shadow: 0 2px 8px rgb(0 0 0 / 0.5), 0 0 14px color-mix(in srgb, var(--brand) 35%, transparent);
+  --case-pair-phone-w: 240px;   /* Copilot AI workspace: each workflow's screen beside its text (owner, 2026-11-03) */
+  --case-subtitle-w: 640px;
+  --quote-dot: color-mix(in srgb, var(--foreground) 14%, transparent); /* conclusion dot grid (owner, 2026-11-04) */
+  --quote-dot-gap: 10px;
+  --case-statement-w: 880px;    /* conclusion measure at lg, about 55 characters a line at 32px */
+  --services-intro-w: 960px;     /* What I can do: the longer intro wraps to two lines at lg (owner, 2026-11-03) */
+  --case-thumb-h-sm: 180px;
+  --case-thumb-h: 260px;
   --screen-h-sm: 220px;
   --screen-h: 440px;
   --visual-h: 232px;
@@ -105,6 +162,7 @@
   --graph-panel-w: 340px;
   --graph-stage-h: 680px;
   --graph-tour-w: 340px;
+  --graph-photo-size: 48px;
   --graph-timeline-label: 240px;
   --carousel-card-w: 300px;
   --pagination-active-w: 20px;
@@ -167,17 +225,88 @@
   --hero-vanish: 48px;           /* vanishing point below the rim, so the hero slips behind the globe */
   --works-heading-from: 0.4;     /* Selected works heading size when it starts to appear */
   --works-rise: 80px;            /* how far below its place the heading starts */
-  /* Selected works scroll behaviour (components/WorksShowcase.tsx, animations.md) */
-  --works-rail-top: 112px;       /* clears the floating bar */
-  --works-bar-top: 72px;         /* mobile project bar, under the floating bar */
-  --works-group-margin-sm: 128px;
+  /* Tools I build with entrance (owner, 2026-11-03, after emil-design-eng) */
+  --tools-reveal-margin: -20%;   /* each group plays once its top is this far inside the viewport bottom */
+  --tools-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --tools-head: 400ms;
+  --tools-head-stagger: 60ms;
+  --tools-head-y: 12px;
+  --tools-head-blur: 4px;
+  --tools-intro: 300ms;
+  --tools-intro-at: 120ms;
+  --tools-reduced: 200ms;        /* reduced motion: opacity only */
+  --tools-intro-w: 560px;        /* desktop: the intro wraps to two lines under the heading */
+  /* Section reveals (owner, 2026-11-03; components/ScrollReveal.tsx). Headings reuse the Tools heading entrance. */
+  --rise-margin: -35%;           /* a group plays once its top is this far inside the viewport bottom (owner: 20% played unseen) */
+  --rise-ease: var(--tools-ease);
+  --rise-head: 700ms;            /* owner, 2026-11-03: the Tools heading values (400ms, 12px) were too subtle here */
+  --rise-head-stagger: 100ms;
+  --rise-head-y: 28px;
+  --rise-head-blur: 8px;
+  --rise-card-fade: 800ms;
+  --rise-card: 1000ms;
+  --rise-card-y: 64px;
+  --rise-card-stagger: 120ms;
+  --rise-fade: 900ms;            /* opacity only: brands panel, graph stage */
+  --rise-reduced: var(--tools-reduced);
+  /* Tools I build with: 3D coin row (components/ToolCoins.tsx, components/tool-coins/scene.ts; owner 2026-11-03, after Revolut) */
+  --coins-load-margin: 600px;    /* three.js starts loading this far before the section reaches the viewport */
+  --coins-size-sm: 56px;         /* coin diameter: half the first build (owner, 2026-11-03) */
+  --coins-size-md: 64px;
+  --coins-size-lg: 88px;
+  --coins-stage-h-sm: 150px;
+  --coins-stage-w-sm: 720px;     /* phone: the row keeps this width and scrolls sideways */
+  --coins-pad-sm: 16px;          /* row's left inset: the section's side padding (px-4, lg:px-12) */
+  --coins-pad-lg: 48px;
+  --coins-stage-h-md: 160px;     /* from md the row fits the width */
+  --coins-stage-h: 200px;
+  --coins-spin: 1100;            /* ms per coin, spin in from edge-on */
+  --coins-stagger: 90;           /* ms between coins */
+  --coins-hover: 70;             /* ms time constant of the hover ease, settles in about 300ms */
+  --coin-room: #2b2c2f;          /* studio walls the metal reflects */
+  --coin-silver: #d9dbde;        /* satin face */
+  --coin-engrave: #a4a7ac;       /* engraved logo floor */
+  --coin-reed: #c9ccd0;          /* milled edge */
+  --coin-bevel: #e4e6e9;         /* polished bevel */
+  --coin-ring: var(--brand);
+  /* Brand colours, shown only on a hovered coin (owner's exception to lime as the only accent, 2026-11-03) */
+  --tool-claude: #d97757;
+  --tool-supabase: #3ecf8e;
+  --tool-tailwind: #38bdf8;
+  --tool-adobe: #ff0000;
+  --tool-miro: #ffd02f;          /* Miro's yellow, on its mark */
+  --tool-surveymonkey: #00bf6f;
+  --tool-slack-red: #e01e5a;
+  --tool-slack-blue: #36c5f0;
+  --tool-slack-green: #2eb67d;
+  --tool-slack-yellow: #ecb22e;
+  --tool-protopie-1: #fa5650;    /* front shield; colours sampled from ProtoPie's favicon */
+  --tool-protopie-2: #ff9a8a;
+  --tool-protopie-3: #ffd6cf;
+  --tool-mono: #111111;          /* Cursor, Vercel, OpenAI, GitHub, Notion: black marks */
+  --tool-figma-red: #f24e1e;
+  --tool-figma-coral: #ff7262;
+  --tool-figma-purple: #a259ff;
+  --tool-figma-blue: #1abcfe;
+  --tool-figma-green: #0acf83;
+  /* Selected works project blocks (components/WorksList.tsx, owner 2026-11-01, layout after poulo.site) */
+  --works-media-col: 1.25fr;     /* media card : story card, about 55/45 */
+  --works-media-glow: 10%;       /* brand tint of the glow behind each preview */
+  --works-square-min-h: 240px;
+  --works-metric-size: var(--text-headline); /* metric square at lg: the work title size (scale A); 44px before */
   --works-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --works-expand: 550ms;
-  --works-colour: 350ms;
   --works-reveal: 1250ms;
   --works-reveal-fade: 800ms;
   --works-reveal-y: 56px;
   --works-reveal-clip: 16%;
+  /* Tile hover, values from poulo.site's work cards (owner, 2026-11-03) */
+  --works-hover: 300ms;
+  --works-hover-ease: cubic-bezier(0, 0, 0.2, 1);
+  --works-hover-lift: -4px;
+  --works-hover-border: color-mix(in srgb, var(--foreground) 36%, transparent); /* poulo doubles its border; our hairline is already brighter, so this is about 1.5x it */
+  --works-hover-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.35);
+  --works-hover-icon-tilt: -6deg;
+  --works-hover-icon-scale: 1.1;
   /* Brands carousel: motion measured from poulo.site, positions in units of the circle size */
   --brands-size-ratio-sm: 0.21;  /* circle size / panel width, larger below lg: so wordmarks stay legible */
   --brands-size-ratio: 0.1335;
@@ -205,6 +334,12 @@
   --twin-panel-h: 80dvh;
   --twin-column-w: 880px;
   --twin-field-h: 52px;
+  --twin-bar-h: calc(var(--twin-field-h) + 22px); /* field + 10px padding and 1px border, top and bottom */
+  /* Scroll-to-top button (owner, 2026-11-03; components/ScrollTop.tsx) */
+  --to-top-size: 56px;
+  --to-top-inset: 16px;          /* from the right edge below lg */
+  --to-top-inset-lg: 24px;
+  --to-top-gap: 12px;            /* above the twin bar below lg */
   --twin-send-size: 40px;
   --twin-radius-shell: 26px;
   --twin-radius-field: 16px;
@@ -251,12 +386,59 @@
   --iso-silk-size: 10px;
   --iso-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --iso-lit: 300ms;
-  --iso-cycle-drop: 3.6s;
+  --iso-cycle-growth: 4.4s;
+  --iso-cycle-review: 7s;
   --iso-cycle-build: 4.4s;
   --iso-cycle-loop: 4s;
   --iso-stagger: 0.14s;
   --iso-drop-y: -44px;
   --iso-lift-y: -12px;
+  --iso-label-size: 11px;
+  --iso-glyph-text-size: 20px;
+  --iso-stack-end: translate(-10px, -51px) scale(0.85); /* where the folded slab sits, clear of the label and readers */
+  --iso-stack-fade: 300ms;
+  --iso-stack-fold: 800ms;
+  --iso-stack-fold-at: 300ms;
+  --iso-stack-label-at: 1100ms;
+  --iso-stack-reader-at: 1400ms;
+  --iso-stack-beam-at: 1700ms;
+  --iso-stack-read-at: 1900ms;
+  --iso-stack-back-fold-at: 300ms;  /* on leave: readers and label go first, then the fold, then the lines */
+  --iso-stack-back-note-at: 1000ms;
+  --iso-read: 1.5s;
+  --iso-tool-stagger: 0.18s;
+  --iso-gate-bubble: 450ms;      /* each chat bubble rises off the block in turn, before the signal starts */
+  --iso-gate-bubble-rise: 5px;   /* the bubbles' thickness, so at rest only their top faces show, flat on the block */
+  --iso-gate-lead: 0.9s;         /* the two bubbles go first, then the rest of the sequence runs as before */
+  --iso-gate-run: 3s;           /* signal: reaches the gate at 0.7s, waits, passes at 1.8s (after the lead) */
+  --iso-gate-person-at: calc(0.7s + var(--iso-gate-lead));
+  --iso-gate-tap: 0.7s;
+  --iso-gate-tap-at: calc(0.95s + var(--iso-gate-lead));
+  --iso-gate-press-at: calc(1.7s + var(--iso-gate-lead));
+  --iso-gate-press: 300ms;
+  --iso-gate-sink: 9px;
+  --iso-gate-action-at: calc(2.55s + var(--iso-gate-lead));
+  --iso-gate-action: 500ms;
+  --iso-gate-action-flat: 12px;  /* the box's height, so at rest only its top shows, flat on the plate */
+  --iso-gate-undo: 200ms;
+  --iso-cycle-research: 9s;
+  --iso-cycle-prototype: 6.5s;  /* in order: tools, prompt lines, token down the wire, then the laptop */
+  --iso-prototype-write-at: 1.2s;
+  --iso-prototype-token-at: 2.5s;
+  --iso-prototype-build-at: 3.3s;
+  /* Testimonial cards: motion from 21st.dev tilt-card "evade", colours ours (components/TiltCard.tsx, animations.md) */
+  --tilt-limit: 20deg;
+  --tilt-scale: 1.08;
+  --tilt-perspective: 1200px;
+  --tilt-duration: 200ms;
+  --tilt-fade: 300ms;
+  --tilt-spot: color-mix(in srgb, var(--foreground) 8%, transparent);
+  --lanyard-card-w: 260px;
+  --lanyard-card-h: 430px;
+  --lanyard-personal-photo-h: 160px;
+  --lanyard-perspective: 900px;
+  --lanyard-stage-h: 600px;      /* rope, card and room to swing */
+  --shadow-tilt: 0 25px 50px -12px rgb(0 0 0 / 0.5);
 }
 
 .dark {
@@ -325,10 +507,10 @@
   --spacing-nav: var(--nav-gap);
   --spacing-nav-link: var(--nav-link-gap);
   --container-intro: var(--intro-w);
+  --container-tools-intro: var(--tools-intro-w);
   --spacing-work-screen-sm: var(--screen-h-sm);
   --spacing-work-screen: var(--screen-h);
   --spacing-visual: var(--visual-h);
-  --spacing-works-rail: var(--works-rail-w);
   --spacing-graph-search: var(--graph-search-w);
   --spacing-graph-select: var(--graph-select-w);
   --spacing-graph-panel: var(--graph-panel-w);
@@ -350,19 +532,24 @@
 
 /* Base type rules. Display is 36 on mobile and 56 from md, per frames 27:5 and 2:2. */
 body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); font-size: var(--text-body); line-height: 1.4; letter-spacing: -0.02em; }
-.display, .title, .subtitle { font-family: var(--font-heading); }
+.display, .headline, .title, .subtitle { font-family: var(--font-heading); }
 .display { font-size: var(--text-display-sm); font-weight: 500; line-height: var(--leading-display-sm); letter-spacing: -0.04em; @variant md { font-size: var(--text-display); line-height: var(--leading-display); } }
+.display-hero { font-size: var(--text-hero-sm); @variant md { font-size: var(--text-hero); } } /* with .display, on the hero h1 only */
+.headline { font-size: var(--text-headline-sm); font-weight: 500; line-height: var(--leading-headline-sm); letter-spacing: -0.035em; @variant lg { font-size: var(--text-headline); line-height: var(--leading-headline); } }
 .title { font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; @variant lg { font-size: var(--text-title); line-height: 1.1; } }
 .subtitle { font-size: var(--text-subtitle-sm); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; @variant lg { font-size: var(--text-subtitle); } }
+.case-statement { font-family: var(--font-heading); font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; text-wrap: balance; @variant lg { max-width: var(--case-statement-w); font-size: var(--text-title); line-height: 1.1; } } /* conclusion: the section heading (.title) size at every breakpoint, so a sentence with figures reads at a glance (owner, 2026-11-04; Figma 42:81 was display) */
 .label { font-size: var(--text-label); font-weight: 500; line-height: 1.33; letter-spacing: -0.02em; text-transform: uppercase; }
-.micro { font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1.5; letter-spacing: 0.18em; text-transform: uppercase; }
+.label-cta { font-size: var(--text-cta); } /* with .label, on lime CTA buttons */
+.micro { font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1.5; letter-spacing: var(--tracking-micro); text-transform: uppercase; }
 .nav-link {
   font-size: var(--text-nav); font-weight: 600; line-height: var(--leading-nav); letter-spacing: 0; color: var(--nav-link);
   transition: background-color var(--nav-pill-duration) ease, color var(--nav-pill-duration) ease;
-  &:focus-visible { background: var(--nav-pill-hover); color: var(--foreground); }
+  &:focus-visible, &[aria-current] { background: var(--nav-pill-hover); color: var(--foreground); } /* current section keeps the hover pill */
   @media (hover: hover) { &:hover { background: var(--nav-pill-hover); color: var(--foreground); } }
   @media (prefers-reduced-motion: reduce) { transition: none; }
 }
+.nav-link-compact { font-size: var(--text-nav-float); line-height: var(--leading-nav-float); }
 .glow-label { font-size: var(--text-body); line-height: var(--leading-glow); letter-spacing: var(--tracking-glow); }
 .frame { max-width: var(--frame-w); margin-inline: auto; @variant frame { border-inline: 1px solid var(--hairline); } } /* side borders drop below the frame width */
 .logo { position: relative; display: block; flex-shrink: 0; overflow: hidden; width: var(--logo-size-sm); height: var(--logo-size-sm); @variant md { width: var(--logo-size); height: var(--logo-size); } }
@@ -439,7 +626,8 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .hero-band { flex: 1 0 var(--horizon-gap-sm); @variant md { flex-basis: var(--horizon-gap); } }
 .hero-horizon-anchor { position: relative; z-index: 5; height: 0; } /* sits at the top of Works, so the rim rides the edge of the globe */
 .hero-horizon { --reach: var(--horizon-reach-sm); @variant md { --reach: var(--horizon-reach); } position: absolute; left: 0; bottom: 0; display: block; width: 100%; pointer-events: none; } /* height and offset from HeroHorizon */
-.works-card { position: relative; z-index: 10; }
+.works-card { position: relative; }
+.works-heading, .works-list { position: relative; z-index: 7; } /* above the cap, which is above the horizon canvas (z 5) */
 .works-heading { text-align: center; & span { display: block; } }
 @media (prefers-reduced-motion: no-preference) {
   .hero {
@@ -450,10 +638,12 @@ body { background: var(--background); color: var(--foreground); font-family: var
   .hero-horizon { opacity: calc(1 - var(--hero-p) * var(--hero-p) * var(--hero-p)); }
   .hero-stage[data-covered] .hero { visibility: hidden; }
   .hero-stage[data-covered] .hero-horizon { display: none; } /* takes it out of view, so it stops drawing */
-  .works-card {
-    --r: calc(var(--horizon-radius) * min(100vw, var(--frame-w))); /* replaced by HeroStage once it has measured */
-    background: var(--background);
-    clip-path: circle(var(--r) at 50% var(--r));
+  /* The globe's body. Only this short strip is clipped: a circle clip on the whole section stops rendering once
+     the section is thousands of pixels tall (the horizon turned into a straight line), so the cap carries it. */
+  .works-card { --r: calc(var(--horizon-radius) * min(100vw, var(--frame-w))); } /* replaced by HeroStage once it has measured */
+  .works-cap {
+    position: absolute; inset-inline: 0; top: 0; z-index: 6; aspect-ratio: 100 / 16; pointer-events: none;
+    background: var(--background); clip-path: circle(var(--r) at 50% var(--r));
   }
   .works-heading {
     opacity: var(--works-heading-in);
@@ -461,31 +651,30 @@ body { background: var(--background); color: var(--foreground); font-family: var
     transform: translateY(calc((1 - var(--works-heading-in)) * var(--works-rise))) scale(calc(var(--works-heading-from) + (1 - var(--works-heading-from)) * var(--works-heading-in)));
   }
   .works-list { opacity: var(--works-list-in); }
-  .hero-stage[data-covered] .works-card { clip-path: none; }
+  .hero-stage[data-covered] .works-cap { display: none; }
 }
-.works-rail {
-  position: sticky; top: var(--works-rail-top); align-self: start; max-height: calc(100vh - var(--works-rail-top) - 24px); overflow-y: auto; scrollbar-width: none;
-  & .works-rail-title { color: var(--muted-foreground); transition: color var(--works-colour) var(--works-ease); }
-  & li[data-on] .works-rail-title { color: var(--foreground); }
+.works-list a:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.works-media { background: radial-gradient(90% 70% at 50% 100%, color-mix(in srgb, var(--brand) var(--works-media-glow), transparent), transparent 70%), var(--card); }
+.works-demo { width: 100%; }
+.works-square { @variant lg { min-height: var(--works-square-min-h); } }
+.works-metric { white-space: nowrap; @variant lg { font-size: var(--works-metric-size); line-height: 1; } }
+/* Tile hover (owner, 2026-11-03, after poulo.site): every tile lifts with a brighter border and a shadow; the squares
+   also darken and their icon tilts. The lift uses transform, because translate carries the scroll reveal and its 1.25s. */
+.works-fig { --works-hover-t: transform var(--works-hover) var(--works-hover-ease), border-color var(--works-hover) var(--works-hover-ease), background-color var(--works-hover) var(--works-hover-ease), box-shadow var(--works-hover) var(--works-hover-ease); transition: var(--works-hover-t); }
+.work-icon { transition: rotate var(--works-hover) var(--works-hover-ease), scale var(--works-hover) var(--works-hover-ease), color var(--works-hover) var(--works-hover-ease); }
+@media (hover: hover) {
+  .works-fig:hover { border-color: var(--works-hover-border); box-shadow: var(--works-hover-shadow); }
+  .works-square:hover { background-color: var(--background); }
+  .works-square:hover .work-icon { color: var(--foreground); }
+  @media (prefers-reduced-motion: no-preference) {
+    .works-fig:hover { transform: translateY(var(--works-hover-lift)); }
+    .works-square:hover .work-icon { rotate: var(--works-hover-icon-tilt); scale: var(--works-hover-icon-scale); }
+  }
 }
-.works-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--works-expand) var(--works-ease); }
-.works-rail li[data-on] .works-more { grid-template-rows: 1fr; }
-.works-bar {
-  position: sticky; top: var(--works-bar-top); z-index: 8; display: flex; @variant lg { display: none; } gap: calc(var(--spacing) * 5); overflow-x: auto; scrollbar-width: none;
-  padding-inline: calc(var(--spacing) * 4); background: var(--background); border-bottom: 1px solid var(--hairline);
-  & button { flex: none; padding-block: calc(var(--spacing) * 3); white-space: nowrap; color: var(--muted-foreground); box-shadow: inset 0 -2px 0 transparent; transition: color var(--works-colour) var(--works-ease), box-shadow var(--works-colour) var(--works-ease); cursor: pointer; }
-  & button[aria-current] { color: var(--foreground); box-shadow: inset 0 -2px 0 var(--brand); }
-}
-.works-list :is(button, a):focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
-.works-phones { display: grid; grid-template-columns: repeat(2, 1fr); gap: calc(var(--spacing) * 4); width: 100%; @variant lg { grid-template-columns: repeat(5, 1fr); } }
-.works-flow { position: relative; min-width: 0; }
-.works-group { scroll-margin-top: var(--works-group-margin-sm); @variant lg { scroll-margin-top: var(--works-rail-top); } }
-.works-rule { position: absolute; inset-block: 0; left: 0; width: 1px; background: var(--hairline); &::after { content: ""; position: absolute; inset: 0; background: var(--brand); transform: scaleY(var(--works-p, 0)); transform-origin: 50% 0; } }
 @media (prefers-reduced-motion: no-preference) {
-  .works-ix[data-ready] .works-fig { transition: opacity var(--works-reveal-fade) ease, translate var(--works-reveal) var(--works-ease), clip-path var(--works-reveal) var(--works-ease); }
+  .works-ix[data-ready] .works-fig { transition: opacity var(--works-reveal-fade) ease, translate var(--works-reveal) var(--works-ease), clip-path var(--works-reveal) var(--works-ease), var(--works-hover-t); }
   .works-ix[data-ready] .works-fig:not([data-in]) { opacity: 0; translate: 0 var(--works-reveal-y); clip-path: inset(var(--works-reveal-clip) 0 0); }
 }
-@media (prefers-reduced-motion: reduce) { .works-more, .works-rail-title, .works-bar button { transition: none; } }
 @property --brands-phase { syntax: "<number>"; inherits: true; initial-value: 0; }
 @property --brands-nudge { syntax: "<number>"; inherits: true; initial-value: 0; }
 @keyframes brands-spin { to { --brands-phase: 1; } } /* one full loop; --p multiplies it by the item count */
@@ -512,8 +701,6 @@ body { background: var(--background); color: var(--foreground); font-family: var
   .brands-list { position: static; display: flex; width: max-content; gap: var(--brands-gap); padding-inline: var(--brands-gap); }
   .brands-item { position: static; flex: none; margin: 0; width: var(--brands-strip-size); height: var(--brands-strip-size); transform: none; }
 }
-.service-bullets li { position: relative; padding-left: calc(var(--spacing) * 4); }
-.service-bullets li::before { content: ""; position: absolute; left: 1px; top: 8px; width: 6px; height: 6px; border-radius: 2px; background: var(--brand); }
 .iso-art { display: block; width: 100%; height: auto; max-height: 216px; overflow: visible; }
 .iso polygon { stroke: var(--iso-line); stroke-width: 1; stroke-linejoin: round; transition: stroke var(--iso-lit) ease, fill var(--iso-lit) ease; }
 .iso-top { fill: var(--iso-top); }
@@ -526,7 +713,66 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .iso-cast { fill: var(--iso-cast); }
 .iso-dim, .iso-rule, .iso-wire, .iso-link, .iso-stem { fill: none; stroke: var(--iso-line); stroke-width: 1; stroke-linecap: round; transition: stroke var(--iso-lit) ease; }
 .iso-rule { stroke-width: 1.5; }
-.iso-link { stroke-dasharray: 2 4; }
+.iso-laptop-frame { fill: var(--iso-top); stroke: var(--iso-line); stroke-width: 1; }
+.iso-laptop-display { fill: var(--iso-right); stroke: var(--iso-line); stroke-width: 0.8; }
+.iso-laptop-detail { fill: none; stroke: var(--iso-line-lit); stroke-width: 1; stroke-linecap: round; }
+.iso-laptop-accent { fill: var(--brand); }
+.iso-laptop-screen { transform-origin: 0 0; }
+[data-lit] .iso-laptop-frame, [data-lit] .iso-laptop-display { stroke: var(--iso-line-lit); }
+.iso-review-line { fill: none; stroke: var(--iso-line-lit); stroke-width: 1.5; stroke-linecap: round; }
+.iso-review-alert, .iso-review-approved { stroke: var(--brand); stroke-width: 1.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.iso-review-approved { stroke-width: 2; }
+.iso-review-alert { opacity: 0; }
+.iso-review-request { fill: var(--brand); opacity: 0; }
+.iso-review-link { fill: none; stroke: var(--iso-line-lit); stroke-width: 1; stroke-dasharray: 2 4; }
+.iso-link { stroke-dasharray: 2 4; transform-box: fill-box; transform-origin: 50% 100%; }
+.iso-stack-label { fill: var(--foreground); font-family: var(--font-mono); font-size: var(--iso-label-size); letter-spacing: 0.08em; opacity: 0; transform: translateY(6px); }
+.iso-reader { opacity: 0; transform: translateX(var(--from)); }
+.iso-reader-icon { fill: var(--iso-line-lit); }
+.iso-beam { fill: none; stroke: var(--iso-line-lit); stroke-width: 1; stroke-dasharray: 2 4; opacity: 0; transform-box: fill-box; transform: scaleX(0); }
+.iso-read-pulse { fill: var(--brand); opacity: 0; }
+.iso-spoke { fill: none; stroke: var(--iso-line-lit); stroke-width: 1; stroke-dasharray: 2 4; }
+.iso-spoke-pulse { fill: var(--brand); opacity: 0; }
+.iso-tool-ring { fill: var(--iso-top); stroke: var(--iso-line-lit); stroke-width: 1; }
+.iso-tool-mark { fill: var(--foreground); }
+.iso-glyph, .iso-glyph-text { fill: var(--iso-line-lit); }
+.iso-outline { fill: none; stroke: var(--iso-line); stroke-width: 1; transition: stroke var(--iso-lit) ease; }
+[data-lit] .iso-outline { stroke: var(--iso-line-lit); }
+.iso-glyph-text { font-family: var(--font-heading); font-size: var(--iso-glyph-text-size); font-weight: 500; }
+.iso-swatch-1 { fill: var(--iso-line); }
+.iso-swatch-2 { fill: var(--iso-line-lit); }
+.iso-swatch-3 { fill: var(--foreground); }
+.iso-gate-confirm { fill: var(--brand); }
+.iso-gate-pulse { fill: var(--brand); opacity: 0; }
+.iso-gate-tap { fill: var(--foreground); opacity: 0; }
+.iso-gate-action { transform: translateY(var(--iso-gate-action-flat)); }
+.iso-gate-tick { opacity: 0; }
+.iso-gate-mark { fill: none; stroke: var(--brand); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+/* Growth: the built roadmap is the resting state. One hover loop starts and ends on it: outcome, icons and highlight clear,
+   the bars sink to the plate, then rise one by one, the icons and highlight return and the connection draws to the KPI. */
+.iso-growth-icon { fill: none; stroke: var(--iso-line-lit); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transform: translateY(-6px); }
+.iso-growth .iso-growth-selected .iso-left { fill: var(--brand); stroke: var(--brand); }
+.iso-growth .iso-growth-selected-icon { stroke: var(--brand); }
+.iso-growth-selected-label { fill: var(--brand); }
+.iso-growth-outcome { fill: var(--brand); }
+.iso-growth-connection, .iso-growth-kpi-stem { fill: none; stroke: var(--brand); stroke-width: 1.2; stroke-linecap: round; }
+.iso-growth-connection { stroke-dasharray: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  [data-playing] .iso-growth-icon { animation: iso-growth-icon var(--iso-cycle) ease-in-out infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
+  [data-playing] .iso-growth-selected-icon { animation-name: iso-growth-icon, iso-growth-tint; animation-delay: calc(var(--i) * var(--iso-stagger)), 0s; }
+  [data-playing] .iso-growth-rise { animation: iso-growth-rise var(--iso-cycle) ease-in-out infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
+  [data-playing] .iso-growth-selected .iso-left { animation: iso-growth-face var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-growth-selected-label { animation: iso-growth-label var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-growth-outcome { animation: iso-growth-outcome var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-growth-connection { animation: iso-growth-draw var(--iso-cycle) ease-in-out infinite; }
+}
+@keyframes iso-growth-outcome { 0%, 6% { opacity: 1; } 14%, 66% { opacity: 0; } 70%, 100% { opacity: 1; } }
+@keyframes iso-growth-draw { 0%, 14% { stroke-dashoffset: 0; } 15%, 68% { stroke-dashoffset: 1; } 82%, 100% { stroke-dashoffset: 0; } }
+@keyframes iso-growth-icon { 0%, 8% { opacity: 1; transform: translateY(-6px); } 18%, 52% { opacity: 0; transform: translateY(0); } 62%, 100% { opacity: 1; transform: translateY(-6px); } }
+@keyframes iso-growth-rise { 0%, 14% { transform: translateY(0); } 30%, 38% { transform: translateY(var(--growth-rise)); } 56%, 100% { transform: translateY(0); } }
+@keyframes iso-growth-face { 0%, 10% { fill: var(--brand); stroke: var(--brand); } 18%, 56% { fill: var(--iso-left); stroke: var(--iso-line); } 64%, 100% { fill: var(--brand); stroke: var(--brand); } }
+@keyframes iso-growth-tint { 0%, 10% { stroke: var(--brand); } 18%, 56% { stroke: var(--iso-line-lit); } 64%, 100% { stroke: var(--brand); } }
+@keyframes iso-growth-label { 0%, 10% { fill: var(--brand); } 18%, 56% { fill: var(--iso-silk); } 64%, 100% { fill: var(--brand); } }
 .iso-tip { fill: var(--foreground); }
 .iso-pulse { fill: var(--brand); }
 .iso-led { fill: var(--brand); opacity: 0.28; }
@@ -536,32 +782,157 @@ body { background: var(--background); color: var(--foreground); font-family: var
 [data-lit] .iso-dim, [data-lit] .iso-rule, [data-lit] .iso-wire, [data-lit] .iso-link, [data-lit] .iso-stem { stroke: var(--iso-line-lit); }
 [data-lit] .iso-hot .iso-left { stroke: var(--brand); }
 @media (prefers-reduced-motion: no-preference) {
-  [data-playing] .iso-drop { animation: iso-drop var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
-  [data-playing] .iso-rule { stroke-dasharray: 1 1; animation: iso-write var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
-  [data-playing] .iso-token { animation: iso-token calc(var(--iso-cycle) / 2) linear infinite; }
+  [data-playing] .iso-review-request { animation: iso-review-request var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-review-alert { animation: iso-review-alert var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-review-approved { animation: iso-review-approved var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-review-data { animation: iso-review-data var(--iso-cycle) ease-in-out infinite; }
+  [data-playing] .iso-review-people { animation: iso-review-people var(--iso-cycle) ease-in-out infinite; }
+  [data-playing] .iso-review-status { animation: iso-review-status var(--iso-cycle) ease-in-out infinite; }
+  [data-playing] .iso-review-person-0 { animation: iso-review-first var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-review-person-1 { animation: iso-review-second var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-review-detail { animation: iso-review-detail var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-drop { animation: iso-drop var(--iso-cycle) linear infinite; animation-delay: calc(var(--iso-drop-at, 0s) + var(--i) * var(--iso-stagger)); }
+  .iso-stack-body, .iso-stack-layer { transition: transform var(--iso-stack-fold) var(--iso-ease) var(--iso-stack-back-fold-at); }
+  .iso-link, .iso-stack-note { transition: transform var(--iso-stack-fade) ease var(--iso-stack-back-note-at), opacity var(--iso-stack-fade) ease var(--iso-stack-back-note-at), stroke var(--iso-lit) ease; }
+  .iso-slab .iso-left { transition: fill var(--iso-stack-fade) ease, stroke var(--iso-lit) ease; }
+  .iso-stack-label, .iso-reader, .iso-beam { transition: opacity var(--iso-stack-fade) ease, transform var(--iso-stack-fade) ease; }
+  [data-lit] .iso-stack-body { transform: var(--iso-stack-end); transition-delay: var(--iso-stack-fold-at); }
+  [data-lit] .iso-stack-layer { transform: translateY(var(--fold)); transition-delay: var(--iso-stack-fold-at); }
+  [data-lit] .iso-link { transform: scaleY(0); opacity: 0; transition-delay: 0ms; }
+  [data-lit] .iso-stack-note { opacity: 0; transition-delay: 0ms; }
+  [data-lit] .iso-slab .iso-left { fill: var(--brand); transition-delay: var(--iso-stack-label-at); }
+  [data-lit] .iso-stack-label { opacity: 1; transform: none; transition-delay: var(--iso-stack-label-at); }
+  [data-lit] .iso-reader { opacity: 1; transform: none; transition-delay: var(--iso-stack-reader-at); }
+  [data-lit] .iso-beam { opacity: 1; transform: none; transition-delay: var(--iso-stack-beam-at); }
+  [data-lit] .iso-read-pulse { animation: iso-read var(--iso-read) linear var(--iso-stack-read-at) infinite; }
+  .iso-gate-press, .iso-gate-action, .iso-gate-tick, .iso-gate-person { transition: transform var(--iso-gate-undo) ease, opacity var(--iso-gate-undo) ease, fill var(--iso-gate-undo) ease; }
+  [data-lit] .iso-gate-person { fill: var(--foreground); transition-delay: var(--iso-gate-person-at); }
+  [data-lit] .iso-gate-tick { opacity: 1; transition-delay: var(--iso-gate-action-at); transition-duration: var(--iso-gate-action); }
+  .iso-gate-bubble { transform: translateY(var(--iso-gate-bubble-rise)); transition: transform var(--iso-gate-undo) ease; }
+  .iso-gate-bubble .iso-left { transition: fill var(--iso-gate-undo) ease, stroke var(--iso-gate-undo) ease; }
+  [data-lit] .iso-gate-bubble .iso-left { fill: var(--brand); stroke: var(--brand); transition: fill var(--iso-gate-bubble) ease calc(var(--i) * var(--iso-gate-bubble)), stroke var(--iso-gate-bubble) ease calc(var(--i) * var(--iso-gate-bubble)); }
+  [data-lit] .iso-gate-bubble { transform: none; transition: transform var(--iso-gate-bubble) var(--iso-ease) calc(var(--i) * var(--iso-gate-bubble)); }
+  [data-lit] .iso-gate-pulse { animation: iso-gate-pulse var(--iso-gate-run) linear var(--iso-gate-lead) both; }
+  [data-lit] .iso-gate-tap { animation: iso-gate-tap var(--iso-gate-tap) ease var(--iso-gate-tap-at) both; }
+  [data-lit] .iso-gate-press { transform: translateY(var(--iso-gate-sink)); transition: transform var(--iso-gate-press) ease var(--iso-gate-press-at); }
+  [data-lit] .iso-gate-action { transform: none; transition: transform var(--iso-gate-action) var(--iso-ease) var(--iso-gate-action-at); }
+  [data-playing] .iso-spoke-pulse { animation: iso-spoke var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-tool-stagger)); }
+  [data-playing] .iso-tool-ring { animation: iso-tool-ring var(--iso-cycle) ease infinite; animation-delay: calc(var(--i) * var(--iso-tool-stagger)); }
+  [data-playing] .iso-tool-mark { animation: iso-tool-mark var(--iso-cycle) ease infinite; animation-delay: calc(var(--i) * var(--iso-tool-stagger)); }
+  [data-playing] .iso-rule { stroke-dasharray: 1 1; animation: iso-write var(--iso-cycle) linear infinite; animation-delay: calc(var(--iso-prototype-write-at) + var(--i) * var(--iso-stagger)); }
+  [data-playing] .iso-token { animation: iso-token var(--iso-cycle) linear var(--iso-prototype-token-at) infinite; }
+  [data-playing] .iso-laptop-screen { animation: iso-laptop-open var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-prototype-ui { animation: iso-prototype-reveal var(--iso-cycle) linear infinite; }
   [data-playing] .iso-station { animation: iso-lift var(--iso-cycle) var(--iso-ease) infinite; animation-delay: calc(var(--i) * var(--iso-cycle) / 4); }
   [data-playing] .iso-led { animation: iso-blink var(--iso-cycle) var(--iso-ease) infinite; animation-delay: calc(var(--i) * var(--iso-cycle) / 4); }
   [data-playing] .iso-pulse { animation: iso-ring var(--iso-cycle) linear infinite; }
 }
 /* Every loop starts and ends with the part in its resting place, so it can start or stop on any box state */
+@keyframes iso-review-request { /* along the wire: out of the data, to the reviewers' link, each reviewer, back to the link, on to the status */
+  0%, 14% { transform: translate(0, -6px); opacity: 0; }
+  18% { transform: translate(0, 0); opacity: 1; }
+  26% { transform: translate(35.5px, 20.5px); }
+  34%, 39% { transform: translate(57.2px, 2px); }
+  50%, 55% { transform: translate(14.7px, 26.5px); }
+  60% { transform: translate(35.5px, 14.5px); }
+  69% { transform: translate(90.1px, 45px); opacity: 1; }
+  73%, 100% { transform: translate(90.1px, 45px); opacity: 0; }
+}
+@keyframes iso-review-data {
+  0%, 3%, 28%, 100% { transform: translateY(0); }
+  10%, 22% { transform: translateY(-6px); }
+}
+@keyframes iso-review-people {
+  0%, 26%, 63%, 100% { transform: translateY(0); }
+  33%, 57% { transform: translateY(-6px); }
+}
+@keyframes iso-review-status {
+  0%, 61%, 95%, 100% { transform: translateY(0); }
+  68%, 88% { transform: translateY(-6px); }
+}
+@keyframes iso-review-first {
+  0%, 33%, 46%, 100% { opacity: 0.45; }
+  35%, 40% { opacity: 1; }
+}
+@keyframes iso-review-second {
+  0%, 49%, 62%, 100% { opacity: 0.45; }
+  51%, 56% { opacity: 1; }
+}
+@keyframes iso-review-detail {
+  0%, 10% { opacity: 1; }
+  22%, 84% { opacity: 0.2; }
+  98%, 100% { opacity: 1; }
+}
+@keyframes iso-review-alert {
+  0%, 69% { opacity: 1; }
+  74%, 100% { opacity: 0; }
+}
+@keyframes iso-review-approved {
+  0%, 69% { opacity: 0; }
+  74%, 91% { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
 @keyframes iso-drop {
   0% { transform: translateY(0); opacity: 1; animation-timing-function: ease-in; }
   12% { transform: translateY(var(--iso-drop-y)); opacity: 0; animation-timing-function: var(--iso-ease); }
   34%, 100% { transform: translateY(0); opacity: 1; }
 }
+@keyframes iso-read { /* from the reader into the slab */
+  0% { transform: translateX(0); opacity: 0; }
+  15%, 85% { opacity: 1; }
+  100% { transform: translateX(var(--to)); opacity: 0; }
+}
+@keyframes iso-spoke { /* from the tool down its line into the prompt */
+  0% { transform: translate(0, 0); opacity: 0; }
+  2%, 12% { opacity: 1; }
+  14%, 100% { transform: translate(var(--to-x), var(--to-y)); opacity: 0; }
+}
+@keyframes iso-tool-ring {
+  0%, 20%, 100% { stroke: var(--iso-line-lit); }
+  3%, 12% { stroke: var(--brand); }
+}
+@keyframes iso-tool-mark {
+  0%, 20%, 100% { fill: var(--foreground); }
+  3%, 12% { fill: var(--brand); }
+}
+@keyframes iso-gate-pulse { /* 8.7 x 5 stops short of the gate, 67.5 x 39 reaches the action */
+  0% { transform: translate(0, 0); opacity: 0; }
+  3% { opacity: 1; }
+  23%, 60% { transform: translate(-8.7px, 5px); opacity: 1; }
+  85% { transform: translate(-67.5px, 39px); opacity: 1; }
+  90%, 100% { transform: translate(-67.5px, 39px); opacity: 0; }
+}
+@keyframes iso-gate-tap {
+  0% { transform: translate(0, 0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { transform: translate(var(--to-x), var(--to-y)); opacity: 1; }
+  100% { transform: translate(var(--to-x), var(--to-y)); opacity: 0; }
+}
 @keyframes iso-write {
   0% { stroke-dashoffset: 0; opacity: 1; }
-  10% { stroke-dashoffset: 0; opacity: 0; }
-  11% { stroke-dashoffset: 1; opacity: 1; }
-  34%, 100% { stroke-dashoffset: 0; opacity: 1; }
+  2% { stroke-dashoffset: 0; opacity: 0; }
+  3% { stroke-dashoffset: 1; opacity: 1; }
+  16%, 100% { stroke-dashoffset: 0; opacity: 1; }
 }
-@keyframes iso-token { /* 26 x 15 is half the wire: from the middle into the prototype, then out of the editor and back to the middle */
+@keyframes iso-token { /* 26 x 15 is half the wire: back to the prompt, along the whole wire into the laptop, then back to its resting place */
   0% { transform: translate(0, 0); opacity: 1; }
-  40% { transform: translate(26px, 15px); opacity: 1; }
-  50% { transform: translate(26px, 15px); opacity: 0; }
-  51% { transform: translate(-26px, -15px); opacity: 0; }
-  60% { transform: translate(-26px, -15px); opacity: 1; }
-  100% { transform: translate(0, 0); opacity: 1; }
+  2% { transform: translate(0, 0); opacity: 0; }
+  3% { transform: translate(-26px, -15px); opacity: 0; }
+  5% { transform: translate(-26px, -15px); opacity: 1; }
+  14% { transform: translate(26px, 15px); opacity: 1; }
+  16% { transform: translate(26px, 15px); opacity: 0; }
+  17% { transform: translate(0, 0); opacity: 0; }
+  21%, 100% { transform: translate(0, 0); opacity: 1; }
+}
+@keyframes iso-laptop-open {
+  0%, 52% { transform: scaleY(0.06); animation-timing-function: ease-out; }
+  67%, 85% { transform: scaleY(1); animation-timing-function: ease-in-out; }
+  98%, 100% { transform: scaleY(0.06); }
+}
+@keyframes iso-prototype-reveal {
+  0%, 64% { opacity: 0; }
+  72%, 85% { opacity: 1; }
+  92%, 100% { opacity: 0; }
 }
 @keyframes iso-lift {
   0%, 22%, 100% { transform: translateY(0); }
@@ -659,4 +1030,139 @@ body { background: var(--background); color: var(--foreground); font-family: var
 @media (prefers-reduced-transparency: reduce) {
   .twin-glass, .twin-sheet, .twin-compose-card { background: var(--card); backdrop-filter: none; }
   .twin-scrim { backdrop-filter: none; }
+}
+.tilt-card {
+  position: relative; overflow: hidden;
+  transition: transform var(--tilt-duration) ease-out, box-shadow var(--tilt-fade) ease-out;
+  & > :not(.tilt-spot) { position: relative; } /* keeps the content above the spotlight */
+}
+.tilt-spot {
+  position: absolute; width: 200%; height: 200%; pointer-events: none;
+  left: calc((var(--tilt-px, 0) + 0.5) * 100%); top: calc((var(--tilt-py, 0) + 0.5) * 100%); translate: -50% -50%;
+  background: radial-gradient(circle, var(--tilt-spot) 0%, transparent 40%);
+  opacity: 0; transition: opacity var(--tilt-fade);
+}
+.tilt-stage[data-tilted] {
+  position: relative; z-index: 1;
+  .tilt-card {
+    will-change: transform; box-shadow: var(--shadow-tilt);
+    /* Evade: the card turns away from the pointer */
+    transform: perspective(var(--tilt-perspective)) rotateX(calc(var(--tilt-py) * var(--tilt-limit) * -2)) rotateY(calc(var(--tilt-px) * var(--tilt-limit) * 2)) scale3d(var(--tilt-scale), var(--tilt-scale), var(--tilt-scale));
+  }
+  .tilt-spot { opacity: 1; }
+}
+
+/* Contact lanyard (components/Lanyard.tsx, animations.md) */
+.lanyard-stage { position: relative; overflow: hidden; width: 100%; height: var(--lanyard-stage-h); }
+.lanyard-rope { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.lanyard-clip { position: absolute; top: 0; left: 50%; width: 28px; height: 6px; translate: -50% 0; border-radius: 0 0 var(--radius-btn) var(--radius-btn); background: var(--hairline); }
+.lanyard-card {
+  position: absolute; left: 0; top: 0; width: var(--lanyard-card-w); height: var(--lanyard-card-h); transform-origin: 50% 0;
+  perspective: var(--lanyard-perspective); filter: drop-shadow(0 18px 24px rgb(0 0 0 / 0.45)); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+  &[data-dragging] { cursor: grabbing; }
+  &:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; border-radius: var(--radius-xl); }
+}
+.lanyard-flipper { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; } /* no filter here: it would flatten the two faces */
+.lanyard-face {
+  position: absolute; inset: 0; display: flex; flex-direction: column; gap: calc(var(--spacing) * 3); overflow: hidden; padding: calc(var(--spacing) * 5);
+  padding-top: calc(var(--spacing) * 7); border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--card); backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.lanyard-back { transform: rotateY(180deg); }
+.lanyard-slot { position: absolute; top: calc(var(--spacing) * 2.5); left: 50%; width: 44px; height: 8px; translate: -50% 0; border: 1px solid var(--hairline); border-radius: 9999px; background: var(--background); }
+.lanyard-sheen { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--tilt-fade); background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), var(--tilt-spot) 0%, transparent 55%); }
+.lanyard-card[data-hover] .lanyard-sheen { opacity: 1; }
+.lanyard-photo { position: relative; overflow: hidden; height: 140px; flex: none; border: 1px solid var(--brand); border-radius: var(--radius-lg); background: var(--secondary); }
+.lanyard-personal-photo { position: relative; overflow: hidden; height: var(--lanyard-personal-photo-h); flex: none; border-radius: var(--radius-lg); background: var(--secondary); }
+.lanyard-stripe { position: absolute; inset-inline: 0; top: 0; height: 4px; background: var(--brand); }
+.lanyard-link { display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) { .lanyard-sheen { transition: none; } }
+
+/* The research illustration reveals a problem, a design, and a test in order. */
+.iso-research-links path { fill: none; stroke: var(--iso-line-lit); stroke-width: 1; stroke-dasharray: 2 4; }
+.iso-research-ring { fill: var(--iso-top); stroke: var(--iso-line-lit); stroke-width: 1.3; }
+.iso-research-handle, .iso-research-icon, .iso-research-warning { fill: none; stroke: var(--iso-line-lit); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.iso-research-handle { stroke-width: 2; }
+.iso-research-warning { fill: var(--iso-top); stroke: var(--brand); }
+.iso-research-test { fill: none; stroke: var(--brand); stroke-width: 1.5; }
+.iso-research-signal { fill: var(--brand); opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  [data-playing] .iso-research-lens { animation: research-search var(--iso-cycle) ease-in-out infinite; animation-delay: calc(var(--i) * .18s); }
+  [data-playing] .iso-research-input-0 { offset-path: path("M-4 -90 L31 -67"); animation: research-input var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-research-input-1 { offset-path: path("M54 -96 L51 -70"); animation: research-input var(--iso-cycle) linear infinite .2s; }
+  [data-playing] .iso-research-input-2 { offset-path: path("M114 -83 L72 -58"); animation: research-input var(--iso-cycle) linear infinite .4s; }
+  [data-playing] .iso-research-to-design { offset-path: path("M31.2 -22 L17.4 -14"); animation: research-design-signal var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-research-to-test { offset-path: path("M-22.5 9 L-36.3 17"); animation: research-test-signal var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-research-warning { animation: research-warning var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-test { animation: research-trial var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-0 { animation: research-lift-problem var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-1 { animation: research-lift-design var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-2 { animation: research-lift-validate var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-0 .iso-left { animation: research-light-problem var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-1 .iso-left { animation: research-light-design var(--iso-cycle) ease infinite; }
+  [data-playing] .iso-research-stage-2 .iso-left { animation: research-light-validate var(--iso-cycle) ease infinite; }
+}
+@keyframes research-search { 0%, 3%, 25%, 100% { transform: translate(0, 0); } 8% { transform: translate(-3px, 2px); } 14% { transform: translate(3px, -2px); } 20% { transform: translate(0, 0); } }
+@keyframes research-input { 0%, 21% { offset-distance: 0%; opacity: 0; } 24% { opacity: 1; } 33% { offset-distance: 100%; opacity: 1; } 36%, 100% { offset-distance: 100%; opacity: 0; } }
+@keyframes research-design-signal { 0%, 43% { offset-distance: 0%; opacity: 0; } 45% { opacity: 1; } 52% { offset-distance: 100%; opacity: 1; } 54%, 100% { offset-distance: 100%; opacity: 0; } }
+@keyframes research-test-signal { 0%, 61% { offset-distance: 0%; opacity: 0; } 63% { opacity: 1; } 70% { offset-distance: 100%; opacity: 1; } 72%, 100% { offset-distance: 100%; opacity: 0; } }
+@keyframes research-warning { 0%, 29%, 43%, 100% { transform: translate(9px, -14px); } 34%, 39% { transform: translate(9px, -19px); } }
+@keyframes research-trial { 0%, 70%, 100% { transform: translateX(0); } 75%, 85% { transform: translateX(-7px); } 80%, 90% { transform: translateX(0); } }
+
+@keyframes research-lift-problem { 0%, 32%, 94%, 100% { translate: 0 0; } 38%, 86% { translate: 0 -7px; } }
+@keyframes research-lift-design { 0%, 50%, 94%, 100% { translate: 0 0; } 56%, 86% { translate: 0 -7px; } }
+@keyframes research-lift-validate { 0%, 68%, 94%, 100% { translate: 0 0; } 74%, 86% { translate: 0 -7px; } }
+@keyframes research-light-problem { 0%, 32%, 94%, 100% { fill: var(--iso-left); } 38%, 86% { fill: var(--brand); } }
+@keyframes research-light-design { 0%, 50%, 94%, 100% { fill: var(--iso-left); } 56%, 86% { fill: var(--brand); } }
+@keyframes research-light-validate { 0%, 68%, 94%, 100% { fill: var(--iso-left); } 74%, 86% { fill: var(--brand); } }
+
+/* Tools I build with entrance (components/Tools.tsx, ToolsReveal.tsx; animations.md) */
+.tools[data-ready] .tools-head { transition: opacity var(--tools-head) var(--tools-ease), translate var(--tools-head) var(--tools-ease), filter var(--tools-head) var(--tools-ease); transition-delay: calc(var(--i) * var(--tools-head-stagger)); }
+.tools[data-ready] .tools-intro { transition: opacity var(--tools-intro) var(--tools-ease) var(--tools-intro-at); }
+.tools[data-ready] [data-reveal]:not([data-in]) :is(.tools-head, .tools-intro) { opacity: 0; }
+.tools[data-ready] [data-reveal]:not([data-in]) .tools-head { translate: 0 var(--tools-head-y); filter: blur(var(--tools-head-blur)); }
+@media (prefers-reduced-motion: reduce) {
+  .tools[data-ready] :is(.tools-head, .tools-intro) { transition: opacity var(--tools-reduced) ease; transition-delay: 0ms; }
+  .tools[data-ready] [data-reveal]:not([data-in]) .tools-head { translate: none; filter: none; }
+}
+
+/* Section reveals (components/ScrollReveal.tsx, animations.md). Steps are ordered by --i within a group, offset by --rise-at.
+   .rise-work is the Works card reveal. Movement uses `translate`, so it never fights a hover `transform`. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-rise-ready] [data-rise] .rise-head { transition: opacity var(--rise-head) var(--rise-ease), translate var(--rise-head) var(--rise-ease), filter var(--rise-head) var(--rise-ease); transition-delay: calc(var(--rise-at, 0ms) + var(--i, 0) * var(--rise-head-stagger)); }
+  [data-rise-ready] [data-rise] .rise-card { transition: opacity var(--rise-card-fade) var(--rise-ease), translate var(--rise-card) var(--rise-ease); transition-delay: calc(var(--rise-at, 0ms) + var(--i, 0) * var(--rise-card-stagger)); }
+  [data-rise-ready] [data-rise] .rise-fade { transition: opacity var(--rise-fade) var(--rise-ease); transition-delay: var(--rise-at, 0ms); }
+  [data-rise-ready] [data-rise] .rise-work { transition: opacity var(--works-reveal-fade) ease, translate var(--works-reveal) var(--works-ease), clip-path var(--works-reveal) var(--works-ease); transition-delay: calc(var(--rise-at, 0ms) + var(--i, 0) * var(--rise-card-stagger)); }
+  [data-rise-ready] [data-rise]:not([data-in]) .rise-head { opacity: 0; translate: 0 var(--rise-head-y); filter: blur(var(--rise-head-blur)); }
+  [data-rise-ready] [data-rise]:not([data-in]) .rise-card { opacity: 0; translate: 0 var(--rise-card-y); }
+  [data-rise-ready] [data-rise]:not([data-in]) .rise-fade { opacity: 0; }
+  [data-rise-ready] [data-rise]:not([data-in]) .rise-work { opacity: 0; translate: 0 var(--works-reveal-y); clip-path: inset(var(--works-reveal-clip) 0 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-rise-ready] [data-rise] :is(.rise-head, .rise-card, .rise-fade, .rise-work) { transition: opacity var(--rise-reduced) ease; }
+  [data-rise-ready] [data-rise]:not([data-in]) :is(.rise-head, .rise-card, .rise-fade, .rise-work) { opacity: 0; }
+}
+/* Coin row: the tile row shows until three.js has loaded (data-live); without JS or WebGL it stays. */
+.tools-coins:not([data-live]) .tools-stage-scroll, .tools-coins[data-live] .tools-fallback { display: none; }
+.tools-stage-scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+.tools-stage { --coins-size: var(--coins-size-sm); --coins-pad: var(--coins-pad-sm); position: relative; width: var(--coins-stage-w-sm); height: var(--coins-stage-h-sm); touch-action: pan-x pan-y; @variant md { --coins-size: var(--coins-size-md); width: 100%; height: var(--coins-stage-h-md); } @variant lg { --coins-size: var(--coins-size-lg); --coins-pad: var(--coins-pad-lg); height: var(--coins-stage-h); } }
+.tools-coin-label { position: absolute; top: 0; left: 0; transform: translateX(-50%); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 300ms ease, color 300ms ease; }
+.tools-coin-label[data-on] { opacity: 1; }
+.tools-coin-label[data-hover] { color: var(--foreground); }
+
+/* Scroll-to-top: the floating nav's glass, the CTA dotted arrow. Below lg it sits above the full-width twin bar; from lg it is
+   centred on the bar's height, beside it. It slides in from below with the floating nav's timing. */
+.to-top {
+  position: fixed; right: var(--to-top-inset); z-index: 50; display: flex; align-items: center; justify-content: center;
+  bottom: calc(var(--twin-bar-bottom-sm) + var(--twin-bar-h) + var(--to-top-gap) + env(safe-area-inset-bottom));
+  width: var(--to-top-size); height: var(--to-top-size); border-radius: 9999px; cursor: pointer;
+  border: 1px solid var(--hairline); background: color-mix(in srgb, var(--card) 70%, transparent); box-shadow: var(--shadow-pill);
+  backdrop-filter: blur(12px) saturate(1.5);
+  opacity: 0; transform: translateY(140%); pointer-events: none;
+  transition: transform var(--nav-float-duration) var(--nav-float-ease), opacity var(--nav-float-duration) ease, bottom var(--twin-bar-in) var(--twin-ease), border-color 200ms ease;
+  &[data-shown="true"] { opacity: 1; transform: none; pointer-events: auto; }
+  &:hover { border-color: var(--ring); }
+  &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  @variant lg { right: var(--to-top-inset-lg); bottom: calc(var(--twin-bar-bottom) + (var(--twin-bar-h) - var(--to-top-size)) / 2); }
+  &[data-bar="false"] { bottom: calc(var(--twin-bar-bottom-sm) + env(safe-area-inset-bottom)); @variant lg { bottom: var(--twin-bar-bottom); } }
+  @media (prefers-reduced-motion: reduce) { transform: none; transition: opacity var(--nav-float-fade) ease; }
 }

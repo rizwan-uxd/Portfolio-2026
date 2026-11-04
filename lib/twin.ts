@@ -1,7 +1,7 @@
 // Answers for the AI twin. No model yet (CLAUDE.md, out of scope for v1): a question is matched to a topic by
 // keywords, and every answer is built from the works and the CV in lib/content.ts, so it can't say anything they don't.
 // The chat only talks to /api/twin, so a real model can replace answer() without touching the UI.
-import { aiTwin, cv, liveSite, person, services, works, worksSection } from "@/lib/content";
+import { aiTwin, cv, person, services, works, worksSection } from "@/lib/content";
 
 export type TwinLink = { href: string; label: string };
 export type TwinAnswer = { lead: string; points?: string[]; link?: TwinLink };
@@ -16,7 +16,7 @@ const result = (slug: string) => {
   const w = work(slug);
   return `${w.title}: ${w.metric} ${w.metricLabel.toLowerCase()}`;
 };
-const caseStudy = (slug: string): TwinLink => ({ href: `${liveSite}/work/${slug}`, label: worksSection.readCase });
+const caseStudy = (slug: string): TwinLink => ({ href: `/work/${slug}`, label: worksSection.readCase });
 
 const [portal, reviewPlatform] = job("horizontal").highlights;
 const [bankingConcepts, copilot] = job("adcb").highlights;
@@ -28,11 +28,11 @@ const [systemsAcrossProducts, systemFoundations] = job("katim").highlights;
 const topics: { keywords: string[]; answer: TwinAnswer }[] = [
   {
     keywords: ["ai", "cursor", "claude", "vibe coding", "copilot", "chatgpt", "llm"],
-    answer: { lead: copilot, points: [bankingConcepts, service("Vibe coding and prototyping").description] },
+    answer: { lead: copilot, points: [bankingConcepts, service("Interactive Code Prototyping").description] },
   },
   {
     keywords: ["prototyp\\w*", "how fast", "speed", "quick\\w*", "design to code", "react native"],
-    answer: { lead: "I took a banking copilot from concept to a working React Native prototype in 3 days, using Claude Code and Cursor.", points: [service("Vibe coding and prototyping").description, ...cv.skills["AI & prototyping"].slice(0, 3)] },
+    answer: { lead: "I took a banking copilot from concept to a working React Native prototype in 3 days, using Claude Code and Cursor.", points: [service("Interactive Code Prototyping").description, ...cv.skills["AI & prototyping"].slice(0, 3)] },
   },
   {
     keywords: ["bank\\w*.*government\\w*", "government\\w*.*bank\\w*"],
@@ -63,7 +63,7 @@ const topics: { keywords: string[]; answer: TwinAnswer }[] = [
   },
   {
     keywords: ["design systems?", "components?", "tokens?", "governance"],
-    answer: { lead: service("Design systems/strategy").description, points: [systemsAcrossProducts, systemFoundations, result("secure-communication-app")] },
+    answer: { lead: service("Scalable Design Systems & Token Ops").description, points: [systemsAcrossProducts, systemFoundations, result("secure-communication-app")] },
   },
   {
     keywords: ["services?", "offer", "what (do|can) you do", "research", "discovery", "usability", "user testing", "process", "approach", "ux"],
@@ -103,7 +103,7 @@ const topics: { keywords: string[]; answer: TwinAnswer }[] = [
     answer: { lead: work("dubainow-mobile-app").summary, points: [dubaiNow, result("dubainow-mobile-app"), cv.award], link: caseStudy("dubainow-mobile-app") },
   },
   {
-    keywords: ["secure", "securelink", "communication"],
+    keywords: ["secure", "securelink", "secureline", "communication"],
     answer: { lead: work("secure-communication-app").summary, points: [result("secure-communication-app")], link: caseStudy("secure-communication-app") },
   },
   {

@@ -33,7 +33,7 @@ export function HeroStage({ children }: { children: ReactNode }) {
       stage.style.setProperty("--hero-scale", String(1 - (1 - endScale) * p));
       stage.style.setProperty("--hero-fade", String(1 - ramp(0.3, 0.85, p)));
       stage.style.setProperty("--works-heading-in", String(ramp(0.33, 0.8, p)));
-      stage.style.setProperty("--works-list-in", String(ramp(0.8, 1, p)));
+      stage.style.setProperty("--works-list-in", String(ramp(0.4, 0.7, p)));
 
       stage.style.setProperty("--hero-p", String(p));
       stage.style.setProperty("--hero-ease", String(p));

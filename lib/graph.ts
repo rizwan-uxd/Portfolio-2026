@@ -144,7 +144,7 @@ const groups: Record<GraphCategory, { title: string; seeds: Seed[] }> = {
       { id: "impact-invest", label: "+20%", title: "+20% new-user onboarding", detail: investInDubai },
       metric("impact-islamic", "emirates-islamic-digital-ux"),
       { id: "impact-bills", label: "5 to 2.5 min", title: "Bill payment from 5 minutes to under 2.5", detail: billPayment },
-      { id: "impact-adoption", label: "55%", title: "55% digital adoption", detail: adoption },
+      { id: "impact-adoption", label: "NPS 85+", title: "NPS above 85", detail: "Emirates Islamic: NPS exceeded 85, and complaints fell to fewer than 3 a week by sprint 18." },
       { id: "icxa", label: "ICXA award", title: "ICXA award, 2020", detail: `${cv.award}.` },
       // Stats from the About section of the live site
       { id: "years", label: "15+ years", title: "15+ years of experience", detail: cv.summary },
@@ -171,7 +171,7 @@ const crossLinks: [string, string][] = [
   ["horizontal", "hajj-platform"], ["horizontal", "review-platform"],
   ["adcb", "ai-copilot"], ["adcb", "banking-concepts"],
   ["digital-dubai", "dubainow"], ["digital-dubai", "invest-in-dubai"],
-  ["enbd", "emirates-islamic"], ["enbd", "impact-adoption"],
+  ["enbd", "emirates-islamic"], ["emirates-islamic", "impact-adoption"],
   // Industries
   ["bny", "banking"], ["enbd", "banking"], ["adcb", "banking"], ["digital-dubai", "government"], ["horizontal", "energy"],
   ["etihad", "aviation"], ["danube", "retail"],
@@ -186,7 +186,7 @@ const crossLinks: [string, string][] = [
   ["design-systems", "katim"], ["design-systems", "secure-comms"], ["design-systems", "dubainow"], ["design-tokens", "katim"], ["component-systems", "katim"], ["component-systems", "secure-comms"],
   ["ai-native", "ai-copilot"], ["ai-native", "banking-concepts"], ["ai-prototyping", "ai-copilot"],
   // Tools used
-  ["claude", "ai-copilot"], ["cursor", "ai-copilot"], ["react-native", "ai-copilot"], ["react", "secure-comms"], ["claude", "ai-prototyping"], ["cursor", "ai-prototyping"],
+  ["claude", "ai-copilot"], ["cursor", "ai-copilot"], ["react-native", "ai-copilot"], ["claude", "ai-prototyping"], ["cursor", "ai-prototyping"],
 ];
 
 export const graphLinks: GraphLink[] = [
@@ -229,7 +229,7 @@ export function shortestPath(from: string, to: string): string[] | null {
   return search(true) ?? search(false);
 }
 
-// Sphere layout: hubs spread evenly, each category's nodes in a cap around its hub, then a few rounds of repulsion so no two sit on top of each other.
+// Ball layout: hubs spread evenly, each category's nodes in a cap around its hub, then a few rounds of repulsion so no two sit on top of each other.
 function layout() {
   const unit = (v: number[]) => {
     const l = Math.hypot(v[0], v[1], v[2]) || 1;
@@ -268,6 +268,15 @@ function layout() {
     }
     leaves.forEach((l, i) => { l.p = unit(l.p.map((v, k) => v + push[i][k])); });
   }
+  // Depth, as on poulo.site: hubs sit part-way out and their nodes scatter in and out around them, so the graph is a ball and not a shell
+  const spread = (i: number) => {
+    const h = Math.sin(i * 12.9898 + 4.1) * 43758.5453;
+    return h - Math.floor(h);
+  };
+  leaves.forEach((l, i) => {
+    const f = l.n.kind === "hub" ? 0.82 : 0.58 + 0.5 * spread(i);
+    l.p = l.p.map((v) => v * f);
+  });
   for (const { n, p } of leaves) [n.x, n.y, n.z] = p;
 }
 layout();

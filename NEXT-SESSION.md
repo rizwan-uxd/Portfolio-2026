@@ -18,6 +18,7 @@ Written 2026-10-30, updated 2026-10-31 at the knowledge graph push, for picking 
 ## Git state
 - Branch: `claude/project-thread-rhwh4o`, the branch behind PR #1 (open): https://github.com/rizwan-uxd/Portfolio-2026/pull/1
 - Everything below is pushed, as of 2026-10-31. See `git log` for the latest commit.
+- Not committed yet: testimonial cards at equal size with the tilt hover (`components/TiltCard.tsx`).
 - Stash: one, `rizwan: full section build before section-by-section rebuild (2026-10-30)`. It is Riz's own work, so keep it.
 
 ## Built and pushed
@@ -31,11 +32,13 @@ Written 2026-10-30, updated 2026-10-31 at the knowledge graph push, for picking 
 - AI twin: floating ask bar and chat panel (`components/AiTwinBar.tsx`). It has no model. `lib/twin.ts` matches keywords and answers only from the CV and works in `lib/content.ts`.
 - Career knowledge graph: interactive 3D sphere, see below.
 
+- Case study pages (not committed yet): `/work/<slug>` for all five, see "Case study pages" in `components.md`. Every "Read the full case study" link now opens them, including the graph and the AI twin.
+
 ## How the knowledge graph works
-Riz's direction (2026-10-31): the interactions of sankar.work's Career Knowledge Graph, with Riz's own content, as a real 3D sphere like Riz's two sphere images.
+Riz's direction: the interactions of sankar.work's Career Knowledge Graph, with Riz's own content, in 3D. The look follows poulo.site's graph (2026-11-01), replacing the glowing wire sphere of 2026-10-31. Highlights use brand lime only.
 
 - `lib/graph.ts` holds the nodes and links, built from `lib/content.ts`, the shortest-path search and the sphere layout. A link goes in only if the CV, the works or the live site states it. A node with nothing stated connects only to its category.
-- `components/GraphSphere.tsx` is the renderer: hand-written WebGL with no dependency. It draws soft quads for lines and sprites for nodes, and projects in JS for picking and labels. The shell, web, violet inner lines and rim rays in `sphereStructure` are decoration and can't be clicked.
+- `components/GraphSphere.tsx` is the renderer: hand-written WebGL with no dependency. It draws curved arcs as thin quads and sprites for nodes, and projects in JS for picking and labels. The dust around the ball is decoration and can't be clicked.
 - `components/Graph.tsx` holds the UI and state: filters, search, trace, Graph/Timeline, tour, Reset, details panel. It passes a `view` object to the sphere.
 - Tour copy and the default trace are in `graphSection` in `lib/content.ts`. Colours are the `--graph-*` tokens.
 - The Secure Communication App has no employer link because its client is confidential. Skill nodes still join it to KATIM's design-system work, so a trace between them goes through a skill.
@@ -51,9 +54,12 @@ Riz's direction: no visible card, and Selected works starts contained inside the
 - The floating nav is triggered by a `data-nav-reveal-after` marker at the top of `#works`.
 
 ## Open items
+- Case studies: Secure Communication's card says "3 months" dev time saved, but its page says "2 months", both as on the live site. Riz hasn't said which is right.
+- Case studies: the Copilot page says 6 days, as the live site does; the CV, graph and AI twin say 3 days (see the graph item below).
+- Case studies: hover states on the links and cards aren't designed. `npm run build` hasn't been run for these pages, only `tsc` and the dev server, so run it before pushing.
 - Graph: the copilot prototype is "3 days" in the CV, the graph and the AI twin, but "six days" on the live site. Riz hasn't said which is right.
 - Graph: Etihad has no dates in any source, so it isn't on the Timeline.
-- Graph: at rest the centre of the sphere is busy and some labels are hard to read until hover, zoom or select. Thinning `webPoints` in `sphereStructure` is the fix if Riz wants it. Riz has not asked.
+- Graph: the look was changed to poulo.site's on 2026-11-01 (monochrome, curved arcs, brand lime highlights). Only seen at 1440 so far.
 - Graph, not tested: real phone touch and pinch, the reduced-motion setting, keyboard use, and WebGL context loss (no recovery is built). The reworked sphere was only seen at 1440; the first version was checked at 390.
 - The heading in Selected works is centred at all times, because it has to fit inside the curve. Riz hasn't confirmed this.
 - At 1440 the largest carousel circle gets a flat top where the track clips it (seen on BNY Mellon). Riz was told and hasn't answered, so don't fix it unless asked.
@@ -64,6 +70,7 @@ Riz's direction: no visible card, and Selected works starts contained inside the
 - Still unbuilt (see `components.md` and "Not decided" in `animations.md`): mobile menu sheet, tablet layouts. Ask Riz before designing anything undesigned.
 
 ## Things that cost time
+- **Never put the globe's `clip-path` on the whole Works section.** Once that section is thousands of pixels tall the circle stops rendering and the horizon becomes a straight line (2026-10-31). The clip lives on the short `.works-cap` strip.
 - **The browser pane does not run animation frames while hidden,** and a script waiting on them times out. For real frames use `playwright-core` with `executablePath` set to the Chrome app and SwiftShader flags.
 - **The browser pane may not draw while hidden.** CSS animations and `requestAnimationFrame` can stall, so a moving element can look frozen. Take a screenshot first, then run a `requestAnimationFrame` loop in the page while measuring. A stale screenshot or a zero speed reading right after load is usually this, not a bug.
 - **After a window resize,** let frames run again before trusting a scroll or nav reading.

@@ -4,7 +4,7 @@ import { person } from "@/lib/content";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: `${person.name} — ${person.role}`,
+  title: `${person.name} | ${person.role}`,
   description: "Designing enterprise products that create measurable business impact.",
 };
 

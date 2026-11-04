@@ -21,11 +21,11 @@ Rule: respect `prefers-reduced-motion` for everything below.
   - Pauses off-screen and when the tab is hidden. Reduced motion: one still frame with the light fully risen.
 
 - Hero to Selected works scroll transition (owner, 2026-10-31: no pause or pinning, so the scroll feels organic, "not hampered, not hastened"; supersedes the earlier pinned versions). `components/HeroStage.tsx`, `.hero-*`, `.works-heading`, `.works-list` and `.works-card` in `app/tokens.css`:
-  - At rest the first screen is the hero and the empty globe: the section is clipped to the circle the horizon draws, in the page colour, and all of Selected works is hidden. 135px of the globe shows, unless the hero content needs more height.
+  - At rest the first screen is the hero and the empty globe: a short strip at the top of the section (`.works-cap`) is clipped to the circle the horizon draws, in the page colour. The clip must stay on that strip. On the whole section it stops rendering once the section is thousands of pixels tall, and the horizon turned into a straight line (owner, 2026-10-31), and all of Selected works is hidden. 135px of the globe shows, unless the hero content needs more height.
   - The page scrolls normally, so the horizon rises 1:1 with the scroll from the first pixel until it reaches the top of the screen. Everything below is a straight line against scroll position, as a share of that travel, with no easing.
   - Hero, eyebrow to CTA: scales from 100% to 10% towards a point 48px below the top of the rim over the whole travel, and fades out from 30% to 85%.
   - Selected works heading: from 33% to 80%, it goes from 40% size (owner, 2026-10-31), invisible and 80px below its place, to full size, opacity and position, riding up with the horizon.
-  - Project list: fades in from 80% to 100%, starting only once the heading is fully visible (owner, 2026-10-31).
+  - Project list: fades in from 40% to 70%, overlapping the heading, so no empty space sits below it (owner, 2026-11-02; supersedes 80% to 100%, which waited for the heading to be fully visible).
   - The globe's edge flattens evenly until it is a straight line at 100%, so Selected works arrives full width and square. The rim and beams ride that edge and fade out late in the move.
   - Reduced motion: plain scroll, no scaling, clipping or fades.
 - Hero intro line (owner, 2026-10-31, follows Magic UI "Typing Animation"; our own code). Replaces the "Senior UX/Product Designer · Dubai" eyebrow above the headline. `components/HeroIntro.tsx`, `.hero-intro`, `.hero-flag*` and `--intro-*` in `app/tokens.css`:
@@ -34,13 +34,11 @@ Rule: respect `prefers-reduced-motion` for everything below.
   - The untyped text is held invisibly, so the centred line doesn't shift as it types. Screen readers get the whole sentence.
   - Mono at 12px, not the 9px uppercase eyebrow style. That size is not in Figma. The hand is the system emoji, the flag is drawn in code.
   - Reduced motion: the final line at once, with a still hand and flag and no cursor.
-- Selected works scroll behaviour (owner, 2026-10-31, follows pleurat.com/work; motion only, our content and colours). `components/WorksShowcase.tsx`, `.works-rail`, `.works-bar`, `.works-rule`, `.works-fig` in `app/tokens.css`:
-  - Four projects: AI Banking Copilot is not in this list (owner, 2026-10-31). All projects' screens stack in one scrolling column. A project is active once its first row reaches the middle of the screen.
-  - Desktop: the project list is pinned at the left, 112px from the top to clear the floating bar. The active row opens over 550ms and the previous one closes, with its title brightening over 350ms. A lime line on the column edge grows with progress through all the projects. Clicking a title smooth-scrolls to its screens.
-  - Mobile: a pinned bar of project names under the floating bar, with a lime underline on the active name, which centres itself. Tapping a name scrolls to it. Each project shows its own details above its screens.
-  - Screens reveal once as they enter: fade over 800ms, rise 56px and unclip from 16% at the top over 1250ms.
-  - Final screens / Case study flips one project at a time, as on the reference. Case study shows a short summary of that project and a link to its full page. Show the other screens opens the rest for that project and stays open.
-  - Reduced motion: no reveal or transitions. The list and bar still pin and follow the scroll.
+- Selected works project blocks (owner, 2026-11-01, layout after poulo.site/#work; supersedes the 2026-10-31 pinned list after pleurat.com/work). `components/WorksList.tsx`, `.works-media`, `.works-square`, `.works-fig` in `app/tokens.css`:
+  - No pinning, no project switching and no filters (owner, 2026-11-01): the four projects stack and scroll with the page.
+  - Each card (media, story, the four squares) reveals once as it enters: fade over 800ms, rise 56px and unclip from 16% at the top over 1250ms.
+  - Hover (owner, 2026-11-03, values from poulo.site's work cards, pointer devices only): every tile lifts 4px, its border brightens to foreground at 36% and a soft shadow shows, 300ms `cubic-bezier(0, 0, 0.2, 1)`. The four squares also darken from card to page background, and their icon tilts -6deg, grows to 110% and turns white. Media and story cards don't change fill: it would wash out the preview glow and merge with the story card's inner panel. The lift uses `transform` because `translate` carries the reveal. Reduced motion: colours only.
+  - Reduced motion: no reveal.
 - Logo R draw (owner, 2026-10-30, Figma `3:39` motion): plays once on load. The R channel starts filled by a thick lime stroke, which retracts along the letter from the stem foot to the leg tip, revealing the R as a drawn line. Figma timeline: 2s, stroke retracts 0.15s to 1.35s linear, then hidden. We play it once instead of looping. Only the full-bleed header animates; the floating bar shows the end state. Reduced motion: end state, no animation.
 - Linkedin button (owner, 2026-10-30):
   - Rest: React Bits "star border" motion. The two Figma glows travel along the bottom (right to left) and top (left to right) edges and fade, 6s linear, infinite, alternate.
@@ -65,21 +63,102 @@ Function and timing measured from surinder.design, colours from our tokens. Valu
 
 ## Services diagrams (owner, 2026-10-31)
 Motion and drawing style from the tracks section on pleurat.com, colours from our tokens. `components/ServiceDiagrams.tsx`, `components/ServiceBox.tsx`, `.iso-*` and `--iso-*` in `tokens.css`.
-- Trigger: hovering anywhere on the box. Touch screens have no hover, so the diagram plays while 60% of the box is in view (our call, not in the brief).
+- Trigger: hovering anywhere on the box. Touch screens have no hover, so the diagram plays while 60% of the diagram itself is in view (our call, not in the brief).
 - At rest the diagram is still and assembled. On hover the lines brighten and the parts loop. Every loop starts and ends with the part in place, and on leave each part finishes its current loop, so nothing snaps back.
-- Product/UX design: the screen's blocks lift off and land in a stagger (3.6s). Design systems: tokens, parts and pages layers land from the bottom up (4.4s). Vibe coding: prompt lines write, a token runs down the wire and the prototype stacks up (4.4s). Discovery: a signal runs the loop and each station lifts and lights as it arrives (4s).
+- Six boxes (owner, 2026-11-01). Product Strategy: bars rise in turn (3.6s). UX Research: a signal runs the loop and each station lifts and lights as it arrives (4s). Complex Interaction: three planes show dense data simplifying, a request passing through two human reviewers, and an exception resolving to approval (7s); the completed state remains visible with reduced motion. AI-Native (owner, 2026-11-02): runs once and holds. At rest the flow waits at a closed gate with a person beside it and a flat action box. The top block shows two opposite raised chat bubbles (extruded slabs with tails), with a CONVERSATION label beside it like CONFIRM (owner, 2026-11-02). At rest the bubbles lie flat on the block. On hover the first bubble rises off it, then the second (0.45s each), each lighting lime on its raised edge as it goes, and only then (0.9s lead) the existing sequence starts: the signal stops short of the gate for about a second, the person only reacts once it arrives and taps confirm, the gate sinks, and the action box rises from flat when the signal reaches it. Moving off is a quick undo. Code Prototyping (logos, owner, 2026-11-02): the Claude Code, Cursor, v0, Lovable and Figma Make logos light in turn and send a pulse down a dotted line into the prompt slab, then the prompt lines write, a token runs down the wire, and only once it arrives does a laptop open and its prototype interface appear, then the laptop closes before the next loop (owner, 2026-11-02; 6.5s). Design Systems (owner, 2026-11-02): each plane shows its own content, token tiles, a button, input, toggle and card, then a page layout. It runs once and holds instead of looping. The dotted lines and layer labels go, the layers fold into one slab (0.8s), its edge turns lime with the label "MACHINE-READABLE DESIGN SYSTEM", then the agent and human icons appear with dotted lines and pulses running into the slab, which repeat while hovered. On leave it reverses to the open stack.
 - Reduced motion: no loops, only the colour change.
 
-## Knowledge graph sphere (owner, 2026-10-31)
-Interactions from sankar.work, look from Riz's sphere references, colours from our tokens. `components/GraphSphere.tsx`.
-- Real 3D: nodes sit on a unit sphere with the root at its centre, inside a coarse bright shell and an irregular web, with violet lines running towards the core and short rays leaving the rim (owner's images 2 and 3). Hub-to-node links arc along the surface; spokes and cross-links are straight chords through the inside, so the inner lines move with depth.
+## Floating bar menu and favicon (owner, 2026-10-31)
+- Menu links in the floating bar drop from 20px to 16px (`--text-nav-float`), the same 32px pill height as surinder.design, which drops 15px to 14px. The exact step is our call.
+- The tab icon is the logo (`app/icon.svg`): the lime M on a dark rounded square. Read from the owner's screenshot of a default globe in a blue tab.
+
+## Case study hover previews (owner, 2026-10-31)
+- Each project in Selected works shows its live preview in the media card (owner, 2026-11-01). The banner is the resting poster.
+- The animations are the owner's own, built in github.com/rizwan-uxd/portfolio (`src/components/preview`) and copied here into `components/preview` with their images in `public/images/preview`. Only two edits: the theme hook is a dark-only stub (`components/theme/theme-provider.tsx`) and the grey-box test fixture is dropped. They use `framer-motion`, a new dependency. Their colours are the products' own, not our tokens.
+- `components/WorkPreview.tsx` plays by default while the card is at least 40% in view, with no hover needed, as on poulo.site (owner, 2026-11-01; replaces hover to play). Out of view it pauses. It fills the width of the media card. Hajj and DubaiNow sit in a 21:9 frame, SecureLink and Emirates Islamic in 4:3, which are the shapes the scenes are drawn for. Reduced motion is handled by the preview engine.
+
+## Contact lanyard card (owner, 2026-10-31)
+Motion from the 21st.dev id-card-lanyard demo, written again for our site; look, copy and colours ours. `components/Lanyard.tsx`, `.lanyard-*` and `--lanyard-*` in `tokens.css`.
+- Replaces the profile photo in Contact. A card hangs from a rope that is a Verlet chain (13 points, 140px, gravity 0.55, damping 0.98, 6 passes, 60Hz fixed step) drawn on a canvas in our tokens. Drag the card to swing it, and it is let go with the speed of the hand (capped, our call). A click, or Enter on the focused card, flips it. Hovering tilts it up to 9deg towards the pointer, with a soft sheen.
+- Front: photo, name, role, location, "15+ years" (all from `lib/content.ts`). Back: email, phone, LinkedIn, Dribbble and Behance as links. No ID number, QR code or validity date, because they would be invented.
+- It draws only while on screen and the tab is visible. Reduced motion: the card hangs still, there is no drag or tilt, and a click flips it with no turn. Touch: the card takes the touch (no page scroll from on it), the 56px each side of it still scrolls the page.
+- Layout (owner): the "Let's talk" label, heading and "Book a free call" moved to the top of the right column, above "Connect with me". The card stage fills the left column.
+
+## Nav current section (owner, 2026-10-31)
+- The nav link for the section on screen keeps the hover pill. Works runs from Selected works through Brands, AI projects is the placeholder section after Brands, and About starts at "What I can do for you" and runs to the end. Nothing is active above Works. The switch happens when a section's top passes 30% down the screen (our call).
+- AI projects is a placeholder section (`components/AiProjects.tsx`) with a stand-in heading, to be designed.
+
+## Testimonial cards (owner, 2026-10-31)
+Motion from the 21st.dev tilt-card "evade" demo, colours from our tokens. `components/TiltCard.tsx`, `.tilt-*` and `--tilt-*` in `tokens.css`.
+- On hover the card turns away from the pointer, up to 20deg each way, at 1.08 scale with 1200px perspective. Transform eases over 200ms, and a soft spotlight follows the cursor and fades in over 300ms. All values are the demo's.
+- Our calls: the pointer is read on a still wrapper, so the card edges don't flicker as the card tilts away. The shadow shows only on hover, because the cards are flat at rest.
+- Touch screens, widths below `lg:` (the swipe row would clip the card) and reduced motion get no tilt.
+
+## Knowledge graph sphere (owner, 2026-11-01)
+Interactions from sankar.work, look from poulo.site's graph (owner's screenshot): monochrome, with brand lime as the only highlight colour. `components/GraphSphere.tsx`.
+- Real 3D: a ball of nodes, not a shell. The root sits at the centre, hubs part-way out, and each hub's nodes scatter in and out around it. Every link is a thin curved arc bowed away from the centre. Dust specks fill the space around it.
+- Everything is white or grey and fades with depth, labels included. Highlight (hover, select, trace, search matches) is brand lime on the nodes, their links and their labels, and everything else dims. A traced path is brand lime and dashed, flowing from start to end. Category colours are not used anywhere in the graph, including the filter chips.
+- The Rizwan node at the centre is the owner's profile photo (`/images/profile-brand.png`: the owner's black-and-white portrait with its background recoloured to brand lime) in a 48px circle, with the whole head showing (owner, 2026-11-01). It is an HTML element over the canvas that follows the node, so nodes passing in front of it are drawn behind it. The ring turns brand lime when the node is highlighted.
 - Slow auto-rotation that stops while a node is hovered or selected or a path is traced, and resumes after. Selecting or tracing flies the camera to it. Reduced motion: no spin, and the camera jumps.
-- Drag empty space to rotate, with inertia. Drag a node to move it over the surface; Reset puts it back. Pinch or ctrl + wheel zooms always; plain wheel only after clicking in the graph (our call), so the page still scrolls past it. Touch keeps vertical swipes for the page.
+- Drag empty space to rotate, with inertia. Drag a node to move it around the ball, at its own depth; Reset puts it back. Pinch or ctrl + wheel zooms always; plain wheel only after clicking in the graph (our call), so the page still scrolls past it. Touch keeps vertical swipes for the page.
 - Rendering pauses off screen and in a hidden tab.
+- Replaces the glowing wire shell from the owner's two sphere images (2026-10-31), which the owner moved on from.
+
+## Tools I build with (owner, 2026-11-03)
+`components/Tools.tsx`, `components/ToolsReveal.tsx`, `components/ToolCoins.tsx`, `components/tool-coins/scene.ts`; `--tools-*`, `--coins-*` and `.tools-*` in `app/tokens.css`.
+- Heading entrance, unchanged from the first pass (emil-design-eng): plays once when the heading is 20% inside the viewport (`--tools-reveal-margin`). The three phrases each fade in, rise 12px and unblur from 4px over 400ms, 60ms apart; the intro fades in over 300ms from 120ms. `cubic-bezier(0.23, 1, 0.32, 1)`. Reduced motion: a 200ms opacity fade. Without JS it shows at rest.
+- The tile entrance is gone: the tiles were replaced by 3D coins (owner chose live three.js coins after a mockup, 2026-11-03).
+- Loading: three.js is imported only when the section is within `--coins-load-margin` (600px) of the viewport. Until then, and without JS or WebGL, the static tile row shows. The render loop runs only while the coin row is on screen.
+- Spin-in, once, when 40% of the row is visible: each coin turns from edge-on (270deg past its resting angle), rises 0.6 units and grows from 85%, over 1100ms (`--coins-spin`), 90ms apart (`--coins-stagger`), ease-out quart. Labels fade in at 70% of their coin's spin.
+- Cursor tilt (fine pointers): the row leans up to about 10deg toward the pointer, eased.
+- Hover (tap on touch, tap again to release): the coin under the pointer (raycast) turns to face the viewer, comes forward over its neighbours, grows 8%, and its logo fades to the tool's brand colours; its label brightens. Eases in and out in about 300ms (`--coins-hover`, exponential). Brand colours are the owner's exception to lime as the only accent.
+- Reduced motion: coins render at rest, no spin and no tilt; hover changes the colour only.
+- Drawing order: each coin is drawn whole, back to front by depth (one layer per coin, depth cleared between them), so coins that cross in 3D never show one coin's milled edge through another's face (owner reported it on Supabase, 2026-11-03). The hovered coin, moved forward, draws last.
+
+## Section reveals (owner, 2026-11-03)
+From the "Scroll fade-in opportunities" review; the owner asked for every opportunity in it. `components/ScrollReveal.tsx` (mounted once in `app/page.tsx`), `--rise-*` and `.rise-*` in `app/tokens.css`.
+- One shared reveal instead of a different entrance per section. Hero, Selected works and Tools keep their own and are not touched.
+- Trigger: a `[data-rise]` group plays once when its top is 35% inside the viewport bottom (`--rise-margin`; owner, 2026-11-03: at 20% the reveals played unseen). The Selected works cards use the same point (was 8%). The observer is open at the top, so jumping past a group still plays it. Nothing animates below the fold. Without JS everything shows at rest.
+- Headings (`.rise-head`): fade, rise 28px and unblur from 8px over 700ms, 100ms apart, `cubic-bezier(0.23, 1, 0.32, 1)` (owner, 2026-11-03: the Tools heading values, 12px over 400ms, were too subtle here). Below `lg:` the heading lines stay inline so they wrap as before, so there they only fade and unblur.
+- Cards and blocks (`.rise-card`): fade over 800ms and rise 64px over 1000ms, 120ms apart.
+- `.rise-fade`: opacity over 900ms. `.rise-work`: the Works card reveal (fade 800ms, rise 56px, unclip from 16% over 1250ms).
+- Brands: title, then the panel fades (opacity only, so the arc doesn't move).
+- AI projects: eyebrow, heading, note; then the two cards with the Works card reveal, so both project lists arrive the same way.
+- What I can do: heading lines and intro; then each box reveals as it enters (title, description, diagram), the right box of a row 90ms after the left. The hairline grid stays put.
+- Knowledge graph: eyebrow, heading and buttons, then the search and filter block (240ms), then the stage (360ms). One group for the section, so switching to Timeline and back doesn't hide the controls.
+- Testimonials: eyebrow, heading, intro; then the three cards. The reveal moves the still tilt stage, because the tilt owns the card's `transform`.
+- Contact: label, heading, CTA and "Connect with me"; then the email and phone rows (from 240ms).
+- Reduced motion: a 200ms opacity fade only.
+
+## Lanyard drop (owner, 2026-11-03)
+The page's one focal reveal. `components/Lanyard.tsx` (`DROP_AT`, `DROP_PUSH`).
+- Until Contact is in view the card is pulled up to the clip with the rope gathered. When 35% of the card stage is in view it falls on the existing rope physics, with a small sideways push (3px per frame), swings and settles in about 1.5s. Grabbing the card before then drops it too.
+- Reduced motion: it already hangs at rest, unchanged.
 
 ## Not decided (ask before building)
 - Hero dot-matrix / ASCII background motion.
-- Scroll reveals and section entrance animations.
 - Hover/focus/pressed states for everything except the header Linkedin button and nav links.
 - Mobile menu sheet open/close.
 - Testimonials carousel motion on mobile.
+
+## Complex Interaction Design: request on wires (owner, 2026-11-03)
+- The request dot no longer jumps between planes. It travels along drawn wires at y 3.5, like the other service diagrams: out of the data plane, across to the reviewers' link, up and down that link to each reviewer, back to the link, then on to the status. Short base-plate wires bridge the gaps between planes. Timings and the plane lifts are unchanged; the keyframes are in `iso-review-request`.
+
+## Footer wordmark (owner, 2026-11-03)
+
+Approved compact “Rizwan” halftone treatment inspired by the 21st.dev Halftone Wordmark Footer. Original canvas implementation samples the site's Geist text into lime dots. Gentle local pointer displacement with damped spring return; no click ripple or continuous ambient animation. Reduced motion renders still dots, including live preference changes. Drawing stops when settled, offscreen or the tab is hidden; observers and events are cleaned up. CSS dotted-text fallback remains before fonts/canvas are ready and without JavaScript. Touch keeps the still wordmark and normal scrolling.
+
+- Footer refinement (owner, 2026-11-03): On touch devices, a gentle 1.8-second wave travels through the halftone dots when at least 35% of the wordmark enters view, then settles. Replays on re-entry; no touch handlers or scroll interception. Desktop retains pointer interaction. Reduced motion disables the wave; leaving view or hiding the tab cancels it.
+
+## CTA hover (owner, 2026-11-03)
+
+- Every link or button that holds a `DottedArrow`, on pointer hover and keyboard focus: the arrow's dots light up from tail to head in a loop (opacity 0.3 to 1, 900ms per loop, 90ms between dots) for as long as it is hovered, and the circle grows to 108% (300ms `cubic-bezier(0.22, 1, 0.36, 1)`). Lime buttons also get a soft lime glow (300ms). Owner's final pick: the dot wave with the glow, over a dot run, a circle fill, a nudge and a sheen sweep.
+- Only the shadow changes on the button itself, because its transform and opacity belong to the reveal animations.
+- Touch screens: nothing (hover only). Reduced motion: no wave; the circle grows instantly and the glow stays.
+- Code: `components/DottedArrow.tsx` gives each dot its place in the wave; the CSS is the CTA hover block in `app/globals.css`.
+
+## Stat count-up (owner, 2026-11-03)
+- Every stat number counts up from 0 the first time it scrolls in, after the 21st.dev Count Animation: 2s, ease-out `cubic-bezier(0.16, 1, 0.3, 1)`, at the same point as the section reveals (`--rise-margin`). Text around the number stays put, so "+25%" runs +0% to +25% and "3 months" runs 0 to 3 months.
+- Where: the Works Impact squares (+25%, 70%, 3 months, +30%) and the AI projects "6 days". Case study pages carry no standalone stat elements (their numbers sit in sentences and meta rows), so nothing counts there. Text with no number ("Coming soon") is left as is.
+- The final value renders first (no JS shows it at rest), a hidden copy holds the width so nothing reflows, and screen readers get the final value only. Reduced motion: no count, the final value shows.
+- Code: `components/CountUp.tsx`, used as `<CountUp value={...} />`.

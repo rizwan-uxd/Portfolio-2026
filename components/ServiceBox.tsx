@@ -49,12 +49,12 @@ export function ServiceBox({ className, children }: { className: string; childre
       };
     }
     const observer = new IntersectionObserver(([entry]) => (entry.isIntersecting ? play() : el.dataset.playing !== undefined && stop()), { threshold: 0.6 });
-    observer.observe(el);
+    observer.observe(el.querySelector("svg") ?? el); // the diagram sits low in the box, so watch the diagram itself
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} data-rise className={className}>
       {children}
     </div>
   );
