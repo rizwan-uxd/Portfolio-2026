@@ -4,7 +4,7 @@ Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variab
 
 ## Tokens (summary, see tokens.css)
 - Dark: bg `#181818`, fg `#e8e8e8`, card `#1f1f1f`, secondary `#292929`, muted-fg `#b4b4b4`, border `#2c2c2c`, hairline `#3d4045`, brand `#e5ff5d` (text on brand `#111`), pos `#00e599`, neg `#fd607f`.
-- Graph categories: companies `#6cb6ff`, industries `#ffa24d`, skills `#ff7ab6`, tools `#4fd8eb`, projects `#e5ff5d`, impact `#b69cff`.
+- Graph categories: companies `#6cb6ff`, industries `#ffa24d`, skills `#ff7ab6`, tools `#4fd8eb`, projects `#e5ff5d`, certifications `#00e599`, impact `#b69cff`. Sphere canvas `--graph-canvas` `#050608`. The wire shell uses the tools and companies colours, inner chords the impact violet, and a traced path the brand lime.
 - Radius: btn 4, sm 3.2, md 6, lg 8 (cards), xl 12 (prompt shell), full (avatars, pills).
 - Spacing scale 4 8 12 16 24 32 48 64 96. Section padding mostly 64 vertical, 48 horizontal on desktop; 48 vertical, 24 horizontal on mobile.
 - Text styles: Display 56/0.92/-0.04em/500, Title 32/1.10/-0.03em/500, Subtitle 20/1.20/-0.02em/500, Body 16/1.40/-0.02em/400, Label 12 uppercase 500, Micro 9 mono uppercase tracking 0.18em.
@@ -20,7 +20,7 @@ Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variab
 - Desktop is 1440 in Figma. Mobile frame `27:5` (390) also exists. Tablet (768) is not designed: follow Codex behaviour and ask before inventing.
 - Below 1214px the frame loses its side borders and goes full width.
 - Mobile follows frame `27:5`: works as an accordion list, graph as chips, category list and thumbnail, testimonials as a swipe row with pagination dots.
-- Header collapses to a compact bar. Collapsed AI twin bar goes full width.
+- Header collapses to a compact bar.
 - Display type is 36/0.96 on mobile (frame `27:5`) and 56/0.92 from `md`, not fluid.
 - Header and hero use the mobile frame below `md` (768) and the desktop frame from `md` up. This is the interim 768 behaviour, awaiting the owner's tablet decision.
 - Review every section at 1440, 768 and 390.
@@ -29,7 +29,7 @@ Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variab
 - Header nav: Works / AI projects / About, Linkedin pill (from Figma `3:33`).
 - Fonts (owner, Option A, 2026-10-30): Geist for headings and display text. Satoshi (local `app/fonts/Satoshi-Variable.ttf`, via `next/font/local`) for body, nav links and buttons, replacing Host Grotesk. JetBrains Mono for labels. The original site uses Satoshi for body/UI and Clash Display for headings; we deliberately use Geist for headings to follow the Codex style.
 - Header background (owner, 2026-10-30): fully transparent at the top of the page; dark translucent blur plus a hairline bottom border after scrolling past the top. Motion is in animations.md.
-- Graph cross-links (28) are inferred and unconfirmed.
+- Graph cross-links are now only ones stated in the CV, works or live site (2026-10-31). Nodes with nothing stated connect to their category only.
 - Testimonial headlines ("Proactive", "Always curious", "Iterates fast") come from Figma, not the live site. Unconfirmed.
 - Remaining sections: the Mac-built version replaces the earlier pushed one (owner choice, 2026-10-30): real photo, live-site copy, Figma-derived graph data.
 
@@ -37,4 +37,4 @@ Values live in `app/tokens.css` (copied from Figma variables; prefer `get_variab
 - Sections keep the mobile frame up to 1023px and use the desktop frame from `lg` (1024); header and hero switch at `md` (768). Interim until the owner decides tablet.
 
 ## Not designed (ask first)
-Hover/focus/pressed states, expanded AI twin, menu sheet (mobile nav), tablet layouts, light theme, AI projects section, About + stats, case-study pages, hero dot-matrix background.
+Hover/focus/pressed states, menu sheet (mobile nav), tablet layouts, light theme, AI projects section, About + stats, case-study pages, hero dot-matrix background.
