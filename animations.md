@@ -162,3 +162,6 @@ Approved compact “Rizwan” halftone treatment inspired by the 21st.dev Halfto
 - Where: the Works Impact squares (+25%, 70%, 3 months, +30%) and the AI projects "6 days". Case study pages carry no standalone stat elements (their numbers sit in sentences and meta rows), so nothing counts there. Text with no number ("Coming soon") is left as is.
 - The final value renders first (no JS shows it at rest), a hidden copy holds the width so nothing reflows, and screen readers get the final value only. Reduced motion: no count, the final value shows.
 - Code: `components/CountUp.tsx`, used as `<CountUp value={...} />`.
+
+## Service diagrams as 3D scenes (owner, 2026-11-04)
+- Each "What I can do for you" box renders its diagram as a three.js scene (`components/ServiceAnimation.tsx`, `lib/service-diagrams/`), mounted when the box comes near the viewport, played on hover and reset on leave, with the SVG diagram as the fallback. Paused for `prefers-reduced-motion`. Brought over from the owner's local copy.

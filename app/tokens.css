@@ -703,6 +703,19 @@ body { background: var(--background); color: var(--foreground); font-family: var
   .brands-item { position: static; flex: none; margin: 0; width: var(--brands-strip-size); height: var(--brands-strip-size); transform: none; }
 }
 .iso-art { display: block; width: 100%; height: auto; max-height: 216px; overflow: visible; }
+.service-animation { position: relative; isolation: isolate; width: 100%; height: var(--visual-h); }
+.service-animation-fallback, .service-animation-render { position: absolute; inset: 0; }
+.service-animation-fallback { display: grid; place-items: center; }
+.service-animation-render { visibility: hidden; overflow: hidden; }
+.service-animation[data-ready] .service-animation-fallback { display: none; }
+.service-animation[data-ready] .service-animation-render { visibility: visible; }
+.service-animation-render canvas, .service-animation-render .diagram-labels { position: absolute; inset: 0; }
+.service-animation-render .diagram-labels { pointer-events: none; }
+.service-animation-render .diagram-label { position: absolute; transform: translate(-50%, 0); white-space: nowrap; color: var(--diagram-text); font: 500 10px/1.25 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
+.service-animation-render .diagram-label.above { transform: translate(-50%, -100%); }
+.service-animation-render .diagram-label.outside-left { transform: translate(-100%, -50%); }
+.service-animation-render .diagram-label.active { color: var(--diagram-active); }
+
 .iso polygon { stroke: var(--iso-line); stroke-width: 1; stroke-linejoin: round; transition: stroke var(--iso-lit) ease, fill var(--iso-lit) ease; }
 .iso-top { fill: var(--iso-top); }
 .iso-right { fill: var(--iso-right); }
