@@ -1,7 +1,10 @@
 import { services, servicesSection } from "@/lib/content";
 import { Heading } from "@/components/SectionHeading";
 import { ServiceBox } from "@/components/ServiceBox";
+import { ServiceAnimation, type ServiceScene } from "@/components/ServiceAnimation";
 import { serviceDiagrams } from "@/components/ServiceDiagrams";
+
+const scenes = ["growth", "research", "interaction", "conversational", "prototyping", "tokenOps"] as const satisfies readonly ServiceScene[];
 
 export function Services() {
   return (
@@ -20,7 +23,7 @@ export function Services() {
               <h3 className="rise-card title" style={{ "--i": 0 } as React.CSSProperties}>{s.title}</h3>
               <p className="rise-card text-muted-foreground lg:min-h-[3lh]" style={{ "--i": 1 } as React.CSSProperties}>{s.description}</p>
               <div className="rise-card flex items-center justify-center lg:h-visual" style={{ "--i": 2 } as React.CSSProperties}>
-                <Diagram />
+                <ServiceAnimation scene={scenes[i]} title={s.title}><Diagram /></ServiceAnimation>
               </div>
             </ServiceBox>
           );

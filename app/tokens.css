@@ -541,6 +541,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .case-statement { font-family: var(--font-heading); font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; text-wrap: balance; @variant lg { max-width: var(--case-statement-w); font-size: var(--text-title); line-height: 1.1; } } /* conclusion: the section heading (.title) size at every breakpoint, so a sentence with figures reads at a glance (owner, 2026-11-04; Figma 42:81 was display) */
 .label { font-size: var(--text-label); font-weight: 500; line-height: 1.33; letter-spacing: -0.02em; text-transform: uppercase; }
 .label-cta { font-size: var(--text-cta); } /* with .label, on lime CTA buttons */
+.display-pixel { font-family: var(--font-doto), var(--font-mono); /* --font-doto is set on the 404 page only */ font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; } /* with .display, on the 404 heading only (owner, 2026-11-04) */
 .micro { font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1.5; letter-spacing: var(--tracking-micro); text-transform: uppercase; }
 .nav-link {
   font-size: var(--text-nav); font-weight: 600; line-height: var(--leading-nav); letter-spacing: 0; color: var(--nav-link);
@@ -702,6 +703,19 @@ body { background: var(--background); color: var(--foreground); font-family: var
   .brands-item { position: static; flex: none; margin: 0; width: var(--brands-strip-size); height: var(--brands-strip-size); transform: none; }
 }
 .iso-art { display: block; width: 100%; height: auto; max-height: 216px; overflow: visible; }
+.service-animation { position: relative; isolation: isolate; width: 100%; height: var(--visual-h); }
+.service-animation-fallback, .service-animation-render { position: absolute; inset: 0; }
+.service-animation-fallback { display: grid; place-items: center; }
+.service-animation-render { visibility: hidden; overflow: hidden; }
+.service-animation[data-ready] .service-animation-fallback { display: none; }
+.service-animation[data-ready] .service-animation-render { visibility: visible; }
+.service-animation-render canvas, .service-animation-render .diagram-labels { position: absolute; inset: 0; }
+.service-animation-render .diagram-labels { pointer-events: none; }
+.service-animation-render .diagram-label { position: absolute; transform: translate(-50%, 0); white-space: nowrap; color: var(--diagram-text); font: 500 10px/1.25 var(--font-mono, monospace); letter-spacing: .08em; text-transform: uppercase; }
+.service-animation-render .diagram-label.above { transform: translate(-50%, -100%); }
+.service-animation-render .diagram-label.outside-left { transform: translate(-100%, -50%); }
+.service-animation-render .diagram-label.active { color: var(--diagram-active); }
+
 .iso polygon { stroke: var(--iso-line); stroke-width: 1; stroke-linejoin: round; transition: stroke var(--iso-lit) ease, fill var(--iso-lit) ease; }
 .iso-top { fill: var(--iso-top); }
 .iso-right { fill: var(--iso-right); }

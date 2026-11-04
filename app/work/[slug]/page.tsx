@@ -6,7 +6,8 @@ import { Frame } from "@/components/Frame";
 import { Header } from "@/components/Header";
 import { ScrollTop } from "@/components/ScrollTop";
 import { caseStudies, getCaseStudy } from "@/lib/case-studies";
-import { person } from "@/lib/content";
+import { person, socialPreview } from "@/lib/content";
+import { previewImage } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -19,7 +20,15 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const study = getCaseStudy((await params).slug);
   if (!study) return {};
-  return { title: `${study.title.join(" ")} | ${person.name}`, description: study.summary };
+  const title = `${study.title.join(" ")} | ${person.name}`;
+  const url = `/work/${study.slug}`;
+  return {
+    title,
+    description: study.summary,
+    alternates: { canonical: url },
+    openGraph: { type: "article", url, siteName: socialPreview.siteName, title, description: study.summary, images: [previewImage] },
+    twitter: { card: "summary_large_image", title, description: study.summary, images: [previewImage] },
+  };
 }
 
 export default async function CaseStudyPage({ params }: Props) {
