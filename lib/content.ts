@@ -514,3 +514,19 @@ export const contact = {
   toTop: "Scroll to top",
   copyright: "© Copyright 2026. Mohammed Rizwan",
 };
+
+// 404 page (owner, 2026-11-04). Heading from the 21st.dev "Pixeleted 404" reference; the subline is a placeholder
+// Claude wrote and the owner has not changed yet; the button label "Retry" is the owner's.
+export const notFoundPage = {
+  title: "Page not found",
+  heading: ["(404) Looks like the page you're looking for", "got lost somewhere."], // 2nd half muted
+  subline: "It may have moved in the redesign. My work is one click away.",
+  cta: "Retry",
+  secondary: "See works",
+};
+
+// Social preview card: the image is public/images/social/preview.png, supplied by the owner, 2026-11-04.
+export const socialPreview = {
+  siteName: "Mohammed Rizwan · Design portfolio",
+  alt: "Mohammed Rizwan, Senior UX/Product Designer. Design portfolio, Dubai, UAE. Banking, government, enterprise. 15+ years.",
+};

@@ -68,3 +68,7 @@ Hover/focus/pressed states, menu sheet (mobile nav), tablet layouts, light theme
 
 - Off the clock copy (owner, 2026-11-04): “Usually watching a Guy Ritchie film, planning my next trip, or chasing an adrenaline rush.” Supersedes the cooking reference to match the supplied adventure photo.
 - Case study conclusion (owner, 2026-11-04): too big to read quickly at display size, so it uses the section heading (.title) size, 32px at lg (line-height 1.1), with an 880px measure and balanced wrapping, on every case study. Mobile stays at the 24px title size. Supersedes Figma 42:81's display size.
+
+## 404 page and social preview (owner, 2026-11-04)
+- 404 (`app/not-found.tsx`) follows the 21st.dev "Pixeleted 404" component without its postcard picture and spinning circle text. Headline in Doto (dotted pixel face, loaded on that page only) with the muted second half, Satoshi subline, lime "Retry" CTA (owner's label) to `/`, plus a "See works" text link. Subline is a Claude placeholder until the owner replaces it.
+- Social preview card is the owner's 1200×630 image, `public/images/social/preview.png`, used for Open Graph and Twitter on every route. Case studies keep their own title and description.

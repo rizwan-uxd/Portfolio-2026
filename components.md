@@ -90,3 +90,6 @@ Open:
 
 ### Case study conclusion as a framed quote (owner, 2026-11-04)
 - Every case study's Conclusion is a quote in a lime-outlined frame on a faint dot grid, with lime squares on the four corners, after 21st.dev's dot-pattern quote by designali-in. The statement is in quotes: the first half medium weight, the second half light and muted. Dot colour and spacing are `--quote-dot` and `--quote-dot-gap`. Riz asked from the DubaiNow page, so it applies to all case studies.
+
+### 404 page (owner, 2026-11-04)
+- `app/not-found.tsx`: Header, centred Doto `.display-pixel` heading, subline, lime Retry CTA to `/` and a See works link. Reference: 21st.dev Pixeleted 404, without its picture and circle text.

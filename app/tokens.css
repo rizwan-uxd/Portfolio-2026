@@ -541,6 +541,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .case-statement { font-family: var(--font-heading); font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; text-wrap: balance; @variant lg { max-width: var(--case-statement-w); font-size: var(--text-title); line-height: 1.1; } } /* conclusion: the section heading (.title) size at every breakpoint, so a sentence with figures reads at a glance (owner, 2026-11-04; Figma 42:81 was display) */
 .label { font-size: var(--text-label); font-weight: 500; line-height: 1.33; letter-spacing: -0.02em; text-transform: uppercase; }
 .label-cta { font-size: var(--text-cta); } /* with .label, on lime CTA buttons */
+.display-pixel { font-family: var(--font-doto), var(--font-mono); /* --font-doto is set on the 404 page only */ font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; } /* with .display, on the 404 heading only (owner, 2026-11-04) */
 .micro { font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1.5; letter-spacing: var(--tracking-micro); text-transform: uppercase; }
 .nav-link {
   font-size: var(--text-nav); font-weight: 600; line-height: var(--leading-nav); letter-spacing: 0; color: var(--nav-link);
