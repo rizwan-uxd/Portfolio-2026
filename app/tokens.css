@@ -120,6 +120,7 @@
   --intro-w: 420px;
   --case-rail-w: 420px;
   --case-subtitle-w: 640px;
+  --case-statement-w: 880px;    /* conclusion measure at lg, about 55 characters a line at 32px */
   --services-intro-w: 960px;     /* What I can do: the longer intro wraps to two lines at lg (owner, 2026-11-03) */
   --case-thumb-h-sm: 180px;
   --case-thumb-h: 260px;
@@ -506,7 +507,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .headline { font-size: var(--text-headline-sm); font-weight: 500; line-height: var(--leading-headline-sm); letter-spacing: -0.035em; @variant lg { font-size: var(--text-headline); line-height: var(--leading-headline); } }
 .title { font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; @variant lg { font-size: var(--text-title); line-height: 1.1; } }
 .subtitle { font-size: var(--text-subtitle-sm); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; @variant lg { font-size: var(--text-subtitle); } }
-.case-statement { font-family: var(--font-heading); font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; @variant lg { font-size: var(--text-display); line-height: var(--leading-display); letter-spacing: -0.04em; } } /* conclusion: title size on mobile (Figma 43:158), display on desktop (42:81) */
+.case-statement { font-family: var(--font-heading); font-size: var(--text-title-sm); font-weight: 500; line-height: var(--leading-title-sm); letter-spacing: -0.03em; text-wrap: balance; @variant lg { max-width: var(--case-statement-w); font-size: var(--text-title); line-height: 1.1; } } /* conclusion: the section heading (.title) size at every breakpoint, so a sentence with figures reads at a glance (owner, 2026-11-04; Figma 42:81 was display) */
 .label { font-size: var(--text-label); font-weight: 500; line-height: 1.33; letter-spacing: -0.02em; text-transform: uppercase; }
 .label-cta { font-size: var(--text-cta); } /* with .label, on lime CTA buttons */
 .micro { font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1.5; letter-spacing: var(--tracking-micro); text-transform: uppercase; }

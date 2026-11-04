@@ -162,9 +162,10 @@ export function CaseStudy({ study }: { study: Study }) {
           </ul>
         )}
         {study.links && (
-          <div className="flex flex-wrap gap-2">
+          // Stacked, one below another, equal width (owner, 2026-11-04).
+          <div className="flex shrink-0 flex-col items-stretch gap-2">
             {study.links.map((link, i) => (
-              <a key={link.href} href={link.href} target="_blank" rel="noreferrer" className={`label ${i === 0 ? "label-cta " : ""}flex items-center gap-3 rounded-btn py-2 pl-6 pr-2 ${i === 0 ? "bg-brand text-brand-foreground" : "border border-hairline"}`}>
+              <a key={link.href} href={link.href} target="_blank" rel="noreferrer" className={`label ${i === 0 ? "label-cta " : ""}flex items-center justify-between gap-3 rounded-btn py-2 pl-6 pr-2 ${i === 0 ? "bg-brand text-brand-foreground" : "border border-hairline"}`}>
                 {link.label} <DottedArrow tone={i === 0 ? "brand" : "outline"} />
               </a>
             ))}

@@ -60,3 +60,4 @@ Hover/focus/pressed states, menu sheet (mobile nav), tablet layouts, light theme
 - Not covered by this decision: the Tools and Contact headers keep their current treatment (Contact keeps its "Let's talk" eyebrow). Selected works stays centred for the globe transition.
 
 - Footer refinement (owner, 2026-11-03): Footer tightened after owner review: less vertical padding and smaller gaps; wordmark capped at 600px with a 4.3 aspect ratio. Mobile uses 32px top / 48px bottom padding; desktop 48px / 64px. Supersedes the earlier footer spacing.
+- Case study conclusion (owner, 2026-11-04): too big to read quickly at display size, so it uses the section heading (.title) size, 32px at lg (line-height 1.1), with an 880px measure and balanced wrapping, on every case study. Mobile stays at the 24px title size. Supersedes Figma 42:81's display size.
