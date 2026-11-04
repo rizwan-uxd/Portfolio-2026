@@ -7,6 +7,8 @@ import { works, worksSection, type Work } from "@/lib/content";
 import { DottedArrow } from "@/components/DottedArrow";
 import { WorkIcon } from "@/components/WorkIcons";
 import { workHighlights } from "@/lib/works-highlights";
+import { CountUp } from "@/components/CountUp";
+import { TrendDelta } from "@/components/TrendDelta";
 
 // Layout follows poulo.site/#work (owner, 2026-11-01): a headline per project, a media card and a story card side by
 // side, then a row of four squares. Styling, copy and images are ours. No filters (owner, 2026-11-01).
@@ -56,7 +58,10 @@ function Squares({ work }: { work: Work }) {
         <WorkIcon name="trending-up" />
         <p className="subtitle mt-auto pt-6">{worksSection.metricLabel}</p>
         <div className="flex flex-col gap-1">
-          <p className="headline works-metric text-brand">{work.metric}</p>
+          <div className="flex flex-wrap items-center gap-3">
+            <p className="headline works-metric text-brand"><CountUp value={work.metric} /></p>
+            {work.metricDelta && <p><TrendDelta value={work.metricDelta} /></p>}
+          </div>
           <p className="text-muted-foreground">{work.metricLabel}</p>
         </div>
       </div>

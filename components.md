@@ -69,3 +69,5 @@ Open:
 ## Footer (owner, 2026-11-03)
 
 `Footer.tsx` replaces the old bottom strip inside Contact. Uses the existing logo and `person` social URLs, labeled LinkedIn, Behance, Dribbble icons, a divider, `FooterWordmark`, and bottom copyright. Semantic social navigation; external links open a new tab. Exact logo asset reused; generated mockup logo is not shipped.
+- Emirates Islamic retention label (owner, 2026-11-04): "Digital customer retention", no "30-day" prefix, on the home card, case study, CV line and conclusion. The 30-day window stays only in How we measured it.
+- Works metric delta (owner, 2026-11-04): a work can set `metricDelta`, shown beside the metric as a small pill (`TrendDelta`): `--delta-bg` lime tint at 12%, lime label text, a 12px up-right arrow. It fades and lifts 4px into place while the value counts up, once at --rise-margin; static with reduced motion. Modelled on the growth pills in Searchable and Mintlify (Mobbin); a drawn trend-line arrow was tried first and rejected as not subtle. Emirates Islamic shows +35% (below 20% to 55%), with the label "Digital customer retention, up from below 20%".

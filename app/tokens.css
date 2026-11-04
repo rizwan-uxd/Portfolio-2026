@@ -97,6 +97,7 @@
   --leading-glow: 26px;
   --tracking-glow: 0.08px;
   --shadow-glow: 0 0 14px 0 color-mix(in srgb, var(--brand) 16%, transparent);
+  --delta-bg: color-mix(in srgb, var(--brand) 12%, transparent); /* works metric change pill, tinted like the Searchable/Mobbin growth pills (owner, 2026-11-04) */
   --glow-w: 72px;
   --glow-h: 44px;
   --glow-br-x: 41px;

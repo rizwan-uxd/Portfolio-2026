@@ -38,6 +38,7 @@ export const brands = [
 export type WorkScreen = { src: string; w: number; h: number; alt: string };
 export type Work = {
   slug: string; title: string; metric: string; metricLabel: string; chip: string; client?: string; year?: string; summary: string;
+  metricDelta?: string; // the change behind the metric, shown beside it and counted up with it (owner, 2026-11-04)
   overview: string[]; facts: { label: string; value: string }[];
   initialScreens: number; // how many show before "Show the other screens"
   screens: WorkScreen[];
@@ -220,9 +221,10 @@ export const works: Work[] = [
     slug: "emirates-islamic-digital-ux",
     title: "Emirates Islamic Digital UX",
     metric: "55%",
-    metricLabel: "30-day digital customer retention", // owner's PDF portfolio 3.0 is final; the old +30% task completion was in no source (2026-11-04)
+    metricDelta: "+35%", // below 20% to 55%, shown in a tinted change pill (owner, 2026-11-04)
+    metricLabel: "Digital customer retention, up from below 20%", // owner's PDF portfolio 3.0 is final; the old +30% task completion was in no source (2026-11-04)
     chip: "Product design · Banking",
-    summary: "Fixed recurring pain points and shipped customer-requested features across Emirates Islamic’s mobile, tablet and online banking, lifting 30-day digital customer retention from below 20% to a weekly average of 55% in 20 sprints.",
+    summary: "Fixed recurring pain points and shipped customer-requested features across Emirates Islamic’s mobile, tablet and online banking, lifting digital customer retention from below 20% to a weekly average of 55% in 20 sprints.",
     overview: [
       "Emirates Islamic Bank (EIB) is a United Arab Emirates based bank providing Sharia-compliant banking. As part of the Emirates NBD group, it serves its own base of premium, loyal customers.",
       "Those customers were not using digital banking. I was the only designer in the agile squad formed to change that, across the mobile app, tablet app and online banking website."
@@ -408,7 +410,7 @@ export const cv = {
       dates: "Feb 2018 - March 2019",
       highlights: [
         "Reduced Emirates Islamic bill-payment task time from 5 minutes to under 2.5 minutes through usability testing and iterative UX improvements.",
-        "As the squad's only designer, helped raise Emirates Islamic's 30-day digital customer retention from below 20% to a weekly average of 55% (target: above 50%), with NPS above 85 and complaints under 3 a week by sprint 18.",
+        "As the squad's only designer, helped raise Emirates Islamic's digital customer retention from below 20% to a weekly average of 55% (target: above 50%), with NPS above 85 and complaints under 3 a week by sprint 18.",
       ],
     },
     { id: "cognizant", keywords: ["cognizant"], role: "UX design consultant - UX/UI", company: "Cognizant", place: "Chennai - Abu Dhabi", dates: "Feb 2013 - Feb 2018", highlights: [] },

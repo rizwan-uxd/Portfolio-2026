@@ -435,13 +435,13 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     // Figures follow the owner's PDF portfolio 3.0 (case study 02, pages 08 to 12) and the owner's outcome summary of 2026-11-04,
-    // which is final: three reported outcomes (30-day retention, NPS, complaints). Feature engagement stays unquantified, and the
+    // which is final: three reported outcomes (digital customer retention, NPS, complaints). Feature engagement stays unquantified, and the
     // 85% feedback figure is out. Objective 3 (conversion) has no reported result, so none is claimed.
     slug: "emirates-islamic-digital-ux",
     title: ["Emirates Islamic", "Digital UX"],
     eyebrow: "Product design · Banking",
     subtitle: "Turning low digital engagement into repeat usage for Emirates Islamic’s existing customers, as the only designer in an agile squad.",
-    summary: "Fixed recurring pain points and shipped customer-requested features across Emirates Islamic’s mobile, tablet and online banking, lifting 30-day digital customer retention from below 20% to a weekly average of 55% in 20 sprints.",
+    summary: "Fixed recurring pain points and shipped customer-requested features across Emirates Islamic’s mobile, tablet and online banking, lifting digital customer retention from below 20% to a weekly average of 55% in 20 sprints.",
     tags: ["Banking B2C", "Mobile, tablet + online banking", "Sole designer in an agile squad", "20 sprints"],
     links: [
       { label: "Live website", href: "https://www.emiratesislamic.ae" },
@@ -524,7 +524,7 @@ export const caseStudies: CaseStudy[] = [
         body: [{
           type: "definitions",
           items: [
-            { label: "30-day digital customer retention", body: "Increased from below 20% to a weekly average of 55% by sprint 20, beating the 50% target." },
+            { label: "Digital customer retention", body: "Increased from below 20% to a weekly average of 55% by sprint 20, beating the 50% target." },
             { label: "Customer advocacy (NPS)", body: "Exceeded 85." },
             { label: "Customer complaints", body: "Reduced to fewer than 3 per week by sprint 18." },
             { label: "Feature engagement", body: "Newly introduced features showed returning and regular customer usage." },
@@ -551,7 +551,7 @@ export const caseStudies: CaseStudy[] = [
         body: [{
           type: "definitions",
           items: [
-            { label: "30-day retention", body: "Digital traffic analytics tracking returning customers after 30 days." },
+            { label: "Digital customer retention", body: "Digital traffic analytics tracking returning customers after 30 days." },
             { label: "NPS", body: "Customer feedback and recommendation scores." },
             { label: "Customer complaints", body: "Weekly complaint volume, monitored across sprint releases." },
             { label: "Feature adoption", body: "Unique customers using newly released features." },
@@ -561,7 +561,7 @@ export const caseStudies: CaseStudy[] = [
       },
     ],
     conclusion: {
-      statement: ["Twenty sprints took 30-day digital customer retention from below 20% to a weekly average of 55%,", "with NPS above 85 and complaints under 3 a week by sprint 18."],
+      statement: ["Twenty sprints took digital customer retention from below 20% to a weekly average of 55%,", "with NPS above 85 and complaints under 3 a week by sprint 18."],
       rest: "The lesson I carry forward: guerrilla testing validated assumptions quickly, but a few stories still needed rework, so formal usability testing belongs inside the sprints.",
     },
   },
