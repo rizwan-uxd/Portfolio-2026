@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { CountUp } from "@/components/CountUp";
 import { aiProjectsSection } from "@/lib/content";
 
 // Lime pixel chevron, as in the owner's reference (2026-10-31).
@@ -31,7 +32,7 @@ function Card({ project }: { project: Project }) {
       <span className="mt-auto flex items-center justify-between gap-4 border-t border-hairline pt-4">
         <span className="flex flex-col gap-1">
           <span className="micro text-muted-foreground">{project.statLabel}</span>
-          <span className="label">{project.stat}</span>
+          <CountUp value={project.stat} className="label" />
         </span>
         <Chevron dim={!href} />
       </span>

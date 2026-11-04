@@ -411,6 +411,7 @@ function Loop() {
 }
 
 // Product Strategy & Growth Alignment: four roadmap stages connect the selected validation step to an outcome.
+// At rest the roadmap is already built (owner, 2026-11-04). On hover it sinks back to the plate and builds up again; moving off finishes the loop.
 function Growth() {
   const stages = [
     { label: "BUILD", x: 0.6, h: 2.8, i: 4.5 },
@@ -418,17 +419,20 @@ function Growth() {
     { label: "EXPLORE", x: 4.2, h: 1.3, i: 1.5 },
     { label: "IDEA", x: 6, h: 0.7, i: 0 },
   ];
+  // The connection runs from the top of the VALIDATE tick to the top of the BUILD cube, so neither icon sits under a dot or the stem.
   const [vx, vy] = at(3.1, 4.5, 2.3);
   const [kx, ky] = at(1.3, 4.5, 3.1);
+  const [sy, ey] = [vy - 23, ky - 24];
   return (
-    <Art x={-9} y={-68} cycle="--iso-cycle-drop">
+    <Art x={-9} y={-60} cycle="--iso-cycle-growth">
       <g className="iso-growth">
         <Box x={0} y={0} w={9} d={8} h={0.3} className="iso-plate" />
         <Pads w={9} d={8} />
-        {[1.2, 2.4, 3.6, 4.8, 6].map((y, i) => <path key={y} className="iso-dim" d={line([0.8, y, 0.3], [2.6 - (i % 2) * 0.6, y, 0.3])} />)}
+        {[1.2, 2.4].map((y, i) => <path key={y} className="iso-dim" d={line([0.8, y, 0.3], [2.6 - i * 0.6, y, 0.3])} />)}
         {stages.map(({ label, x, h, i }) => {
           const [tx, ty] = at(x + 0.7, 9.6, 0.3);
           const [iconX, iconY] = at(x + 0.7, 4.5, 0.3 + h);
+          const selected = label === "VALIDATE";
           return (
             <g key={label}>
               <polygon className="iso-cast" points={top({ x, y: 3.4, z: 0.3, w: 1.4, d: 2.2 })} />
@@ -437,31 +441,28 @@ function Growth() {
               </clipPath>
               <g clipPath={`url(#iso-growth-clip-${i})`}>
                 <g className="iso-growth-rise" style={{ "--i": i, "--growth-rise": `${h * UNIT}px` } as CSSProperties}>
-                  <Box x={x} y={3.4} z={0.3} w={1.4} d={2.2} h={h} className={label === "VALIDATE" ? "iso-growth-selected" : ""} />
+                  <Box x={x} y={3.4} z={0.3} w={1.4} d={2.2} h={h} className={selected ? "iso-growth-selected" : ""} />
                 </g>
               </g>
-              <defs>
-                <g id={`iso-growth-symbol-${i}`} transform={`matrix(${COS / UNIT} ${-SIN / UNIT} 0 1 ${iconX} ${iconY - 9})`}>
-                    {label === "IDEA" && <><path d="M-5 0 A6 6 0 1 1 5 0 C3 2 3 3 3 4 H-3 C-3 3 -3 2 -5 0 Z M-3 7 H3 M-2 9 H2" /></>}
-                    {label === "EXPLORE" && <><circle cx="-2" cy="-2" r="5.5" /><path d="M2 2 L7 7" /></>}
-                    {label === "VALIDATE" && <><circle r="8" /><path d="M-4 0 L-1 3 L5 -4" /></>}
-                    {label === "BUILD" && <><path d="M-7 -5 L0 -9 L7 -5 V4 L0 8 L-7 4 Z M-7 -5 L0 -1 L7 -5 M0 -1 V8" /></>}
+              <g className={`iso-growth-icon${selected ? " iso-growth-selected-icon" : ""}`} style={delay(i)}>
+                <g transform={`matrix(${COS / UNIT} ${-SIN / UNIT} 0 1 ${iconX} ${iconY - 9})`}>
+                  {label === "IDEA" && <path d="M-5 0 A6 6 0 1 1 5 0 C3 2 3 3 3 4 H-3 C-3 3 -3 2 -5 0 Z M-3 7 H3 M-2 9 H2" />}
+                  {label === "EXPLORE" && <><circle cx="-2" cy="-2" r="5.5" /><path d="M2 2 L7 7" /></>}
+                  {selected && <><circle r="8" /><path d="M-4 0 L-1 3 L5 -4" /></>}
+                  {label === "BUILD" && <path d="M-7 -5 L0 -9 L7 -5 V4 L0 8 L-7 4 Z M-7 -5 L0 -1 L7 -5 M0 -1 V8" />}
                 </g>
-              </defs>
-              <g className="iso-growth-icon" style={delay(i)}>
-                <use href={`#iso-growth-symbol-${i}`} />
               </g>
-              <text className={`iso-silk${label === "VALIDATE" ? " iso-growth-selected-label" : ""}`} x={tx} y={ty + 12} textAnchor="middle" dominantBaseline="central">{label}</text>
+              <text className={`iso-silk${selected ? " iso-growth-selected-label" : ""}`} x={tx} y={ty + 12} textAnchor="middle" dominantBaseline="central">{label}</text>
             </g>
           );
         })}
         <g className="iso-growth-outcome">
-          <path className="iso-growth-connection" d={`M${vx} ${vy} C${vx + 6} ${vy - 36}, ${kx - 25} ${ky - 12}, ${kx} ${ky}`} />
-          <circle cx={vx} cy={vy} r="2.5" />
-          <circle cx={kx} cy={ky} r="2.5" />
-          <path className="iso-growth-kpi-stem" d={`M${kx} ${ky} v-22`} />
+          <path className="iso-growth-connection" pathLength="1" d={`M${vx} ${sy} C${vx} ${sy - 30}, ${kx + 22} ${ey - 10}, ${kx} ${ey}`} />
+          <circle cx={vx} cy={sy} r="2.5" />
+          <circle cx={kx} cy={ey} r="2.5" />
+          <path className="iso-growth-kpi-stem" d={`M${kx} ${ey} v-14`} />
         </g>
-        <text className="iso-silk" x={kx} y={ky - 28} textAnchor="middle">GROWTH / KPI</text>
+        <text className="iso-silk" x={kx} y={ey - 20} textAnchor="middle">GROWTH / KPI</text>
       </g>
     </Art>
   );

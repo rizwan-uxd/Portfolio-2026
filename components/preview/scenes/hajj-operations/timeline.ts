@@ -31,7 +31,7 @@ export const hajjOperationsTimeline = defineTimeline({
   // ghosting-out Emirates had to opt out of.
   exit: "fade",
   description:
-    "A project approval in an operations data-entry platform, then a live executive dashboard building in — power load, meter connectivity, interruptions, drill-test readiness and alerts.",
+    "A project approval in an operations data-entry platform, then a live executive dashboard building in with power load, meter connectivity, interruptions, drill-test readiness and alerts.",
   steps: [
     { id: "titleA", duration: 1000 },
     { id: "zoomInA", duration: 550 },

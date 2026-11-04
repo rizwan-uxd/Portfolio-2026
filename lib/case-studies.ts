@@ -1,7 +1,9 @@
 // Case study pages (/work/<slug>), laid out from Figma 41:6 (desktop) and 43:6 (mobile). The copy and images come
 // from the live site's /work/<slug> pages; the Hajj headings follow the Figma template, which carries the same text.
 // Two rules from the live site's source: the Hajj client is only ever "Leading energy provider in Saudi", and its
-// +25% card metric stays off this page, which says outright that no figures were measured. SecureLink's client stays confidential.
+// +25% card metric stays off this page, which says outright that no figures were measured. SecureLine's client stays confidential.
+
+import type { CaseIconName } from "@/components/CaseFeatures";
 
 export type Figure = {
   src: string; w: number; h: number; alt: string; caption?: string;
@@ -15,15 +17,26 @@ export type Definition = {
   points?: string[];
   link?: { label: string; href: string };
 };
+// A card or list row with an icon and an illustration (SecureLine overview and approach, owner 2026-11-04).
+export type FeatureArt = "secure-chat" | "one-app" | "legacy-layers" | "feature-checklist" | "component-kit" | "test-loop";
+export type Feature = { icon: CaseIconName; label: string; body: string; art: FeatureArt; points?: string[]; image?: Figure }; // image replaces the art
+export type IconItem = { icon: CaseIconName; label: string; body: string };
 export type Block =
   | { type: "text"; text: string; muted?: boolean }
   | { type: "list"; items: string[] }
-  | { type: "definitions"; items: Definition[] };
+  | { type: "definitions"; items: Definition[] }
+  | { type: "cards"; items: Feature[] } // full-width cards under the section header
+  | { type: "features"; items: Feature[] } // full-width list with a visual for the chosen row
+  | { type: "iconGrid"; items: IconItem[] }; // cards with icons, full width under the header (owner, 2026-11-04)
+// One tab of a rotating screen showcase: the same screen in both themes, with what it does.
+export type Showcase = { label: string; lead: string; points: string[]; dark: Figure; light: Figure };
 export type Section = {
   eyebrow: string; title: string;
   body?: Block[];
   steps?: { label: string; actor?: string; body: string }[];
   phones?: Figure[]; // a row of portrait screens
+  phonesPaired?: boolean; // each definition gets the phone at its index, label and phone on the left (owner, 2026-11-03)
+  showcase?: Showcase[]; // tabbed screens that rotate on their own (owner, 2026-11-04)
   comparisons?: Comparison[]; // shown before figures
   figures?: Figure[];
 };
@@ -38,6 +51,7 @@ export type CaseStudy = {
   meta: { label: string; value: string }[];
   hero?: Figure;
   heroPhones?: Figure[];
+  prototype?: { src: string; title: string }; // embedded under the meta strip, above the hero (owner, 2026-11-03)
   thumbnail: string; // More works card
   sections: Section[];
   conclusion: { statement: [string, string]; rest?: string }; // statement's 2nd half muted
@@ -66,7 +80,7 @@ export const caseStudies: CaseStudy[] = [
       { label: "Role", value: "UX Lead + Product Designer" },
       { label: "Duration", value: "4 months" },
       { label: "Team", value: "2 designers, with PM, Ops, Mecca and development counterparts" },
-      { label: "Delivery", value: "2026 Hajj season — MVP 3" },
+      { label: "Delivery", value: "2026 Hajj season, MVP 3" },
     ],
     hero: { src: `${hajj}/hero-dashboard.png`, w: 3184, h: 1832, alt: "The live power monitoring dashboard for the Hajj period alongside the project-manager data entry platform, showing load, meter connectivity, interruptions, readiness and the projects list." },
     thumbnail: `${hajj}/banner.png`,
@@ -102,7 +116,7 @@ export const caseStudies: CaseStudy[] = [
           items: [
             { label: "Role", body: "UX Lead, hands-on throughout: discovery, data and KPI analysis, information architecture, flows, hi-fi UI, developer handoff and QA. I led two designers on the engagement." },
             { label: "Challenge", body: "Information was fragmented, inconsistently structured, and rarely tied to a clear action. Source reports were in Arabic and translated for the design work, with terminology verified against native speakers before it entered the interface." },
-            { label: "Governance decision", highlight: true, body: "The initial assumption was that Mecca users would correct project data directly. The validated model inverted it: the project manager reports reality, the Mecca team reviews, and then either approves and publishes or sends it back for revision. Catching this before the downstream design was built kept the approval trail, the states and the entire data-entry surface aligned with how the organisation actually works — the single clearest UX-leadership moment on the project." },
+            { label: "Governance decision", highlight: true, body: "The initial assumption was that Mecca users would correct project data directly. The validated model inverted it: the project manager reports reality, the Mecca team reviews, and then either approves and publishes or sends it back for revision. Catching this before the downstream design was built kept the approval trail, the states and the entire data-entry surface aligned with how the organisation actually works. It was the single clearest UX-leadership moment on the project." },
           ],
         }],
         figures: [{ src: `${hajj}/governance-flow.png`, w: 3344, h: 1360, alt: "The initial information architecture next to the structure confirmed in the users and stakeholder workshop sessions.", caption: "Initial understanding, and the structure confirmed in workshop." }],
@@ -126,7 +140,7 @@ export const caseStudies: CaseStudy[] = [
           items: [
             { label: "Data-entry platform", body: "A separate product surface, deliberately not part of the CEO portal: login → project list → add or update → approval → reporting. Keeping it separate meant the people reporting reality were never designing around an executive’s view of it." },
             { label: "States as reusable patterns", body: "On Track, Delayed, Completed Early, Completed Late and Not Started, plus empty and no-result, validation, error, approval and send-back. These were authored as reusable patterns rather than one-off screens, so the same vocabulary carries across the whole workflow." },
-            { label: "Constraints navigated", body: "Power BI’s chart limitations meant investigating which visualisation patterns were actually supported and adapting the information design around what was feasible. The underlying data model could not be changed, so the work was designing around it — restructuring how information was surfaced, not touching the source structure." },
+            { label: "Constraints navigated", body: "Power BI’s chart limitations meant investigating which visualisation patterns were actually supported and adapting the information design around what was feasible. The underlying data model could not be changed, so I designed around it, restructuring how information was surfaced without touching the source structure." },
             { label: "The Hajj operating cycle", body: "The same dashboard was designed to shift focus across pre, during and post Hajj: readiness before, live operations during, and learning after." },
           ],
         }],
@@ -169,42 +183,58 @@ export const caseStudies: CaseStudy[] = [
         ],
       },
     ],
-    conclusion: { statement: ["The real transformation wasn’t the dashboard.", "It was changing how operational information moved through the organisation — from ground reality to leadership decision."] },
+    conclusion: { statement: ["The real transformation wasn’t the dashboard.", "It was changing how operational information moved through the organisation, from ground reality to leadership decision."] },
   },
   {
+    // Rebuilt 2026-11-04 from three of the owner's sources: the live site, the Behance project "SecureLine Communication App"
+    // (gallery 210562981) and the one-page PDF portfolio (case study 01). Owner, 2026-11-04: the name is SecureLine
+    // (the screens still show SecureLine until re-exported), there was no access to users, the app was built in Flutter,
+    // and the PDF is correct wherever it speaks. The saving is 3 months of development time (CV, works card, graph, AI twin; only the old page said 2). The PDF
+    // names the client, but the page keeps it confidential. Key screens and the semantic colours are exports from the owner's
+    // Figma files (Connect Me, TDS v1.2, 2026-11-04); the hero is still a crop of the Behance file.
     slug: "secure-communication-app",
     title: ["Secure Communication", "App"],
     eyebrow: "Design systems",
-    subtitle: "Designed a secure enterprise communication platform with a scalable design system and reusable React components, standardizing complex workflows across products and platforms.",
-    summary: "Designed a secure enterprise communication platform with a scalable design system and reusable React components, standardizing complex workflows across products and platforms.",
+    subtitle: "Took a one-line brief from leadership to SecureLine, a secure communication app for iOS, Android and desktop, built on a design system that saved 3 months of development time.",
+    summary: "Took a one-line brief from leadership to SecureLine, a secure communication app for iOS, Android and desktop, built on a design system that saved 3 months of development time.",
+    tags: ["Enterprise communication", "iOS, Android + desktop", "Light + dark themes"],
+    links: [{ label: "Behance case study", href: "https://www.behance.net/gallery/210562981/SecureLine-Communication-App" }],
     meta: [
       { label: "Client", value: "Confidential" },
       { label: "Year", value: "2024" },
-      { label: "Role", value: "Senior Product Designer" },
-      { label: "Services", value: "UX, Design system" },
+      { label: "Role", value: "Senior Product Designer, concept to post-launch" },
+      { label: "Platforms", value: "iOS, Android, desktop native" },
+      { label: "Impact", value: "3 months of development time saved" },
     ],
-    hero: { src: `${secure}/banner.png`, w: 2560, h: 1440, alt: "Secure Communication App" },
+    hero: { src: `${secure}/hero-dark.jpg`, w: 1400, h: 800, alt: "SecureLine on a laptop: the home screen with today’s meetings, recent chats, the Daily standup participants and its group chat." },
     thumbnail: `${secure}/banner.png`,
     sections: [
       {
         eyebrow: "Overview",
         title: "Overview",
         body: [
-          { type: "text", text: "SecureLink (name changed) is a custom-built enterprise communication platform that empowers high security government organizations to connect and collaborate securely. It enables employees to effortlessly schedule meetings, engage in instant messaging, and conduct high-quality voice and video conferences." },
-          { type: "text", muted: true, text: "This case study explores the journey of converting a one line sentence from leadership to a full scale enterprise application with a custom built design system to a highest level of security, highlighting the challenges faced, the approach taken to address them, and the results achieved." },
+          { type: "text", text: "SecureLine is a secure communication application designed for the defence industry. Its military-grade encryption lets employees across the organisation collaborate and share information: they schedule meetings, message each other, and hold voice and video calls." },
+          { type: "text", muted: true, text: "As Senior Product Designer I owned the design from concept to post-launch, and delivered and supported two product lifecycles." },
+          {
+            type: "cards",
+            items: [
+              { icon: "target", art: "secure-chat", label: "Project goal", body: "Design an enterprise communication app for secure communication between employees inside the organisation." },
+              { icon: "users", art: "one-app", label: "Users", body: "Employees within the client organisation, who needed one app for official communication and scheduling." },
+              { icon: "layers", art: "legacy-layers", label: "Constraint", body: "New designs had to build on the organisation’s existing legacy application framework and its system rules." },
+            ],
+          },
         ],
-        figures: [{ src: `${secure}/detail-1.png`, w: 1400, h: 866, alt: "Secure Communication App — process detail 1" }],
       },
       {
         eyebrow: "The problem",
-        title: "The problem",
+        title: "A one-line brief",
         body: [
-          { type: "text", text: "The problem at hand was the lack of proper product requirements. It is just a one liner from leadership that we need to create an enterprise app for all employee internal communication. While there were few platforms available for enterprise communication apps, they often failed to provide customization tailored to organization employees with security in question." },
+          { type: "text", text: "There were no product requirements, only one line from leadership: build an enterprise app for all internal employee communication. Enterprise communication platforms already existed, but none could be tailored to the organisation’s employees or meet its security needs." },
           {
             type: "list",
             items: [
-              "Tight deadlines: Initial product key screens delivery deadlines were tighter and due in 3 weeks.",
-              "Access to target users: No access to potential end users as it’s highly confidential.",
+              "Tight deadline: the first key screens were due in 3 weeks.",
+              "No access to users: the domain is sensitive, so direct contact with users to gather requirements was restricted.",
             ],
           },
         ],
@@ -213,13 +243,100 @@ export const caseStudies: CaseStudy[] = [
         eyebrow: "Approach",
         title: "Approach",
         body: [
-          { type: "text", text: "To address these problems and create a highly secured enterprise communication app with customizations, the following approach was taken:" },
+          { type: "text", text: "Without users to interview, I worked from the market, from the system, and from quick validation:" },
+          {
+            type: "features",
+            items: [
+              { icon: "search", art: "feature-checklist", label: "Competitor analysis", body: "Competitor analysis of enterprise communication apps set the essential features to build.", points: ["User onboarding", "Chat", "Video and audio calls", "Meetings", "Settings", "User profile"] },
+              { icon: "component", art: "component-kit", label: "Design system first", body: "I built on a design system framework and designed the most frequently used components first, which is how the 3-week deadline was met.", image: { src: `${secure}/tds-buttons.png`, w: 1480, h: 740, alt: "The TDS button matrix for mobile: primary and secondary buttons in small, medium and large, with and without icons." } },
+              { icon: "user-check", art: "test-loop", label: "Iterative guerrilla testing", body: "Guerrilla testing validated the designs, found usability issues and tested our assumptions, round after round." },
+            ],
+          },
+        ],
+      },
+      {
+        eyebrow: "Design system",
+        title: "One system for mobile, desktop and web",
+        body: [
+          { type: "text", text: "The library is organised the way it is used: foundations, then tokens, then components." },
+          {
+            type: "iconGrid",
+            items: [
+              { icon: "palette", label: "Foundations", body: "Colour, border, layout, spacing, typography and icons, each a page of the Figma library." },
+              { icon: "braces", label: "Semantic tokens", body: "54 semantic colours in five groups: 17 for content, 17 for backgrounds, 11 for borders, 7 surface levels and 2 overlays. Each name points to a different primitive in light and dark, so a component never changes when the theme does." },
+              { icon: "sun-moon", label: "Variables and modes", body: "Figma variables carry the light and dark modes across mobile, desktop and code." },
+              { icon: "component", label: "Components", body: "Avatars, buttons, badges, chips and tags, top, bottom and title bars, the navigation drawer, controls, text input, alerts, banners, snackbars, lists and message bubbles, with their variants and sizes for mobile and web." },
+            ],
+          },
+        ],
+        figures: [
+          { src: `${secure}/tds-semantic-colors.png`, w: 1008, h: 812, alt: "The Semantic colors page of the TDS design system: content tokens such as Content Primary, Content Brand and Content Link, each mapped to a neutral or brand primitive, shown side by side in light and dark.", caption: "Semantic content colours in TDS v1.2, light beside dark. Same token names, different primitives." },
+          { src: `${secure}/detail-1.png`, w: 1400, h: 866, alt: "The SecureLine home screen on mobile and desktop, each split half dark and half light, next to Figma’s variable mode menu set to Dark.", caption: "The same screens in dark and light, switched by variable mode in Figma." },
+          { src: `${secure}/detail-2.png`, w: 1290, h: 740, alt: "The component library pages in Figma, laid out at an angle: buttons, typography headings, colour scales and navigation.", caption: "The component library." },
+        ],
+      },
+      {
+        eyebrow: "Key screens",
+        title: "Home, meetings, calls and one way to start anything",
+        body: [{ type: "text", text: "Four screens from the mobile app, exported from the product’s Figma file. Each one comes in both themes, built from the same design tokens." }],
+        showcase: [
+          {
+            label: "Home",
+            lead: "Today at a glance: the next meetings and the latest chats on one screen.",
+            points: [
+              "Meetings sit at the top as swipeable cards, each with its time, purpose, organiser and status.",
+              "Recent chats follow, with attachments, read receipts and unread counts.",
+              "The bottom bar reaches Meetings, Calls and Chats in one tap.",
+            ],
+            dark: { src: `${secure}/screens/home-dark.png`, w: 750, h: 1624, alt: "SecureLine home screen in dark mode: a Daily standup meeting card marked Pending, then recent chats with unread counts." },
+            light: { src: `${secure}/screens/home-light.png`, w: 750, h: 1624, alt: "SecureLine home screen in light mode: a Daily standup meeting card marked Pending, then recent chats with unread counts." },
+          },
+          {
+            label: "Meetings",
+            lead: "A dashboard to manage and understand ongoing and upcoming meetings.",
+            points: [
+              "Each card carries the date and time, the meeting’s purpose and who organised it.",
+              "Status chips show what still needs a response.",
+              "Sort and filter controls keep a long schedule manageable.",
+            ],
+            dark: { src: `${secure}/screens/meetings-dark.png`, w: 750, h: 1624, alt: "SecureLine meetings screen in dark mode: Daily standup, Sprint backlog and Product road map cards with sort and filter icons." },
+            light: { src: `${secure}/screens/meetings-light.png`, w: 750, h: 1624, alt: "SecureLine meetings screen in light mode: Daily standup, Sprint backlog and Product road map cards with sort and filter icons." },
+          },
+          {
+            label: "Calls",
+            lead: "Recent call logs with their history, and a call back by video or voice from each one.",
+            points: [
+              "A missed call stands out in the brand colour.",
+              "An arrow shows whether each call came in or went out, with its time.",
+              "Video and voice buttons sit on every row for a one-tap call back.",
+            ],
+            dark: { src: `${secure}/screens/calls-dark.png`, w: 750, h: 1624, alt: "SecureLine calls screen in dark mode: four recent calls, the first a missed call in orange, each with video and voice buttons." },
+            light: { src: `${secure}/screens/calls-light.png`, w: 750, h: 1624, alt: "SecureLine calls screen in light mode: four recent calls, the first a missed call in orange, each with video and voice buttons." },
+          },
+          {
+            label: "Create new",
+            lead: "One plus button starts anything: a meeting, a call or a chat.",
+            points: [
+              "The same button sits in the top bar of every screen.",
+              "A bottom sheet keeps the current screen in view behind it.",
+              "Its three options match the three tabs in the bottom bar.",
+            ],
+            dark: { src: `${secure}/screens/create-dark.png`, w: 750, h: 1624, alt: "SecureLine Create New bottom sheet in dark mode over the dimmed home screen, offering Meeting, Calls and Chats." },
+            light: { src: `${secure}/screens/create-light.png`, w: 750, h: 1624, alt: "SecureLine Create New bottom sheet in light mode over the dimmed home screen, offering Meeting, Calls and Chats." },
+          },
+        ],
+      },
+      {
+        eyebrow: "After launch",
+        title: "Requests from a custom-built product",
+        body: [
+          { type: "text", text: "Because the product was tailored to one organisation, its users came back with requests of their own:" },
           {
             type: "definitions",
             items: [
-              { label: "Competitor analysis", body: "Defined primary features to build through secondary research & competitor analysis." },
-              { label: "Design system", body: "Leveraging a design system framework and prioritizing frequently used components, able to meet deadlines." },
-              { label: "Iterative guerilla testing", body: "Conducted guerilla testing for validation to identify usability issues and test design assumptions." },
+              { label: "My Teams and departments", body: "Lets users organise and reach colleagues within their own teams and departments." },
+              { label: "Chats with moderators", body: "Users can create chat rooms and give moderators special privileges to manage discussions." },
+              { label: "Late design tokens", body: "Design tokens came into Figma near the end of the product cycle, which challenged our design plan." },
             ],
           },
         ],
@@ -228,22 +345,20 @@ export const caseStudies: CaseStudy[] = [
         eyebrow: "Accomplishments & takeaways",
         title: "Accomplishments & takeaways",
         body: [
-          { type: "text", text: "Though we strive for positive outcomes, some projects give us experiences and learnings which I would like to note below:" },
           {
             type: "list",
             items: [
-              "Thrived in the understanding and concept phase, leveraging my skills to develop successful solutions despite limited user interaction.",
-              "Organized and streamlined design systems to cater to multiple product lines, reducing design and development time by 2 months.",
-              "While there was a learning curve in implementing Figma variables for the Flutter environment, the process of successfully integrating them for dark and light mode using design tokens was ultimately rewarding.",
+              "Thrived in the understanding and concept phase, developing solutions that worked despite limited user interaction.",
+              "Organised one design system to serve two product lines, saving 3 months of development time.",
+              "Implementing Figma variables for the Flutter environment had a learning curve, but integrating them for dark and light mode through design tokens was ultimately rewarding.",
             ],
           },
         ],
-        figures: [{ src: `${secure}/detail-2.png`, w: 1290, h: 740, alt: "Secure Communication App — process detail 2" }],
       },
     ],
     conclusion: {
-      statement: ["SecureLink, our secure enterprise communication platform,", "successfully completed its pilot release within the agreed-upon timeframe with potential clients."],
-      rest: "By leveraging reusable components from our design system, we were able to streamline development. Additionally, our iterative usability testing proved valuable as it yielded positive feedback from potential clients. SecureLink is now a prominent product within our company portfolio, and we’ve secured a client who has signed off on its implementation for their organization.",
+      statement: ["SecureLine’s pilot release shipped within the agreed timeframe,", "and a client has signed off on its implementation for their organisation."],
+      rest: "Reusable components from the design system streamlined development, and iterative usability testing earned positive feedback from potential clients. SecureLine is now a prominent product in the company’s portfolio.",
     },
   },
   {
@@ -272,7 +387,7 @@ export const caseStudies: CaseStudy[] = [
           { type: "text", text: "DubaiNow is the only Dubai Government app for city services, giving residents access to 115+ government services, from bills and residency to police and driving. It is part of Dubai’s paperless strategy, which moves every government service into the app." },
           { type: "text", muted: true, text: "As Customer Experience Designer I created the app’s design system, then designed services on it from concept to release and tracked how they performed." },
         ],
-        figures: [{ src: `${dubai}/services-home.png`, w: 1792, h: 1146, alt: "The DubaiNow home screen with its service categories, next to the Police category with the Report Accident service.", caption: "115+ services, grouped by category." }],
+        figures: [{ src: `${dubai}/services-home.png`, w: 1788, h: 1140, alt: "The DubaiNow home screen with its service categories, next to the Police category with the Report Accident service.", caption: "115+ services, grouped by category." }],
       },
       {
         eyebrow: "The problem",
@@ -571,8 +686,7 @@ export const caseStudies: CaseStudy[] = [
     eyebrow: "AI product design · Vibe coded",
     subtitle: "From AI concept to working prototype in 6 days.",
     summary: "Designing an AI-native banking experience and transforming it into a working prototype using AI-assisted development.",
-    links: [
-      { label: "Live prototype", href: copilotPrototype },
+    links: [ // the Live prototype button went when the prototype was embedded below (owner, 2026-11-03)
       { label: "GitHub repository", href: copilotRepository },
     ],
     meta: [
@@ -582,6 +696,7 @@ export const caseStudies: CaseStudy[] = [
       { label: "Stack", value: "Figma · Claude Code · Cursor · React Native · Expo · GitHub" },
       { label: "Repository", value: "Public on GitHub" },
     ],
+    prototype: { src: copilotPrototype, title: "AI Banking Copilot live prototype" },
     heroPhones: [
       { src: `${copilot}/home.png`, ...phone, alt: "Copilot home screen: a natural-language prompt field, four workflow shortcuts, and a proactive insights list flagging a spending rise and two ways to save." },
       { src: `${copilot}/explain-transaction.png`, ...phone, alt: "A transaction opened into a plain-language explanation of what the charge was, with the amount, merchant, date and reference listed underneath." },
@@ -605,7 +720,7 @@ export const caseStudies: CaseStudy[] = [
         body: [
           { type: "text", text: "The AI Copilot changes who does the thinking." },
           { type: "text", muted: true, text: "Traditional banking expects customers to search, compare, understand products and decide what to do next." },
-          { type: "text", muted: true, text: "AI Banking Copilot shifts that cognitive work to the assistant — understanding intent, reasoning with customer context, and recommending the best next action." },
+          { type: "text", muted: true, text: "AI Banking Copilot shifts that cognitive work to the assistant. It understands intent, reasons with customer context and recommends the best next action." },
           {
             type: "definitions",
             items: [
@@ -618,6 +733,7 @@ export const caseStudies: CaseStudy[] = [
       {
         eyebrow: "AI workspace",
         title: "Four workflows, one copilot",
+        phonesPaired: true,
         body: [
           { type: "text", text: "Each workflow starts from what the customer is actually trying to do, and ends in a completed action rather than an answer." },
           {
@@ -625,21 +741,21 @@ export const caseStudies: CaseStudy[] = [
             items: [
               {
                 label: "Explain transactions",
-                body: "A charge the customer doesn’t recognise is answered in a single turn — what it was, who took it, and what they can do about it.",
+                body: "A charge the customer doesn’t recognise is answered in a single turn, covering what it was, who took it and what they can do about it.",
                 points: [
                   "Answers in plain language first: the merchant and the reason for the charge, before any transaction detail.",
-                  "Backs the answer with the record — amount, merchant, date, reference — so the explanation is checkable, not just plausible.",
+                  "Backs the answer with the record (amount, merchant, date and reference), so the customer can check the explanation for themselves.",
                   "Ends on the three actions that actually follow: view the bill, download the receipt, or report a problem.",
                   "Leaves the thread open, so the next question continues the conversation instead of restarting it.",
                 ],
               },
               {
                 label: "Analyze spending",
-                body: "The analysis is set up in conversation — which accounts, over what period — and comes back as something to act on rather than read.",
+                body: "The analysis is set up in conversation, choosing which accounts and what period, and comes back as something to act on rather than read.",
                 points: [
                   "Asks two questions before answering, and no more: which accounts, and which timeframe.",
                   "Leads with the total and its movement against the previous month, then the category split behind it.",
-                  "Names the specific things worth knowing — the category that jumped, the saving that was missed.",
+                  "Names the specific things worth knowing, like the category that jumped or the saving that was missed.",
                   "Turns each insight into a recommendation with the control attached: set the budget, view the offers, enable the alerts.",
                 ],
               },
@@ -648,14 +764,14 @@ export const caseStudies: CaseStudy[] = [
                 body: "Product discovery reasons over the customer’s own spending, then proves the recommendation before asking them to apply for anything.",
                 points: [
                   "Ranks by net annual benefit against real spending, not by product tier or marketing order.",
-                  "Justifies the match in the customer’s own data — where the money goes, how often they fly, what they currently earn on it.",
+                  "Justifies the match with the customer’s own data, such as where the money goes, how often they fly and what they currently earn on it.",
                   "Checks eligibility in place against income, tenure and credit score, without touching the credit file.",
                   "Ends pre-qualified with the terms stated up front: documents, timing, and the odds of approval.",
                 ],
               },
               {
                 label: "Resolve issues",
-                body: "A reported problem is carried all the way to a raised, referenced case — inside the same conversation that surfaced it.",
+                body: "A reported problem is carried all the way to a raised, referenced case, inside the same conversation that surfaced it.",
                 points: [
                   "Picks the dispute up from the transaction already on screen, with no separate support journey to find.",
                   "Confirms what it understood before acting, and has the customer name the issue type rather than assuming it.",
@@ -669,7 +785,7 @@ export const caseStudies: CaseStudy[] = [
         phones: [
           { src: `${copilot}/explain-transaction.png`, ...phone, alt: "The explain-transaction flow: a question about a deduction answered with the charge’s origin, its details, and the actions available next." },
           { src: `${copilot}/analyze-recommendations.png`, ...phone, alt: "The end of the spending analysis flow: each insight turned into a recommendation the customer can act on, with quick actions underneath." },
-          { src: `${copilot}/product-eligibility.png`, ...phone, alt: "The product recommendation flow checking eligibility in place — income, tenure and credit score confirmed against the customer’s own data before any application starts." },
+          { src: `${copilot}/product-eligibility.png`, ...phone, alt: "The product recommendation flow checking eligibility in place. Income, tenure and credit score are confirmed against the customer’s own data before any application starts." },
           { src: `${copilot}/resolve-issue-confirmed.png`, ...phone, alt: "The end of the issue resolution flow: the dispute raised and confirmed, with a case summary and a ticket reference the customer can return to." },
         ],
       },
@@ -695,7 +811,7 @@ export const caseStudies: CaseStudy[] = [
         ],
       },
     ],
-    conclusion: { statement: ["The customer defines the goal.", "The AI figures out how to achieve it."] },
+    conclusion: { statement: ["The AI does the thinking.", "The customer stays in control."], rest: "It understands the goal, reasons over the customer’s own data and recommends the next step, but nothing happens until the customer confirms." }, // owner, 2026-11-03
   },
 ];
 
@@ -705,6 +821,8 @@ export const caseStudySection = {
   moreLabel: "Next case studies",
   moreHeading: "More works",
   readCase: "Read case study",
+  prototypeLabel: "Try the live prototype", // our UI labels for the embed, not from the live site
+  prototypeOpen: "Open in a new tab",
 };
 
 export const getCaseStudy = (slug: string) => caseStudies.find((study) => study.slug === slug);

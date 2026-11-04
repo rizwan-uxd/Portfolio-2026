@@ -19,7 +19,7 @@ export const workHighlights: Record<string, Highlight[]> = {
   "secure-communication-app": [
     { icon: "search", label: "Competitor analysis", body: "Defined primary features to build through secondary research & competitor analysis." },
     { icon: "layout-grid", label: "Design system", body: "Leveraging a design system framework and prioritizing frequently used components, able to meet deadlines." },
-    { icon: "user-check", label: "Iterative guerilla testing", body: "Conducted guerilla testing for validation to identify usability issues and test design assumptions." },
+    { icon: "user-check", label: "Iterative guerrilla testing", body: "Conducted guerrilla testing for validation to identify usability issues and test design assumptions." },
   ],
   "emirates-islamic-digital-ux": [
     { icon: "compass", label: "UX discovery in grooming", body: "Story mapping prioritised every user story against the squad’s objectives, with a user survey when a story needed more evidence." },

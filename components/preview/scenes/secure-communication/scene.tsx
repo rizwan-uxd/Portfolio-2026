@@ -163,7 +163,7 @@ export function SecureCommunicationScene() {
               background: "var(--pv-accent)",
             }}
           />
-          SecureLink
+          SecureLine
         </div>
         {NAV_ITEMS.map((item) => {
           const active = item === "Home";

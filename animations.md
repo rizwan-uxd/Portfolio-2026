@@ -156,3 +156,9 @@ Approved compact “Rizwan” halftone treatment inspired by the 21st.dev Halfto
 - Only the shadow changes on the button itself, because its transform and opacity belong to the reveal animations.
 - Touch screens: nothing (hover only). Reduced motion: no wave; the circle grows instantly and the glow stays.
 - Code: `components/DottedArrow.tsx` gives each dot its place in the wave; the CSS is the CTA hover block in `app/globals.css`.
+
+## Stat count-up (owner, 2026-11-03)
+- Every stat number counts up from 0 the first time it scrolls in, after the 21st.dev Count Animation: 2s, ease-out `cubic-bezier(0.16, 1, 0.3, 1)`, at the same point as the section reveals (`--rise-margin`). Text around the number stays put, so "+25%" runs +0% to +25% and "3 months" runs 0 to 3 months.
+- Where: the Works Impact squares (+25%, 70%, 3 months, +30%) and the AI projects "6 days". Case study pages carry no standalone stat elements (their numbers sit in sentences and meta rows), so nothing counts there. Text with no number ("Coming soon") is left as is.
+- The final value renders first (no JS shows it at rest), a hidden copy holds the width so nothing reflows, and screen readers get the final value only. Reduced motion: no count, the final value shows.
+- Code: `components/CountUp.tsx`, used as `<CountUp value={...} />`.

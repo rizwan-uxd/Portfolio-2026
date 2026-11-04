@@ -6,8 +6,11 @@ html { scroll-behavior: smooth; }
 
 .footer-name { font-family: var(--font-heading); font-size: var(--footer-name-size-sm); font-weight: 500; letter-spacing: -0.03em; }
 .footer-social { font-size: var(--footer-social-size); }
-.footer-social:hover { color: var(--foreground); }
-.footer-social:hover .footer-social-circle { border-color: var(--muted-foreground); }
+.footer-social, .footer-social-circle, .footer-social svg { transition: color var(--social-hover) ease, border-color var(--social-hover) ease; }
+.footer-social:is(:hover, :focus-visible) { color: var(--foreground); }
+.footer-social:is(:hover, :focus-visible) svg { color: var(--brand); }
+.footer-social:is(:hover, :focus-visible) .footer-social-circle { border-color: var(--brand); }
+@media (prefers-reduced-motion: reduce) { .footer-social, .footer-social-circle, .footer-social svg { transition: none; } }
 .footer-divider { max-width: var(--footer-divider-width); }
 .footer-copyright { font-size: var(--footer-copyright-size); }
 .footer-wordmark { position: relative; width: 100%; max-width: var(--footer-wordmark-width); aspect-ratio: var(--footer-wordmark-ratio); container-type: inline-size; color: var(--brand); }

@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { CompareSlider } from "@/components/CompareSlider";
 import { DottedArrow } from "@/components/DottedArrow";
-import { caseStudySection, nextCaseStudies, type Block, type CaseStudy as Study, type Figure, type Section } from "@/lib/case-studies";
+import { ScreenShowcase } from "@/components/ScreenShowcase";
+import { FeatureCards, FeatureList, IconGrid } from "@/components/CaseFeatures";
+import { caseStudySection, nextCaseStudies, type Block, type CaseStudy as Study, type Definition, type Figure, type Section } from "@/lib/case-studies";
 
 const number = (i: number) => String(i + 1).padStart(2, "0");
 const fullWidth = "(min-width: 1214px) 1116px, 100vw";
@@ -37,6 +39,7 @@ function Caption({ children }: { children: React.ReactNode }) {
 
 function BlockView({ block }: { block: Block }) {
   if (block.type === "text") return <p className={block.muted ? "text-muted-foreground" : undefined}>{block.text}</p>;
+  if (block.type === "cards" || block.type === "features" || block.type === "iconGrid") return null; // lifted out to full width by SectionView
   if (block.type === "list") {
     return (
       <ol className="w-full rounded-lg border border-hairline bg-card">
@@ -73,20 +76,59 @@ function BlockView({ block }: { block: Block }) {
   );
 }
 
+// Copilot "AI workspace" (owner, 2026-11-03): each workflow is a row, its label and screen on the left, its text on
+// the right. Below lg: label, text, then the screen.
+function PairedRows({ items, phones }: { items: Definition[]; phones: Figure[] }) {
+  return (
+    <div className="flex flex-col lg:px-12 lg:pb-8">
+      {items.map((item, i) => (
+        <div key={item.label ?? item.body} className="flex flex-col gap-4 border-hairline py-8 not-first:border-t lg:grid lg:grid-cols-[var(--case-rail-w)_minmax(0,1fr)] lg:gap-x-12 lg:py-12">
+          <div className="contents lg:flex lg:flex-col lg:gap-6">
+            {item.label && <p className="micro text-muted-foreground">{item.label}</p>}
+            {phones[i] && (
+              <div className="order-last w-3/5 overflow-hidden rounded-lg border border-border bg-card lg:order-none lg:w-[var(--case-pair-phone-w)]">
+                <Image src={phones[i].src} alt={phones[i].alt} width={phones[i].w} height={phones[i].h} sizes="(min-width: 1024px) 240px, 60vw" className="block h-auto w-full" />
+              </div>
+            )}
+          </div>
+          <div className="text-muted-foreground lg:pt-9">
+            {item.body}
+            {item.points && (
+              <ul className="mt-3 flex list-disc flex-col gap-2 pl-5 marker:text-brand">
+                {item.points.map((point) => <li key={point}>{point}</li>)}
+              </ul>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function SectionView({ section, index }: { section: Section; index: number }) {
+  // Paired sections lift their definitions block out of the body and give each item its phone, in order.
+  const paired = section.phonesPaired && section.phones ? section.body?.find((b) => b.type === "definitions") : undefined;
+  const wide = section.body?.filter((b) => b.type === "cards" || b.type === "features" || b.type === "iconGrid") ?? [];
+  const body = section.body?.filter((b) => b !== paired && b.type !== "cards" && b.type !== "features" && b.type !== "iconGrid");
   return (
     <section className="flex flex-col gap-4 border-t border-hairline px-4 py-12 lg:gap-0 lg:p-0">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-12 lg:px-12 lg:pb-8 lg:pt-16">
-        <div className={`flex flex-col gap-4 ${section.body ? "lg:w-[var(--case-rail-w)] lg:shrink-0" : "lg:flex-1"}`}>
+        <div className={`flex flex-col gap-4 ${body?.length ? "lg:w-[var(--case-rail-w)] lg:shrink-0" : "lg:flex-1"}`}>
           <p className="micro text-muted-foreground"><span className="text-brand">{number(index)}</span> · {section.eyebrow}</p>
           <h2 className="title">{section.title}</h2>
         </div>
-        {section.body && (
+        {body?.length ? (
           <div className="flex min-w-0 flex-col gap-4 lg:flex-1 lg:gap-6">
-            {section.body.map((block, i) => <BlockView key={i} block={block} />)}
+            {body.map((block, i) => <BlockView key={i} block={block} />)}
           </div>
-        )}
+        ) : null}
       </div>
+      {wide.map((block, i) => (
+        <div key={i} className="lg:px-12 lg:pb-8 lg:pt-4">
+          {block.type === "cards" ? <FeatureCards items={block.items} /> : block.type === "features" ? <FeatureList items={block.items} /> : block.type === "iconGrid" ? <IconGrid items={block.items} /> : null}
+        </div>
+      ))}
+      {paired?.type === "definitions" && <PairedRows items={paired.items} phones={section.phones!} />}
       {section.steps && (
         <div className="lg:px-12 lg:pb-8 lg:pt-4">
           <ol className={`grid grid-cols-1 overflow-clip rounded-lg border border-hairline ${section.steps.length > 3 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
@@ -100,7 +142,12 @@ function SectionView({ section, index }: { section: Section; index: number }) {
           </ol>
         </div>
       )}
-      {section.phones && (
+      {section.showcase && (
+        <div className="px-0 lg:px-12 lg:pb-8 lg:pt-4">
+          <ScreenShowcase items={section.showcase} />
+        </div>
+      )}
+      {section.phones && !paired && (
         <div className="lg:px-12 lg:pb-8 lg:pt-4">
           <Phones phones={section.phones} />
         </div>
@@ -145,22 +192,40 @@ function MoreWorks({ slug }: { slug: string }) {
   );
 }
 
+// The working prototype, live in a phone-sized frame, so it can be tried on the page (owner, 2026-11-03).
+function Prototype({ src, title }: { src: string; title: string }) {
+  return (
+    <div className="flex flex-col items-center gap-4 border-t border-hairline px-4 py-8 lg:border-t-0 lg:px-12 lg:pb-0 lg:pt-12">
+      <p className="micro text-muted-foreground">{caseStudySection.prototypeLabel}</p>
+      <div className="w-full max-w-[var(--case-proto-w)] overflow-hidden rounded-[var(--case-proto-radius)] border border-border bg-card">
+        <iframe src={src} title={title} loading="lazy" className="block h-[var(--case-proto-h)] w-full border-0" />
+      </div>
+      <a href={src} target="_blank" rel="noreferrer" className="label flex gap-1 text-brand">
+        {caseStudySection.prototypeOpen} <span aria-hidden>↗</span>
+      </a>
+    </div>
+  );
+}
+
 // The Figma template's placeholders have fixed heights. The boards carry small type, so they show whole at their own ratio.
 export function CaseStudy({ study }: { study: Study }) {
   return (
     <article>
-      <header className="flex flex-col items-start gap-4 px-4 py-8 lg:gap-6 lg:p-12">
-        <Link href="/#works" className="label text-muted-foreground"><span aria-hidden>←</span> {caseStudySection.back}</Link>
-        <p className="micro text-brand">{study.eyebrow}</p>
-        <h1 className="display">
-          {study.title[0]} <span className="text-muted-foreground">{study.title[1]}</span>
-        </h1>
-        <p className="subtitle max-w-[var(--case-subtitle-w)] text-muted-foreground">{study.subtitle}</p>
-        {study.tags && (
-          <ul className="flex flex-wrap gap-2">
-            {study.tags.map((tag) => <li key={tag} className="micro rounded-full border border-hairline px-3 py-1">{tag}</li>)}
-          </ul>
-        )}
+      {/* Links sit opposite the title at lg, bottom-aligned with the subtitle (owner, 2026-11-03). */}
+      <header className="flex flex-col items-start gap-4 px-4 py-8 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:p-12">
+        <div className="flex flex-col items-start gap-4 lg:gap-6">
+          <Link href="/#works" className="label text-muted-foreground"><span aria-hidden>←</span> {caseStudySection.back}</Link>
+          <p className="micro text-brand">{study.eyebrow}</p>
+          <h1 className="display">
+            {study.title[0]} <span className="text-muted-foreground">{study.title[1]}</span>
+          </h1>
+          <p className="subtitle max-w-[var(--case-subtitle-w)] text-muted-foreground">{study.subtitle}</p>
+          {study.tags && (
+            <ul className="flex flex-wrap gap-2">
+              {study.tags.map((tag) => <li key={tag} className="micro rounded-full border border-hairline px-3 py-1">{tag}</li>)}
+            </ul>
+          )}
+        </div>
         {study.links && (
           // Stacked, one below another, equal width (owner, 2026-11-04).
           <div className="flex shrink-0 flex-col items-stretch gap-2">
@@ -184,6 +249,8 @@ export function CaseStudy({ study }: { study: Study }) {
 
       <div aria-hidden data-nav-reveal-after />
 
+      {study.prototype && <Prototype {...study.prototype} />}
+
       <div className="border-t border-hairline px-4 py-6 lg:border-t-0 lg:p-12">
         {study.hero && <Picture figure={study.hero} priority />}
         {study.heroPhones && <Phones phones={study.heroPhones} priority />}
@@ -191,12 +258,21 @@ export function CaseStudy({ study }: { study: Study }) {
 
       {study.sections.map((section, i) => <SectionView key={section.eyebrow} section={section} index={i} />)}
 
-      <section className="flex flex-col gap-4 border-t border-hairline px-4 py-12 lg:gap-6 lg:px-12 lg:py-24">
-        <p className="micro text-brand">{caseStudySection.conclusion}</p>
-        <p className="case-statement">
-          {study.conclusion.statement[0]} <span className="text-muted-foreground">{study.conclusion.statement[1]}</span>
-        </p>
-        {study.conclusion.rest && <p className="max-w-[var(--case-subtitle-w)] text-muted-foreground">{study.conclusion.rest}</p>}
+      {/* Conclusion as a framed quote on a dot grid, brand squares on the corners, after 21st.dev's dot-pattern quote by designali-in (owner, 2026-11-04). */}
+      <section className="border-t border-hairline px-4 py-12 lg:px-12 lg:py-24">
+        <div className="relative border border-brand/60">
+          <div aria-hidden className="absolute inset-0 bg-[radial-gradient(var(--quote-dot)_1px,transparent_1px)] bg-[size:var(--quote-dot-gap)_var(--quote-dot-gap)]" />
+          {["-left-1.5 -top-1.5", "-right-1.5 -top-1.5", "-bottom-1.5 -left-1.5", "-bottom-1.5 -right-1.5"].map((corner) => (
+            <span key={corner} aria-hidden className={`absolute size-3 bg-brand ${corner}`} />
+          ))}
+          <div className="relative flex flex-col gap-4 px-6 py-10 lg:gap-8 lg:px-16 lg:py-20">
+            <p className="micro text-brand">{caseStudySection.conclusion}</p>
+            <blockquote className="case-statement">
+              <span>“{study.conclusion.statement[0]}</span> <span className="font-light text-muted-foreground">{study.conclusion.statement[1]}”</span>
+            </blockquote>
+            {study.conclusion.rest && <p className="max-w-[var(--case-subtitle-w)] text-muted-foreground">{study.conclusion.rest}</p>}
+          </div>
+        </div>
       </section>
 
       <MoreWorks slug={study.slug} />

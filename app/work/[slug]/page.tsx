@@ -19,7 +19,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const study = getCaseStudy((await params).slug);
   if (!study) return {};
-  return { title: `${study.title.join(" ")} — ${person.name}`, description: study.summary };
+  return { title: `${study.title.join(" ")} | ${person.name}`, description: study.summary };
 }
 
 export default async function CaseStudyPage({ params }: Props) {

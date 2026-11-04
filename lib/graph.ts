@@ -186,7 +186,7 @@ const crossLinks: [string, string][] = [
   ["design-systems", "katim"], ["design-systems", "secure-comms"], ["design-systems", "dubainow"], ["design-tokens", "katim"], ["component-systems", "katim"], ["component-systems", "secure-comms"],
   ["ai-native", "ai-copilot"], ["ai-native", "banking-concepts"], ["ai-prototyping", "ai-copilot"],
   // Tools used
-  ["claude", "ai-copilot"], ["cursor", "ai-copilot"], ["react-native", "ai-copilot"], ["react", "secure-comms"], ["claude", "ai-prototyping"], ["cursor", "ai-prototyping"],
+  ["claude", "ai-copilot"], ["cursor", "ai-copilot"], ["react-native", "ai-copilot"], ["claude", "ai-prototyping"], ["cursor", "ai-prototyping"],
 ];
 
 export const graphLinks: GraphLink[] = [

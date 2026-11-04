@@ -14,11 +14,19 @@ export const person = {
   behance: "https://www.behance.net/rizuxdesigner",
 };
 
+// Personal badge copy and travel photo supplied by the owner, 2026-11-04.
+export const offClock = {
+  heading: "Off the clock",
+  description: "Usually watching a Guy Ritchie film, planning my next trip, or chasing an adrenaline rush.",
+  photo: "/images/off-the-clock.jpg",
+  photoAlt: "Rizwan wearing a blue helmet and harness in a misty mountain landscape.",
+};
+
 export const hero = {
   intro: { greeting: "Hi", lead: "I'm Mohammed Rizwan from", place: "Dubai" },
   headline: ["Designing enterprise products ", "that ", "create measurable business impact."], // last part is muted; "that " is muted only on mobile (frame 27:5)
   subline:
-    "15+ years designing banking, government and enterprise platforms. AI accelerates my design process — enabling faster delivery, broader exploration and uncompromising quality.",
+    "15+ years designing banking, government and enterprise platforms. AI speeds up my design process, so I can deliver faster, explore more widely and keep quality high.",
   cta: "Book a meeting", // owner, 2026-11-03 (was "Let's connect"), same as the contact CTA
 };
 
@@ -71,7 +79,7 @@ export const works: Work[] = [
       },
       {
         label: "Delivery",
-        value: "2026 Hajj season — MVP 3"
+        value: "2026 Hajj season, MVP 3"
       }
     ],
     initialScreens: 2,
@@ -160,13 +168,13 @@ export const works: Work[] = [
         src: "/images/work/dubainow-mobile-app/detail-1.png",
         w: 1600,
         h: 1200,
-        alt: "DubaiNow Mobile App — process detail 1"
+        alt: "DubaiNow Mobile App, process detail 1"
       },
       {
         src: "/images/work/dubainow-mobile-app/detail-2.png",
         w: 1200,
         h: 675,
-        alt: "DubaiNow Mobile App — process detail 2"
+        alt: "DubaiNow Mobile App, process detail 2"
       }
     ],
     client: "Digital Dubai government",
@@ -178,9 +186,9 @@ export const works: Work[] = [
     metric: "3 months",
     metricLabel: "Dev time saved",
     chip: "Design systems",
-    summary: "Designed a secure enterprise communication platform with a scalable design system and reusable React components, standardizing complex workflows across products and platforms.",
+    summary: "Designed a secure enterprise communication platform for iOS, Android and desktop, on a scalable design system with light and dark themes that standardised workflows across two product lines.",
     overview: [
-      "SecureLink (name changed) is a custom-built enterprise communication platform that empowers high security government organizations to connect and collaborate securely. It enables employees to effortlessly schedule meetings, engage in instant messaging, and conduct high-quality voice and video conferences.",
+      "SecureLine is a secure communication application designed for the defence industry. Its military-grade encryption lets employees within the organisation collaborate and share information seamlessly, schedule meetings, message each other, and hold voice and video calls.",
       "This case study explores the journey of converting a one line sentence from leadership to a full scale enterprise application with a custom built design system to a highest level of security, highlighting the challenges faced, the approach taken to address them, and the results achieved."
     ],
     facts: [
@@ -205,13 +213,13 @@ export const works: Work[] = [
         src: "/images/work/secure-communication-app/detail-1.png",
         w: 1400,
         h: 866,
-        alt: "Secure Communication App — process detail 1"
+        alt: "Secure Communication App, process detail 1"
       },
       {
         src: "/images/work/secure-communication-app/detail-2.png",
         w: 1290,
         h: 740,
-        alt: "Secure Communication App — process detail 2"
+        alt: "Secure Communication App, process detail 2"
       }
     ],
     client: "Confidential",
@@ -274,7 +282,7 @@ export const worksSection = {
 export const servicesSection = {
   heading: ["What I can do", "for you"], // 2nd line muted
   intro:
-    "As a digital designer, with an empathetic, human-first mindset and a structured way of thinking, I translate real user needs and business goals into clear journeys and polished UI — reducing friction, making decisions easier, and helping teams ship with confidence.",
+    "As a digital designer with an empathetic, human-first mindset and a structured way of thinking, I turn real user needs and business goals into clear journeys and polished UI. That means less friction, easier decisions and teams that ship with confidence.",
 };
 
 // Titles from the owner (2026-11-01). Descriptions reworded 2026-11-02 (owner asked) to claims the case studies support.
@@ -313,7 +321,7 @@ export const aiProjectsSection = {
     {
       tag: "Vibe coded",
       title: "AI Banking Copilot",
-      summary: "An AI-native banking concept designed and vibe coded into a working React Native prototype in six days — intent-driven flows that end in a completed action, not a chat reply.",
+      summary: "An AI-native banking concept, designed and vibe coded into a working React Native prototype in six days. Its intent-driven flows end in a completed action instead of a chat reply.",
       statLabel: "Concept to prototype",
       stat: "6 days",
       image: "/images/work/ai-banking-copilot/banner.png",
@@ -327,7 +335,7 @@ export const aiProjectsSection = {
       statLabel: "Status",
       stat: "Coming soon",
       image: "/images/work/ai-banking-app/tile.png",
-      alt: "The app's home screen — total balance, send, transfer, pay and topup actions, and recent transactions — dimmed behind a lock.",
+      alt: "The app's home screen, dimmed behind a lock, showing the total balance, send, transfer, pay and topup actions, and recent transactions.",
     },
   ],
 };
@@ -335,7 +343,7 @@ export const aiProjectsSection = {
 // Copy from the owner's reference image (2026-11-03); Meta and Grok removed (owner, 2026-11-03). Logos are in components/ToolLogos.tsx, keyed by these names.
 export const toolsSection = {
   heading: ["AI is part of how I", "design & build,", "every day."], // 2nd phrase muted
-  intro: "Not a novelty — a daily practice. These are the tools I reach for to move from a rough idea to a shipped, working product.",
+  intro: "These are the tools I reach for every day to move from a rough idea to a shipped, working product.",
   tools: ["Claude", "Figma", "Cursor", "Supabase", "Vercel", "OpenAI", "GitHub", "Tailwind", "Adobe", "Notion", "Slack", "Miro", "SurveyMonkey", "ProtoPie"] as const, // last six added by the owner, 2026-11-03
 };
 
@@ -368,8 +376,8 @@ export const cv = {
     {
       id: "adcb",
       keywords: ["adcb", "abu dhabi commercial bank", "publicis( sapient)?", "sapient"],
-      role: "Design lead - UX (contract)",
-      company: "Abu Dhabi Commercial Bank - Publicis Sapient",
+      role: "Design lead, UX (contract)",
+      company: "Abu Dhabi Commercial Bank, Publicis Sapient",
       place: "Abu Dhabi",
       dates: "Feb 2025 - July 2025",
       highlights: [
@@ -380,7 +388,7 @@ export const cv = {
     {
       id: "katim",
       keywords: ["katim"],
-      role: "Senior product designer - UX/UI",
+      role: "Senior product designer, UX/UI",
       company: "Katim",
       place: "Abu Dhabi",
       dates: "Oct 2022 - Nov 2024",
@@ -413,7 +421,7 @@ export const cv = {
         "As the squad's only designer, helped raise Emirates Islamic's digital customer retention from below 20% to a weekly average of 55% (target: above 50%), with NPS above 85 and complaints under 3 a week by sprint 18.",
       ],
     },
-    { id: "cognizant", keywords: ["cognizant"], role: "UX design consultant - UX/UI", company: "Cognizant", place: "Chennai - Abu Dhabi", dates: "Feb 2013 - Feb 2018", highlights: [] },
+    { id: "cognizant", keywords: ["cognizant"], role: "UX design consultant, UX/UI", company: "Cognizant", place: "Chennai and Abu Dhabi", dates: "Feb 2013 - Feb 2018", highlights: [] },
     { id: "danube", keywords: ["danube"], role: "Customer research analyst", company: "Danube Retail chain", place: "Jeddah, KSA", dates: "Aug 2011 - Jan 2013", highlights: [] },
     { id: "bny", keywords: ["bny", "bny mellon", "new york mellon"], role: "Usability analyst", company: "Bank of New York Mellon", place: "Chennai, India", dates: "Jun 2008 - Aug 2009", highlights: [] },
   ],
@@ -481,13 +489,13 @@ export const graphSection = {
     { node: "hajj-platform", title: "Hajj operations platform", body: "A PowerPoint- and meeting-driven reporting process became a connected enterprise platform, with a 25% efficiency gain." },
     { node: "ai-copilot", title: "AI Banking Copilot", body: "An intent-driven banking copilot, from concept to a working React Native prototype in 3 days with Claude Code and Cursor." },
     { node: "dubainow", title: "DubaiNow", body: "A design system for a large-scale government app carried 57 services in a year to a 70% CSAT score, and won an ICXA award in 2020." },
-    { node: "secure-comms", title: "Secure Communication App", body: "A scalable design system and reusable React components saved 3 months of development time." },
+    { node: "secure-comms", title: "Secure Communication App", body: "A scalable design system with reusable components saved 3 months of development time." },
     { node: "ai-copilot", path: ["bny", "ai-copilot"], title: "Trace any path", body: "From usability analyst at BNY Mellon in 2008 to an AI copilot for ADCB in 2025, connected through banking. Pick any two points above to trace your own." },
   ] as { node: string; path?: [string, string]; title: string; body: string }[],
 };
 
 export const testimonials = [
-  { name: "Jayakumar", role: "Manager - Design, KATIM", headline: "Proactive", sub: "a well-rounded product design skill set",
+  { name: "Jayakumar", role: "Design manager, KATIM", headline: "Proactive", sub: "a well-rounded product design skill set",
     quote: "Rizwan demonstrated exceptional dedication to designing our collaboration and file-sharing apps. His optimistic outlook and proactive approach to problem-solving have been instrumental in delivering innovative user experiences. He possesses a strong foundation in design systems and a well-rounded product design skill set, making him an ideal candidate for any design team.",
     highlights: ["exceptional dedication", "proactive approach to problem-solving", "strong foundation in design systems"] },
   { name: "Dr. Ali", role: "City Planning Advisor, Digital Dubai", headline: "Always curious", sub: "a clear professional attitude",

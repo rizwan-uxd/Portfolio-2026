@@ -103,7 +103,7 @@ const topics: { keywords: string[]; answer: TwinAnswer }[] = [
     answer: { lead: work("dubainow-mobile-app").summary, points: [dubaiNow, result("dubainow-mobile-app"), cv.award], link: caseStudy("dubainow-mobile-app") },
   },
   {
-    keywords: ["secure", "securelink", "communication"],
+    keywords: ["secure", "securelink", "secureline", "communication"],
     answer: { lead: work("secure-communication-app").summary, points: [result("secure-communication-app")], link: caseStudy("secure-communication-app") },
   },
   {

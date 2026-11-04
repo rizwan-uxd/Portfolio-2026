@@ -7,6 +7,8 @@
   --footer-name-size: 26px;
   --footer-name-size-sm: 20px;
   --footer-social-size: 15px;
+  /* Footer social icons turn lime on hover and focus (owner, 2026-11-03: the site's brand, not each network's) */
+  --social-hover: 150ms;
   --footer-copyright-size: 12px;
   --footer-divider-width: 800px;
   --footer-wordmark-width: 600px;
@@ -120,7 +122,34 @@
   --nav-link-gap: 28px;          /* between hover pills: keeps the 52px text spacing from Figma (36 + 2 x 8) */
   --intro-w: 420px;
   --case-rail-w: 420px;
+  --case-proto-w: 390px;         /* embedded prototype: the reference phone width */
+  --case-proto-h: min(844px, 80svh); /* the reference phone height, kept inside a short screen */
+  --case-proto-radius: 28px;
+  --case-showcase-phone-w: 320px; /* SecureLine rotating key screens (owner, 2026-11-04) */
+  /* SecureLine overview cards and approach list (owner, 2026-11-04) */
+  --case-feature-art-h: 160px;
+  --case-feature-visual-h: 360px;
+  --case-feature-panel-w: 320px;
+  --case-feature-phone-w: 200px;
+  --case-loop-size: 224px;
+  --ease-feature: cubic-bezier(0.22, 1, 0.36, 1);
+  --case-showcase-phone-w-sm: 240px; /* below lg, so the description stays near the screen */
+  /* Showcase theme switch, after 21st.dev's Cinematic Theme Switcher (owner, 2026-11-04) */
+  --theme-switch-w: 76px;
+  --theme-switch-h: 40px;
+  --theme-switch-pad: 4px;
+  --theme-switch-knob: 30px;
+  --theme-switch-travel: 36px;   /* w - knob - 2 * pad - 2px border */
+  --theme-switch-icon: 16px;
+  --theme-switch-icon-inset: 11px;
+  --theme-switch-duration: 500ms;
+  --theme-switch-ease: cubic-bezier(0.34, 1.56, 0.64, 1); /* spring with a little overshoot */
+  --theme-switch-inset: inset 0 2px 6px rgb(0 0 0 / 0.6), inset 0 -1px 2px rgb(255 255 255 / 0.06);
+  --theme-switch-knob-shadow: 0 2px 8px rgb(0 0 0 / 0.5), 0 0 14px color-mix(in srgb, var(--brand) 35%, transparent);
+  --case-pair-phone-w: 240px;   /* Copilot AI workspace: each workflow's screen beside its text (owner, 2026-11-03) */
   --case-subtitle-w: 640px;
+  --quote-dot: color-mix(in srgb, var(--foreground) 14%, transparent); /* conclusion dot grid (owner, 2026-11-04) */
+  --quote-dot-gap: 10px;
   --case-statement-w: 880px;    /* conclusion measure at lg, about 55 characters a line at 32px */
   --services-intro-w: 960px;     /* What I can do: the longer intro wraps to two lines at lg (owner, 2026-11-03) */
   --case-thumb-h-sm: 180px;
@@ -357,7 +386,7 @@
   --iso-silk-size: 10px;
   --iso-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --iso-lit: 300ms;
-  --iso-cycle-drop: 3.6s;
+  --iso-cycle-growth: 4.4s;
   --iso-cycle-review: 7s;
   --iso-cycle-build: 4.4s;
   --iso-cycle-loop: 4s;
@@ -406,6 +435,7 @@
   --tilt-spot: color-mix(in srgb, var(--foreground) 8%, transparent);
   --lanyard-card-w: 260px;
   --lanyard-card-h: 430px;
+  --lanyard-personal-photo-h: 160px;
   --lanyard-perspective: 900px;
   --lanyard-stage-h: 600px;      /* rope, card and room to swing */
   --shadow-tilt: 0 25px 50px -12px rgb(0 0 0 / 0.5);
@@ -718,27 +748,31 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .iso-gate-action { transform: translateY(var(--iso-gate-action-flat)); }
 .iso-gate-tick { opacity: 0; }
 .iso-gate-mark { fill: none; stroke: var(--brand); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.iso-growth-rise { transform: translateY(var(--growth-rise)); }
-[data-lit] .iso-growth-rise { transform: translateY(0); }
-.iso-growth-icon { fill: none; stroke: var(--iso-line-lit); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
-[data-lit] .iso-growth-icon { opacity: 1; transform: translateY(-6px); }
-.iso-growth-outcome { fill: var(--brand); opacity: 0; }
+/* Growth: the built roadmap is the resting state. One hover loop starts and ends on it: outcome, icons and highlight clear,
+   the bars sink to the plate, then rise one by one, the icons and highlight return and the connection draws to the KPI. */
+.iso-growth-icon { fill: none; stroke: var(--iso-line-lit); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transform: translateY(-6px); }
+.iso-growth .iso-growth-selected .iso-left { fill: var(--brand); stroke: var(--brand); }
+.iso-growth .iso-growth-selected-icon { stroke: var(--brand); }
+.iso-growth-selected-label { fill: var(--brand); }
+.iso-growth-outcome { fill: var(--brand); }
 .iso-growth-connection, .iso-growth-kpi-stem { fill: none; stroke: var(--brand); stroke-width: 1.2; stroke-linecap: round; }
-[data-lit] .iso-growth-selected .iso-left { fill: var(--brand); stroke: var(--brand); }
-[data-lit] .iso-growth-selected-label { fill: var(--brand); }
-[data-lit] .iso-growth-outcome { opacity: 1; }
+.iso-growth-connection { stroke-dasharray: 1; }
 @media (prefers-reduced-motion: no-preference) {
-  [data-playing] .iso-growth-icon { animation: iso-growth-icon var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
-  [data-playing] .iso-growth-rise { animation: iso-growth-rise var(--iso-cycle) linear infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
+  [data-playing] .iso-growth-icon { animation: iso-growth-icon var(--iso-cycle) ease-in-out infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
+  [data-playing] .iso-growth-selected-icon { animation-name: iso-growth-icon, iso-growth-tint; animation-delay: calc(var(--i) * var(--iso-stagger)), 0s; }
+  [data-playing] .iso-growth-rise { animation: iso-growth-rise var(--iso-cycle) ease-in-out infinite; animation-delay: calc(var(--i) * var(--iso-stagger)); }
   [data-playing] .iso-growth-selected .iso-left { animation: iso-growth-face var(--iso-cycle) linear infinite; }
   [data-playing] .iso-growth-selected-label { animation: iso-growth-label var(--iso-cycle) linear infinite; }
   [data-playing] .iso-growth-outcome { animation: iso-growth-outcome var(--iso-cycle) linear infinite; }
+  [data-playing] .iso-growth-connection { animation: iso-growth-draw var(--iso-cycle) ease-in-out infinite; }
 }
-@keyframes iso-growth-icon { 0%, 30% { opacity: 0; transform: translateY(0); } 42%, 82% { opacity: 1; transform: translateY(-6px); } 92%, 100% { opacity: 0; transform: translateY(0); } }
-@keyframes iso-growth-rise { 0%, 8% { transform: translateY(var(--growth-rise)); } 34%, 86% { transform: translateY(0); } 100% { transform: translateY(var(--growth-rise)); } }
-@keyframes iso-growth-face { 0%, 43% { fill: var(--iso-left); stroke: var(--iso-line); } 53%, 88% { fill: var(--brand); stroke: var(--brand); } 100% { fill: var(--iso-left); stroke: var(--iso-line); } }
-@keyframes iso-growth-label { 0%, 43% { fill: var(--iso-silk); } 53%, 88% { fill: var(--brand); } 100% { fill: var(--iso-silk); } }
-@keyframes iso-growth-outcome { 0%, 48% { opacity: 0; } 60%, 88% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes iso-growth-outcome { 0%, 6% { opacity: 1; } 14%, 66% { opacity: 0; } 70%, 100% { opacity: 1; } }
+@keyframes iso-growth-draw { 0%, 14% { stroke-dashoffset: 0; } 15%, 68% { stroke-dashoffset: 1; } 82%, 100% { stroke-dashoffset: 0; } }
+@keyframes iso-growth-icon { 0%, 8% { opacity: 1; transform: translateY(-6px); } 18%, 52% { opacity: 0; transform: translateY(0); } 62%, 100% { opacity: 1; transform: translateY(-6px); } }
+@keyframes iso-growth-rise { 0%, 14% { transform: translateY(0); } 30%, 38% { transform: translateY(var(--growth-rise)); } 56%, 100% { transform: translateY(0); } }
+@keyframes iso-growth-face { 0%, 10% { fill: var(--brand); stroke: var(--brand); } 18%, 56% { fill: var(--iso-left); stroke: var(--iso-line); } 64%, 100% { fill: var(--brand); stroke: var(--brand); } }
+@keyframes iso-growth-tint { 0%, 10% { stroke: var(--brand); } 18%, 56% { stroke: var(--iso-line-lit); } 64%, 100% { stroke: var(--brand); } }
+@keyframes iso-growth-label { 0%, 10% { fill: var(--brand); } 18%, 56% { fill: var(--iso-silk); } 64%, 100% { fill: var(--brand); } }
 .iso-tip { fill: var(--foreground); }
 .iso-pulse { fill: var(--brand); }
 .iso-led { fill: var(--brand); opacity: 0.28; }
@@ -1038,6 +1072,7 @@ body { background: var(--background); color: var(--foreground); font-family: var
 .lanyard-sheen { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--tilt-fade); background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), var(--tilt-spot) 0%, transparent 55%); }
 .lanyard-card[data-hover] .lanyard-sheen { opacity: 1; }
 .lanyard-photo { position: relative; overflow: hidden; height: 140px; flex: none; border: 1px solid var(--brand); border-radius: var(--radius-lg); background: var(--secondary); }
+.lanyard-personal-photo { position: relative; overflow: hidden; height: var(--lanyard-personal-photo-h); flex: none; border-radius: var(--radius-lg); background: var(--secondary); }
 .lanyard-stripe { position: absolute; inset-inline: 0; top: 0; height: 4px; background: var(--brand); }
 .lanyard-link { display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) { .lanyard-sheen { transition: none; } }

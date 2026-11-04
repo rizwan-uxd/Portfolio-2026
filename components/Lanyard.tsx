@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { cv, person } from "@/lib/content";
+import { cv, offClock, person } from "@/lib/content";
 
 type Point = { x: number; y: number; oldx: number; oldy: number };
 
@@ -17,12 +17,6 @@ const THROW = 22;          // px per frame, the fastest a card can be let go
 const TILT = 9;             // deg, towards the pointer
 const DROP_AT = 0.35;       // share of the stage in view when the card drops in (animations.md)
 const DROP_PUSH = 3;        // px per frame sideways as it drops, so it swings a little as it settles
-
-const links = [
-  { label: "LinkedIn", href: person.linkedin },
-  { label: "Dribbble", href: person.dribbble },
-  { label: "Behance", href: person.behance },
-];
 
 // A card on a lanyard (motion from the 21st.dev id-card-lanyard demo, look and content ours).
 // A Verlet rope holds the card: drag to swing it, click or press Enter to flip it, hover to tilt it towards the pointer.
@@ -275,17 +269,11 @@ export function Lanyard() {
             <span aria-hidden className="lanyard-slot" />
             <span aria-hidden className="lanyard-sheen" />
             <span aria-hidden className="lanyard-stripe" />
-            <p className="micro text-brand">Connect</p>
-            <a href={`mailto:${person.email}`} className="lanyard-link"><span className="micro text-muted-foreground">Email</span><span>{person.email}</span></a>
-            <a href={`tel:${person.phone.replace(/\s/g, "")}`} className="lanyard-link"><span className="micro text-muted-foreground">Phone</span><span>{person.phone}</span></a>
-            <div className="h-px w-full bg-hairline" />
-            <div className="grid gap-2">
-              {links.map((l) => (
-                <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="label flex items-center justify-between">
-                  {l.label} <span aria-hidden className="text-muted-foreground">↗</span>
-                </a>
-              ))}
+            <p className="subtitle text-brand">{offClock.heading}</p>
+            <div className="lanyard-personal-photo">
+              <Image src={offClock.photo} alt={offClock.photoAlt} fill sizes="220px" className="object-cover" draggable={false} />
             </div>
+            <p>{offClock.description}</p>
             <p className="micro mt-auto text-center text-muted-foreground">Click to flip back</p>
           </div>
         </div>
