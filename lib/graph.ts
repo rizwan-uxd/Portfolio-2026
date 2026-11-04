@@ -144,7 +144,7 @@ const groups: Record<GraphCategory, { title: string; seeds: Seed[] }> = {
       { id: "impact-invest", label: "+20%", title: "+20% new-user onboarding", detail: investInDubai },
       metric("impact-islamic", "emirates-islamic-digital-ux"),
       { id: "impact-bills", label: "5 to 2.5 min", title: "Bill payment from 5 minutes to under 2.5", detail: billPayment },
-      { id: "impact-adoption", label: "55%", title: "55% digital adoption", detail: adoption },
+      { id: "impact-adoption", label: "NPS 85+", title: "NPS above 85", detail: "Emirates Islamic: NPS exceeded 85, and complaints fell to fewer than 3 a week by sprint 18." },
       { id: "icxa", label: "ICXA award", title: "ICXA award, 2020", detail: `${cv.award}.` },
       // Stats from the About section of the live site
       { id: "years", label: "15+ years", title: "15+ years of experience", detail: cv.summary },
@@ -171,7 +171,7 @@ const crossLinks: [string, string][] = [
   ["horizontal", "hajj-platform"], ["horizontal", "review-platform"],
   ["adcb", "ai-copilot"], ["adcb", "banking-concepts"],
   ["digital-dubai", "dubainow"], ["digital-dubai", "invest-in-dubai"],
-  ["enbd", "emirates-islamic"], ["enbd", "impact-adoption"],
+  ["enbd", "emirates-islamic"], ["emirates-islamic", "impact-adoption"],
   // Industries
   ["bny", "banking"], ["enbd", "banking"], ["adcb", "banking"], ["digital-dubai", "government"], ["horizontal", "energy"],
   ["etihad", "aviation"], ["danube", "retail"],

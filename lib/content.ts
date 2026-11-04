@@ -219,22 +219,22 @@ export const works: Work[] = [
   {
     slug: "emirates-islamic-digital-ux",
     title: "Emirates Islamic Digital UX",
-    metric: "+30%",
-    metricLabel: "Task completion efficiency",
-    chip: "UX/UI",
-    summary: "Optimized digital banking experiences by simplifying key financial workflows, reducing task time, and improving adoption across core user journeys.",
+    metric: "55%",
+    metricLabel: "30-day digital customer retention", // owner's PDF portfolio 3.0 is final; the old +30% task completion was in no source (2026-11-04)
+    chip: "Product design · Banking",
+    summary: "Fixed recurring pain points and shipped customer-requested features across Emirates Islamic’s mobile, tablet and online banking, lifting 30-day digital customer retention from below 20% to a weekly average of 55% in 20 sprints.",
     overview: [
-      "Emirates Islamic Bank (EIB) is a United Arab Emirates based bank engaged in the provision of Sharia-compliant banking solutions.",
-      "This is one of the premium Islamic banks in the market, and as it's connected to Emirates NBD, it has its own set of premium and loyal customers."
+      "Emirates Islamic Bank (EIB) is a United Arab Emirates based bank providing Sharia-compliant banking. As part of the Emirates NBD group, it serves its own base of premium, loyal customers.",
+      "Those customers were not using digital banking. I was the only designer in the agile squad formed to change that, across the mobile app, tablet app and online banking website."
     ],
     facts: [
       {
         label: "Role",
-        value: "UX designer"
+        value: "Product Designer"
       },
       {
-        label: "Services",
-        value: "Digital banking UX/UI"
+        label: "Platforms",
+        value: "Mobile, tablet apps & online banking"
       }
     ],
     initialScreens: 2,
@@ -249,13 +249,13 @@ export const works: Work[] = [
         src: "/images/work/emirates-islamic-digital-ux/detail-1.png",
         w: 1260,
         h: 648,
-        alt: "Emirates Islamic Digital UX — process detail 1"
+        alt: "International transfer on mobile, before and after the enhancement."
       },
       {
         src: "/images/work/emirates-islamic-digital-ux/detail-2.png",
         w: 1260,
         h: 648,
-        alt: "Emirates Islamic Digital UX — process detail 2"
+        alt: "New digital features, cardless cash withdrawal and Noqodi payments, and financial budgeting enhancements on the tablet app."
       }
     ],
     client: "Emirates Islamic Bank",
@@ -408,7 +408,7 @@ export const cv = {
       dates: "Feb 2018 - March 2019",
       highlights: [
         "Reduced Emirates Islamic bill-payment task time from 5 minutes to under 2.5 minutes through usability testing and iterative UX improvements.",
-        "Increased digital adoption to 55%, exceeding the target by 20% within two months of squad launch.",
+        "As the squad's only designer, helped raise Emirates Islamic's 30-day digital customer retention from below 20% to a weekly average of 55% (target: above 50%), with NPS above 85 and complaints under 3 a week by sprint 18.",
       ],
     },
     { id: "cognizant", keywords: ["cognizant"], role: "UX design consultant - UX/UI", company: "Cognizant", place: "Chennai - Abu Dhabi", dates: "Feb 2013 - Feb 2018", highlights: [] },

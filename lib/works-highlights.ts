@@ -22,8 +22,8 @@ export const workHighlights: Record<string, Highlight[]> = {
     { icon: "user-check", label: "Iterative guerilla testing", body: "Conducted guerilla testing for validation to identify usability issues and test design assumptions." },
   ],
   "emirates-islamic-digital-ux": [
-    { icon: "compass", label: "Discovery in grooming", body: "Grooming sessions gave a deep understanding of user needs, business objectives and the validity of feedback before story points were assigned." },
-    { icon: "pencil", label: "Paper sketches", body: "To optimize ideation within tight deadlines, I used paper sketches to quickly ideate and brainstorm ideas with the team." },
-    { icon: "smartphone", label: "Increased digital adoption", body: "Digital adoption rose to 55% by the end of our squad’s tenure, 20% more than the success criteria of 35%." },
+    { icon: "compass", label: "UX discovery in grooming", body: "Story mapping prioritised every user story against the squad’s objectives, with a user survey when a story needed more evidence." },
+    { icon: "users", label: "NPS above 85", body: "Customer advocacy exceeded 85, and complaints fell to fewer than 3 a week by sprint 18." },
+    { icon: "smartphone", label: "Customer-requested features", body: "New features such as ATM self-withdrawal met unmet needs, and customers returned to use them regularly." },
   ],
 };

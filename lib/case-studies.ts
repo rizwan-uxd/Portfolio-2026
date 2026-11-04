@@ -434,75 +434,135 @@ export const caseStudies: CaseStudy[] = [
     },
   },
   {
+    // Figures follow the owner's PDF portfolio 3.0 (case study 02, pages 08 to 12) and the owner's outcome summary of 2026-11-04,
+    // which is final: three reported outcomes (30-day retention, NPS, complaints). Feature engagement stays unquantified, and the
+    // 85% feedback figure is out. Objective 3 (conversion) has no reported result, so none is claimed.
     slug: "emirates-islamic-digital-ux",
     title: ["Emirates Islamic", "Digital UX"],
-    eyebrow: "UX/UI",
-    subtitle: "Optimized digital banking experiences by simplifying key financial workflows, reducing task time, and improving adoption across core user journeys.",
-    summary: "Optimized digital banking experiences by simplifying key financial workflows, reducing task time, and improving adoption across core user journeys.",
+    eyebrow: "Product design · Banking",
+    subtitle: "Turning low digital engagement into repeat usage for Emirates Islamic’s existing customers, as the only designer in an agile squad.",
+    summary: "Fixed recurring pain points and shipped customer-requested features across Emirates Islamic’s mobile, tablet and online banking, lifting 30-day digital customer retention from below 20% to a weekly average of 55% in 20 sprints.",
+    tags: ["Banking B2C", "Mobile, tablet + online banking", "Sole designer in an agile squad", "20 sprints"],
+    links: [
+      { label: "Live website", href: "https://www.emiratesislamic.ae" },
+      { label: "EI+ on Google Play", href: "https://play.google.com/store/apps/details?id=com.emiratesislamic.android" },
+    ],
     meta: [
       { label: "Client", value: "Emirates Islamic Bank" },
       { label: "Year", value: "2018" },
-      { label: "Role", value: "UX designer" },
-      { label: "Services", value: "Digital banking UX/UI" },
+      { label: "Role", value: "Product Designer" },
+      { label: "Platforms", value: "Mobile, tablet apps & online banking" },
+      { label: "Timeline", value: "10 months · 20 two-week sprints" },
     ],
-    hero: { src: `${emirates}/banner.png`, w: 2560, h: 1440, alt: "Emirates Islamic Digital UX" },
+    hero: { src: `${emirates}/banner.png`, w: 2560, h: 1440, alt: "The Emirates Islamic website on desktop next to the EI+ mobile app login screen." },
     thumbnail: `${emirates}/banner.png`,
     sections: [
       {
         eyebrow: "Overview",
         title: "Overview",
         body: [
-          { type: "text", text: "Emirates Islamic Bank (EIB) is a United Arab Emirates based bank engaged in the provision of Sharia-compliant banking solutions." },
-          { type: "text", muted: true, text: "This is one of the premium Islamic banks in the market, and as it’s connected to Emirates NBD, it has its own set of premium and loyal customers." },
+          { type: "text", text: "Emirates Islamic Bank (EIB) is a United Arab Emirates based bank providing Sharia-compliant banking. As part of the Emirates NBD group, it serves its own base of premium, loyal customers." },
+          { type: "text", muted: true, text: "Those customers were not using digital banking. I was the only designer in the agile squad formed to change that, responsible for all UX from concept to after-live support, across the mobile app, tablet app and online banking website." },
         ],
-        figures: [{ src: `${emirates}/detail-1.png`, w: 1260, h: 648, alt: "Emirates Islamic Digital UX — process detail 1" }],
       },
       {
         eyebrow: "The problem",
-        title: "The problem",
+        title: "Low engagement, frequent complaints",
         body: [
-          { type: "text", text: "As the sole UX designer within a ten-person agile squad at Emirates Islamic, I was tasked with enhancing the digital customer journey across retail and online banking channels. The team focused on bug fixes, addressing customer feedback, and implementing feature requests." },
+          { type: "text", text: "Emirates Islamic’s existing customers showed low engagement with digital channels: digital user retention was below 20%. The customers who did use digital services complained often, through retail branches and app store reviews." },
           {
             type: "list",
             items: [
-              "Traditional banking environment: As part of a traditional bank, it’s very hard to explain the importance of user experience to people.",
-              "UX maturity: A prevalent challenge was the limited understanding of UX design as a distinct discipline. Design was often equated with development, and the significance of clearly articulating problem statements was undervalued.",
-              "UX in an Agile environment: The two-week sprint cycle demanded efficient planning and execution of design tasks. Close collaboration with development was essential as their work was dependent on design deliverables.",
+              "Low digital engagement limited the bank’s cost-saving opportunities and revenue growth.",
+              "Frequent complaints risked customer satisfaction and retention. Left unresolved, they meant higher operational costs and missed opportunities to grow through digital channels.",
             ],
           },
         ],
       },
       {
-        eyebrow: "Approach",
-        title: "Approach",
+        eyebrow: "Goals & objectives",
+        title: "Three objectives for the squad",
+        body: [{ type: "text", text: "The goal was to enhance the overall user experience and increase digital adoption among existing customers. For UX, that became three objectives." }],
+        steps: [
+          { label: "Objective 1", body: "Fix at least 70% of the high-impact user pain points identified by the business." },
+          { label: "Objective 2", body: "Increase the digital user retention rate to above 50%." },
+          { label: "Objective 3", body: "Increase the conversion rate of digital banking users by at least 20%." },
+        ],
+      },
+      {
+        eyebrow: "Process",
+        title: "UX inside a two-week sprint cycle",
+        body: [{ type: "text", text: "The squad had limited time, so the challenge was fitting UX methods into agile. After a stakeholder workshop, UX discovery happened mainly at the product backlog stage." }],
+        steps: [
+          { label: "Backlog grooming", actor: "UX discovery", body: "Understood the business goal and user pain point behind each story. Validated and grouped stories, prioritised them through user story mapping, and sent a user survey when a story needed more evidence before entering a sprint." },
+          { label: "Sprint planning", actor: "Sizing", body: "Assigned story points by effort, sorted stories into small, medium and large, and explained the rationale for prioritising each design deliverable." },
+          { label: "Agile sprints", actor: "Testing", body: "Paper sketches for brainstorming, guerrilla testing with employees outside the squad to check each design hypothesis, and competitor analysis of similar finance products." },
+        ],
+        figures: [{ src: `${emirates}/story-map.png`, w: 1566, h: 975, alt: "User story map: the squad’s three objectives across the top, the epics that serve each, and user stories below in P1, P2 and P3 rows.", caption: "User story mapping, prioritised by impact against each objective." }],
+      },
+      {
+        eyebrow: "UI design during sprints",
+        title: "Two design tracks, sized to the work",
+        body: [
+          {
+            type: "definitions",
+            items: [
+              { label: "New features", body: "Understand → Page flow and information architecture → Wireframes → UI design → Testing." },
+              { label: "Minor requirements", body: "Understand → Paper sketches → UI design → Testing." },
+            ],
+          },
+          { type: "text", muted: true, text: "Work designed in sprints included ATM self-withdrawal on mobile (a new feature), the NOL top-up redesign, international transfer, and spending analysis and bill payments in online banking." },
+        ],
+        figures: [
+          { src: `${emirates}/detail-1.png`, w: 1260, h: 648, alt: "International transfer on mobile, before and after the enhancement." },
+          { src: `${emirates}/detail-2.png`, w: 1260, h: 648, alt: "New digital features, cardless cash withdrawal and Noqodi payments, and financial budgeting enhancements on the tablet app." },
+        ],
+      },
+      {
+        eyebrow: "Outcomes",
+        title: "Retention up, complaints down",
         body: [{
           type: "definitions",
           items: [
-            { label: "Discovery in grooming", body: "By actively participating in grooming sessions, I ensured a deep understanding of user needs, business objectives, and the validity of user feedback. This critical analysis enabled precise problem identification before assigning story points." },
-            { label: "T-shirt sizing UX stories", body: "To arrive at correct story points, I sized user stories assigned to me based on complexity and hours required, based on my experience — e.g. a simple UI enhancement (2–4 hours) sized “S” would need to be fixed across 3 digital channels." },
-            { label: "Paper sketches", body: "To optimize ideation within tight deadlines, I used paper sketches to quickly ideate and brainstorm ideas with the team." },
+            { label: "30-day digital customer retention", body: "Increased from below 20% to a weekly average of 55% by sprint 20, beating the 50% target." },
+            { label: "Customer advocacy (NPS)", body: "Exceeded 85." },
+            { label: "Customer complaints", body: "Reduced to fewer than 3 per week by sprint 18." },
+            { label: "Feature engagement", body: "Newly introduced features showed returning and regular customer usage." },
           ],
         }],
       },
       {
-        eyebrow: "Results",
-        title: "Results",
-        body: [
-          { type: "text", text: "Agile methodologies accelerated time-to-market, enabling rapid feedback loops and iterative design refinements based on customer interactions." },
-          {
-            type: "definitions",
-            items: [
-              { label: "Increased digital adoption", body: "Within 2 months of our squad’s first release, digital adoption rose to 55% by the end of our squad’s tenure — 20% more than the success criteria of 35%." },
-              { label: "Addressed UX feedback", body: "Addressed 75% of the UX feedback from customers by the end of 14 sprints." },
-            ],
-          },
-        ],
-        figures: [{ src: `${emirates}/detail-2.png`, w: 1260, h: 648, alt: "Emirates Islamic Digital UX — process detail 2" }],
+        eyebrow: "Why it worked",
+        title: "Why the numbers moved",
+        body: [{
+          type: "list",
+          items: [
+            "Improved existing banking journeys by addressing recurring customer pain points.",
+            "Reduced customer friction and improved the overall digital banking experience.",
+            "Introduced customer-requested features to address unmet needs.",
+            "Encouraged repeat usage and stronger engagement with digital banking services.",
+            "Improved customer advocacy and reduced recurring complaints.",
+          ],
+        }],
+      },
+      {
+        eyebrow: "Measurement",
+        title: "How we measured it",
+        body: [{
+          type: "definitions",
+          items: [
+            { label: "30-day retention", body: "Digital traffic analytics tracking returning customers after 30 days." },
+            { label: "NPS", body: "Customer feedback and recommendation scores." },
+            { label: "Customer complaints", body: "Weekly complaint volume, monitored across sprint releases." },
+            { label: "Feature adoption", body: "Unique customers using newly released features." },
+            { label: "Repeat feature usage", body: "Customers returning to use the same features over a defined 30-day period." },
+          ],
+        }],
       },
     ],
     conclusion: {
-      statement: ["Over 24 sprints, the Emirates Islamic digital enhancement squad successfully cleared the backlog and resolved bugs,", "aligning with objectives of increased digital adoption, reduced customer complaints, and fewer customer service calls."],
-      rest: "This fast-paced environment fostered innovative UX problem-solving through iterative guerilla testing and rapid paper prototyping.",
+      statement: ["Twenty sprints took 30-day digital customer retention from below 20% to a weekly average of 55%,", "with NPS above 85 and complaints under 3 a week by sprint 18."],
+      rest: "The lesson I carry forward: guerrilla testing validated assumptions quickly, but a few stories still needed rework, so formal usability testing belongs inside the sprints.",
     },
   },
   {
