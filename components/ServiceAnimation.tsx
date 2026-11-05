@@ -3,6 +3,8 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import type { DiagramRenderer } from "@/lib/service-diagrams/engine.js";
 
+const REWIND_MS = 420;
+
 export type ServiceScene = "growth" | "research" | "interaction" | "conversational" | "prototyping" | "tokenOps";
 
 export function ServiceAnimation({ scene, title, children }: { scene: ServiceScene; title: string; children: ReactNode }) {
@@ -24,12 +26,35 @@ export function ServiceAnimation({ scene, title, children }: { scene: ServiceSce
 
     function play() {
       if (!hovered || !renderer?.renderer || renderer.lost || reduced.matches || document.hidden) return;
-      if (!renderer.playing && renderer.time === 0) renderer.play();
+      if (!renderer.playing && renderer.time < renderer.duration) renderer.play(); // also resumes from a partial rewind
     }
 
-    function reset() {
+    // Leaving rewinds to the start over REWIND_MS on an ease-in-out curve instead of snapping (owner, 2026-11-05).
+    let rewindFrame = 0;
+    function stopRewind() {
+      cancelAnimationFrame(rewindFrame);
+      rewindFrame = 0;
+    }
+
+    function reset(instant = false) {
       hovered = false;
-      if (renderer && (renderer.playing || renderer.time > 0)) renderer.seek(0);
+      stopRewind();
+      if (!renderer || (!renderer.playing && renderer.time === 0)) return;
+      const from = renderer.time;
+      if (instant || reduced.matches || !renderer.renderer || renderer.lost) {
+        renderer.seek(0);
+        return;
+      }
+      renderer.pause(false);
+      const started = performance.now();
+      const step = (now: number) => {
+        if (!renderer) return;
+        const t = Math.min(1, (now - started) / REWIND_MS);
+        const eased = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        renderer.seek(from * (1 - eased));
+        rewindFrame = t < 1 ? requestAnimationFrame(step) : 0;
+      };
+      rewindFrame = requestAnimationFrame(step);
     }
 
     async function mount() {
@@ -58,7 +83,7 @@ export function ServiceAnimation({ scene, title, children }: { scene: ServiceSce
         const canvas = diagram.renderer.domElement;
         canvas.addEventListener("webglcontextlost", () => {
           delete stage.dataset.ready;
-          reset();
+          reset(true);
         }, options);
         canvas.addEventListener("webglcontextrestored", () => { stage.dataset.ready = ""; }, options);
         stage.dataset.ready = "";
@@ -72,6 +97,7 @@ export function ServiceAnimation({ scene, title, children }: { scene: ServiceSce
     }
 
     function dispose() {
+      stopRewind();
       delete stage.dataset.ready;
       delete stage.dataset.phase;
       renderer?.destroy();
@@ -90,11 +116,12 @@ export function ServiceAnimation({ scene, title, children }: { scene: ServiceSce
     stage.addEventListener("pointermove", (event) => {
       if (hovered || event.pointerType !== "mouse" || event.buttons) return;
       hovered = true;
+      stopRewind();
       play();
     }, options);
-    stage.addEventListener("pointerleave", reset, options);
-    document.addEventListener("visibilitychange", () => { if (document.hidden) reset(); }, options);
-    reduced.addEventListener("change", () => queueMicrotask(reset), options);
+    stage.addEventListener("pointerleave", () => reset(), options);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) reset(true); }, options);
+    reduced.addEventListener("change", () => queueMicrotask(() => reset(true)), options);
 
     return () => {
       listeners.abort();
